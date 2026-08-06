@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" class="govuk-template">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{% block title %}Kainos Work{% endblock %}</title>
+    <link rel="stylesheet" href="/govuk-frontend.min.css" />
+    <link rel="stylesheet" href="/styles/app.css" />
+  </head>
+  <body class="govuk-template__body">
+    <script>document.body.className+= ' js-enabled';</script>
+    <div class="govuk-width-container">
+      <main class="govuk-main-wrapper" id="main-content" role="main">
+        {% block content %}{% endblock %}
+      </main>
+    </div>
+    <script src="/govuk-frontend.min.js"></script>
+  </body>
+  </html>
