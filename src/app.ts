@@ -36,9 +36,8 @@ app.get("/govuk-frontend.min.css", (_req, res) => {
   );
 });
 
-app.use(
-  "/govuk-frontend.min.js",
-  express.static(
+app.get("/govuk-frontend.min.js", (_req, res) => {
+  res.sendFile(
     path.join(
       __dirname,
       "..",
@@ -48,8 +47,8 @@ app.use(
       "govuk",
       "govuk-frontend.min.js",
     ),
-  ),
-);
+  );
+});
 app.use(express.static(path.join(__dirname, "..", "public")));
 app.use(express.urlencoded({ extended: true }));
 
