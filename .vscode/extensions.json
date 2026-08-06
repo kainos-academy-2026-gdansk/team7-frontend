@@ -1,0 +1,16 @@
+{
+  "recommendations": [
+    "biomejs.biome",
+    "Prisma.prisma",
+    "vitest.explorer",
+    "mikestead.dotenv",
+    "christian-kohler.path-intellisense",
+    "eamodio.gitlens",
+    "streetsidesoftware.code-spell-checker",
+    "ronnidc.nunjucks",
+    "samuelcolvin.jinjahtml",
+    "formulahendry.auto-rename-tag",
+    "bradlc.vscode-tailwindcss",
+    "christian-kohler.npm-intellisense"
+  ]
+}
