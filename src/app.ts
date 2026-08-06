@@ -5,7 +5,7 @@ const app = express();
 
 nunjucks.configure(
   [
-    path.join(__dirname, "views"),
+    path.join(__dirname, "..", "src", "views"),
     path.join(__dirname, "..", "node_modules", "govuk-frontend", "dist"),
   ],
   {
