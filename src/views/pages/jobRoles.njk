@@ -1,0 +1,34 @@
+{% extends "layouts/base.njk" %}
+
+{% block title %}Job roles{% endblock %}
+
+{% block content %}
+  <h1 class="govuk-heading-l">Job roles</h1>
+
+  {% if jobRoles.length > 0 %}
+    <table class="govuk-table">
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th scope="col" class="govuk-table__header">Role</th>
+          <th scope="col" class="govuk-table__header">Location</th>
+          <th scope="col" class="govuk-table__header">Capability</th>
+          <th scope="col" class="govuk-table__header">Band</th>
+          <th scope="col" class="govuk-table__header">Closing date</th>
+        </tr>
+      </thead>
+      <tbody class="govuk-table__body">
+        {% for jobRole in jobRoles %}
+          <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">{{ jobRole.roleName }}</th>
+            <td class="govuk-table__cell">{{ jobRole.location }}</td>
+            <td class="govuk-table__cell">{{ jobRole.capability.name }}</td>
+            <td class="govuk-table__cell">{{ jobRole.band.name }}</td>
+            <td class="govuk-table__cell">{{ jobRole.closingDate }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p class="govuk-body">There are no job roles available at the moment.</p>
+  {% endif %}
+{% endblock %}

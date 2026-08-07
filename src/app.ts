@@ -1,6 +1,7 @@
 import path from "node:path";
 import express from "express";
 import nunjucks from "nunjucks";
+import { getJobRolesPage } from "./controllers/JobRoleController";
 const app = express();
 
 nunjucks.configure(
@@ -59,4 +60,5 @@ app.get("/health", (_req, res) => {
 app.get("/", (_req, res) => {
   res.render("pages/index.njk");
 });
+app.get("/job-roles", getJobRolesPage);
 export default app;
