@@ -14,6 +14,7 @@ export interface JobRole {
   closingDate: string | null;
   status: JobRoleStatus;
   description: string | null;
+  responsibilities: string;
   openPositions: number | null;
   sharePointLink: string | null;
   band: Band;

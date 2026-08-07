@@ -30,6 +30,8 @@ export const jobRoles: JobRole[] = [
     status: "OPEN",
     description:
       "Set the technical direction across Kainos, championing innovation and engineering excellence at the highest level.",
+    responsibilities:
+      "Set the technical vision, sponsor innovation initiatives, mentor principals and architects.",
     openPositions: 1,
     sharePointLink:
       "https://kainossoftwareltd.sharepoint.com/sites/Career/JobProfiles/Engineering/Job%20Profile%20-%20Technology%20Leader.pdf",
@@ -44,6 +46,8 @@ export const jobRoles: JobRole[] = [
     status: "OPEN",
     description:
       "Own architecture for the most complex client engagements and shape architectural standards across accounts.",
+    responsibilities:
+      "Own end-to-end architecture, define technical standards, advise clients on strategy.",
     openPositions: 1,
     sharePointLink:
       "https://kainossoftwareltd.sharepoint.com/sites/Career/JobProfiles/Engineering/Job%20Profile%20-%20Principal%20Architect%20(Principal).pdf",
@@ -58,6 +62,8 @@ export const jobRoles: JobRole[] = [
     status: "OPEN",
     description:
       "Lead the design and delivery of Dynamics 365 and Power Platform solutions for enterprise clients.",
+    responsibilities:
+      "Design Power Platform solutions, lead solution workshops, govern integrations.",
     openPositions: 2,
     sharePointLink:
       "https://kainossoftwareltd.sharepoint.com/sites/Career/JobProfiles/Engineering/Job%20Profile%20-%20Dynamics%20365%20PP%20Solution%20Architect%20(M).pdf",
@@ -72,6 +78,8 @@ export const jobRoles: JobRole[] = [
     status: "OPEN",
     description:
       "Define technical solutions end to end and guide delivery teams through implementation.",
+    responsibilities:
+      "Produce technical designs, guide delivery teams, review code and design decisions.",
     openPositions: 2,
     sharePointLink:
       "https://kainossoftwareltd.sharepoint.com/sites/Career/JobProfiles/Engineering/Job%20Profile%20-%20Technical%20Architect%20(Consultant).pdf",
@@ -86,6 +94,8 @@ export const jobRoles: JobRole[] = [
     status: "OPEN",
     description:
       "Lead test strategy and quality engineering practice across one or more delivery teams.",
+    responsibilities:
+      "Own the test strategy, coach test engineers, maintain automated test frameworks.",
     openPositions: 1,
     sharePointLink:
       "https://kainossoftwareltd.sharepoint.com/sites/Career/JobProfiles/Engineering/Job%20profile%20-%20Lead%20Test%20Engineer%20(Consultant).pdf",
@@ -100,6 +110,8 @@ export const jobRoles: JobRole[] = [
     status: "OPEN",
     description:
       "Design and run non-functional testing covering performance, resilience and scalability.",
+    responsibilities:
+      "Run performance and resilience testing, build test tooling, analyse and report results.",
     openPositions: 2,
     sharePointLink:
       "https://kainossoftwareltd.sharepoint.com/sites/Career/JobProfiles/Engineering/Job%20profile%20-%20Senior%20NFT%20Engineer%20(Senior%20Associate).pdf",
@@ -114,6 +126,8 @@ export const jobRoles: JobRole[] = [
     status: "OPEN",
     description:
       "Build accessible, responsive user interfaces and collaborate closely with designers and back-end engineers.",
+    responsibilities:
+      "Build accessible interfaces, integrate with REST APIs, write unit and component tests.",
     openPositions: 4,
     sharePointLink:
       "https://kainossoftwareltd.sharepoint.com/sites/Career/JobProfiles/Engineering/Job%20Profile%20-%20Front-End%20Engineer%20(A).pdf",
@@ -128,6 +142,8 @@ export const jobRoles: JobRole[] = [
     status: "OPEN",
     description:
       "Deliver business applications on low code platforms, from configuration through to integration.",
+    responsibilities:
+      "Configure low code applications, build integrations, support deployment and fixes.",
     openPositions: 3,
     sharePointLink:
       "https://kainossoftwareltd.sharepoint.com/sites/Career/JobProfiles/Engineering/Job%20specification%20-%20Low%20Code%20Engineer%20(A)%20-%20Low%20Code.pdf",
@@ -142,6 +158,8 @@ export const jobRoles: JobRole[] = [
     status: "CLOSED",
     description:
       "Join a delivery team and grow core software engineering skills through structured training and mentoring.",
+    responsibilities:
+      "Develop and test features, take part in code reviews, complete structured training.",
     openPositions: 0,
     sharePointLink:
       "https://kainossoftwareltd.sharepoint.com/sites/Career/JobProfiles/Engineering/Job%20profile%20-%20Software%20Engineer%20(Trainee).pdf",
@@ -156,6 +174,8 @@ export const jobRoles: JobRole[] = [
     status: "OPEN",
     description:
       "Combine paid work on client projects with a degree apprenticeship in software engineering.",
+    responsibilities:
+      "Work on client projects, study towards a degree apprenticeship, own small tasks.",
     openPositions: 10,
     sharePointLink:
       "https://kainossoftwareltd.sharepoint.com/sites/Career/JobProfiles/Engineering/Job%20profile%20-%20Apprentice%20Software%20Engineer%20(Apprentice).pdf",
