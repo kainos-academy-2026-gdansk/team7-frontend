@@ -161,15 +161,18 @@ body,
 }
 
 .kainos-footer__container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
-  gap: 5rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 3rem;
   padding-top: 2.5rem;
   padding-bottom: 2.5rem;
 }
 
-.kainos-footer__section {
-  flex: 0 1 auto;
+.kainos-footer__groups {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4rem;
 }
 
 .kainos-footer__heading {
