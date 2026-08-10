@@ -7,6 +7,8 @@ const env = new nunjucks.Environment(
   { autoescape: true },
 );
 
+env.addGlobal("currentYear", () => new Date().getFullYear());
+
 describe("pages/index.njk", () => {
   it("fills the layout blocks", () => {
     const html = env.render("pages/index.njk");
