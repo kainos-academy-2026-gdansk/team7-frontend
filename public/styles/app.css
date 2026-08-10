@@ -5,6 +5,7 @@
   --kainos-dark-green: #004631;
   --kainos-grey: #575756;
   --kainos-border: #d9d9d6;
+  --kainos-tint: #f2f7ef;
   --kainos-text: #0b0c0c;
   --kainos-font: "Century Gothic", "Avenir Next", "Futura", "Trebuchet MS", Arial, sans-serif;
 }
@@ -245,7 +246,7 @@ body,
 }
 
 .kainos-page-banner {
-  background-image: linear-gradient(120deg, var(--kainos-blue), var(--kainos-mid-blue));
+  background-image: linear-gradient(120deg, var(--kainos-blue), var(--kainos-dark-green));
   padding: 2rem;
   margin-bottom: 2rem;
 }
@@ -264,7 +265,23 @@ body,
   margin: 0;
 }
 
+.govuk-table {
+  border-top: 3px solid var(--kainos-green);
+}
+
 .govuk-table__head .govuk-table__header {
-  color: var(--kainos-blue);
-  border-bottom: 2px solid var(--kainos-green);
+  background-color: var(--kainos-blue);
+  color: #ffffff;
+  border-bottom: 3px solid var(--kainos-green);
+  padding: 0.75rem 1rem;
+}
+
+.govuk-table__body .govuk-table__row:nth-child(odd) {
+  background-color: var(--kainos-tint);
+}
+
+.govuk-table__cell,
+.govuk-table__body .govuk-table__header {
+  border-bottom: 1px solid var(--kainos-border);
+  padding: 0.75rem 1rem;
 }
