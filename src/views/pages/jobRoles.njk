@@ -2,35 +2,66 @@
 
 {% block title %}Job roles{% endblock %}
 
-{% block content %}
+{% block banner %}
   <div class="kainos-page-banner">
-    <h1 class="govuk-heading-l kainos-page-banner__title">Job roles</h1>
-    <p class="kainos-page-banner__count">{{ jobRoles.length }} roles found</p>
+    <div class="govuk-width-container">
+      <h1 class="govuk-heading-l kainos-page-banner__title">Job roles</h1>
+    </div>
   </div>
+{% endblock %}
 
-  {% if jobRoles.length > 0 %}
-    <table class="govuk-table">
-      <thead class="govuk-table__head">
-        <tr class="govuk-table__row">
-          <th scope="col" class="govuk-table__header">Role</th>
-          <th scope="col" class="govuk-table__header">Location</th>
-          <th scope="col" class="govuk-table__header">Capability</th>
-          <th scope="col" class="govuk-table__header">Band</th>
-          <th scope="col" class="govuk-table__header">Closing date</th>
-        </tr>
-      </thead>
-      <tbody class="govuk-table__body">
+{% macro fact(label, value, icon) %}
+  <span class="kainos-job__fact">
+    <img class="kainos-job__icon" src="/images/icons/{{ icon }}.png" alt="" width="289" height="289" />
+    <span class="govuk-visually-hidden">{{ label }}:</span>{{ value }}
+  </span>
+{% endmacro %}
+
+{% block content %}
+  {% if totalCount > 0 %}
+    <div class="kainos-job-list">
+      <p class="kainos-job-list__count">{{ totalCount }} jobs found</p>
+      <ul class="kainos-job-list__items">
         {% for jobRole in jobRoles %}
-          <tr class="govuk-table__row">
-            <th scope="row" class="govuk-table__header">{{ jobRole.roleName }}</th>
-            <td class="govuk-table__cell">{{ jobRole.location }}</td>
-            <td class="govuk-table__cell">{{ jobRole.capability}}</td>
-            <td class="govuk-table__cell">{{ jobRole.band}}</td>
-            <td class="govuk-table__cell">{{ jobRole.closingDate | formatDate }}</td>
-          </tr>
+          <li class="kainos-job">
+            <h2 class="kainos-job__title">{{ jobRole.roleName }}</h2>
+            <p class="kainos-job__facts">
+              {{ fact("Location", jobRole.location, "location") }}
+              {{ fact("Capability", jobRole.capability, "capability") }}
+              {{ fact("Band", jobRole.band, "band") }}
+            </p>
+            <p class="kainos-job__facts kainos-job__closing">
+              {{ fact("Closing date", jobRole.closingDate | formatDate, "closing-date") }}
+            </p>
+          </li>
         {% endfor %}
-      </tbody>
-    </table>
+      </ul>
+    </div>
+
+    {% if totalPages > 1 %}
+      <nav class="kainos-pagination" aria-label="Job roles pagination">
+        {% if page > 1 %}
+          <a class="kainos-pagination__step" rel="prev" href="/job-roles?page={{ page - 1 }}">Previous</a>
+        {% endif %}
+        <ul class="kainos-pagination__pages">
+          {% for number in range(1, totalPages + 1) %}
+            <li>
+              {% if number == page %}
+                <a class="kainos-pagination__page kainos-pagination__page--current"
+                   aria-current="page" href="/job-roles?page={{ number }}">{{ number }}</a>
+              {% else %}
+                <a class="kainos-pagination__page" href="/job-roles?page={{ number }}">
+                  <span class="govuk-visually-hidden">Page </span>{{ number }}
+                </a>
+              {% endif %}
+            </li>
+          {% endfor %}
+        </ul>
+        {% if page < totalPages %}
+          <a class="kainos-pagination__step" rel="next" href="/job-roles?page={{ page + 1 }}">Next</a>
+        {% endif %}
+      </nav>
+    {% endif %}
   {% else %}
     <p class="govuk-body">There are no job roles available at the moment.</p>
   {% endif %}

@@ -12,11 +12,12 @@
   <body class="govuk-template__body">
     <script>document.body.className+= ' js-enabled';</script>
     {% include "partials/header.njk" %}
-    <div class="govuk-width-container">
-      <main class="govuk-main-wrapper" id="main-content" role="main">
+    <main class="govuk-main-wrapper" id="main-content" role="main">
+      {% block banner %}{% endblock %}
+      <div class="govuk-width-container">
         {% block content %}{% endblock %}
-      </main>
-    </div>
+      </div>
+    </main>
     {% include "partials/footer.njk" %}
     <script type="module">
       import { initAll } from "/govuk-frontend.min.js";
