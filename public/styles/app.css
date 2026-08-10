@@ -1,0 +1,108 @@
+:root {
+  --kainos-blue: #283583;
+  --kainos-mid-blue: #41679f;
+  --kainos-green: #61a83f;
+  --kainos-dark-green: #004631;
+  --kainos-grey: #575756;
+  --kainos-border: #d9d9d6;
+  --kainos-text: #0b0c0c;
+  --kainos-font: "Century Gothic", "Avenir Next", "Futura", "Trebuchet MS", Arial, sans-serif;
+}
+
+body,
+.govuk-body,
+.govuk-table,
+.govuk-link {
+  font-family: var(--kainos-font);
+}
+
+.govuk-body,
+.govuk-table {
+  color: var(--kainos-text);
+  font-size: 1.125rem;
+  line-height: 1.6;
+}
+
+.govuk-heading-xl,
+.govuk-heading-l,
+.govuk-heading-m {
+  font-family: var(--kainos-font);
+  color: var(--kainos-blue);
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+}
+
+.govuk-heading-xl {
+  font-size: 2.75rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+}
+
+.govuk-heading-l {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 1.25rem;
+}
+
+.govuk-heading-m {
+  font-size: 1.375rem;
+  font-weight: 600;
+}
+
+.govuk-link {
+  color: var(--kainos-mid-blue);
+  text-underline-offset: 0.15em;
+}
+
+.govuk-link:hover {
+  color: var(--kainos-blue);
+}
+
+.govuk-width-container {
+  max-width: 1200px;
+}
+
+.kainos-hero__title {
+  text-align: center;
+}
+
+.kainos-header {
+  background-color: var(--kainos-blue);
+  border-bottom: 4px solid var(--kainos-green);
+}
+
+.kainos-header__container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+.kainos-header__logo {
+  font-family: var(--kainos-font);
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.kainos-header__nav {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.kainos-header__link {
+  font-family: var(--kainos-font);
+  font-size: 1.0625rem;
+  color: #ffffff;
+  text-decoration: none;
+  padding-bottom: 0.25rem;
+  border-bottom: 2px solid transparent;
+}
+
+.kainos-header__link:hover {
+  border-bottom-color: var(--kainos-green);
+}
