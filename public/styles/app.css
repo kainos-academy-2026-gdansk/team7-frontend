@@ -154,3 +154,69 @@ body,
 .kainos-header__link:hover {
   border-bottom-color: var(--kainos-green);
 }
+.kainos-footer {
+  margin-top: 4rem;
+  background-color: var(--kainos-blue);
+  color: #ffffff;
+}
+
+.kainos-footer__container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  padding-top: 2.5rem;
+  padding-bottom: 2.5rem;
+}
+
+.kainos-footer__section {
+  flex: 1 1 200px;
+}
+
+.kainos-footer__heading {
+  font-family: var(--kainos-font);
+  font-size: 1.125rem;
+  font-weight: 700;
+  display: inline-block;
+  margin: 0 0 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 3px solid var(--kainos-green);
+}
+
+.kainos-footer__text {
+  font-family: var(--kainos-font);
+  margin: 0;
+  line-height: 1.6;
+}
+
+.kainos-footer__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  line-height: 2;
+}
+
+.kainos-footer__link {
+  font-family: var(--kainos-font);
+  color: #ffffff;
+  text-underline-offset: 0.15em;
+}
+
+.kainos-footer__link:hover {
+  text-decoration-thickness: 2px;
+}
+
+.kainos-footer__link:focus-visible {
+  outline: 3px solid var(--kainos-green);
+  outline-offset: 2px;
+}
+
+.kainos-footer__bar {
+  border-top: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.kainos-footer__copyright {
+  font-family: var(--kainos-font);
+  font-size: 0.9375rem;
+  margin: 0;
+  padding: 1rem 0;
+}
