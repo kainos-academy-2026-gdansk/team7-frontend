@@ -62,8 +62,53 @@ body,
   max-width: 1200px;
 }
 
-.kainos-hero__title {
+.kainos-hero {
   text-align: center;
+  padding: 1rem 0 3rem;
+}
+
+.kainos-hero__title {
+  margin-bottom: 1rem;
+}
+
+.kainos-hero__title::after {
+  content: "";
+  display: block;
+  width: 4rem;
+  height: 4px;
+  margin: 1.25rem auto 0;
+  background-color: var(--kainos-green);
+}
+
+.kainos-hero__lead {
+  font-family: var(--kainos-font);
+  font-size: 1.25rem;
+  line-height: 1.6;
+  color: var(--kainos-grey);
+  max-width: 40rem;
+  margin: 0 auto 2rem;
+}
+
+.kainos-button {
+  display: inline-block;
+  font-family: var(--kainos-font);
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #ffffff;
+  background-color: var(--kainos-blue);
+  padding: 0.875rem 2rem;
+  border-bottom: 4px solid var(--kainos-green);
+  text-decoration: none;
+}
+
+.kainos-button:hover {
+  background-color: var(--kainos-mid-blue);
+  color: #ffffff;
+}
+
+.kainos-button:focus-visible {
+  outline: 3px solid var(--kainos-green);
+  outline-offset: 2px;
 }
 
 .kainos-header {
