@@ -63,8 +63,26 @@ body,
 }
 
 .kainos-hero {
-  text-align: center;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 3rem;
   padding: 4rem 0 5rem;
+}
+
+.kainos-hero__content {
+  flex: 1 1 22rem;
+}
+
+.kainos-hero__image {
+  flex: 1 1 20rem;
+  max-width: 32rem;
+}
+
+.kainos-hero__image img {
+  display: block;
+  width: 100%;
+  height: auto;
 }
 
 .kainos-hero__title {
@@ -76,7 +94,7 @@ body,
   display: block;
   width: 4rem;
   height: 4px;
-  margin: 1.25rem auto 0;
+  margin: 1.25rem 0 0;
   background-color: var(--kainos-green);
 }
 
@@ -86,7 +104,7 @@ body,
   line-height: 1.6;
   color: var(--kainos-grey);
   max-width: 40rem;
-  margin: 0 auto 2rem;
+  margin: 0 0 2rem;
 }
 
 .kainos-button {
