@@ -64,7 +64,7 @@ body,
 
 .kainos-hero {
   text-align: center;
-  padding: 1rem 0 3rem;
+  padding: 4rem 0 5rem;
 }
 
 .kainos-hero__title {
@@ -163,13 +163,13 @@ body,
 .kainos-footer__container {
   display: flex;
   flex-wrap: wrap;
-  gap: 2rem;
+  gap: 5rem;
   padding-top: 2.5rem;
   padding-bottom: 2.5rem;
 }
 
 .kainos-footer__section {
-  flex: 1 1 200px;
+  flex: 0 1 auto;
 }
 
 .kainos-footer__heading {
@@ -184,6 +184,7 @@ body,
 
 .kainos-footer__text {
   font-family: var(--kainos-font);
+  max-width: 18rem;
   margin: 0;
   line-height: 1.6;
 }
@@ -216,7 +217,7 @@ body,
 
 .kainos-footer__copyright {
   font-family: var(--kainos-font);
-  font-size: 0.9375rem;
+  font-size: 0.875rem;
   margin: 0;
-  padding: 1rem 0;
+  padding: 0.625rem 0;
 }
