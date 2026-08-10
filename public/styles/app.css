@@ -243,3 +243,28 @@ body,
   padding: 0.625rem 0;
   text-align: center;
 }
+
+.kainos-page-banner {
+  background-image: linear-gradient(120deg, var(--kainos-blue), var(--kainos-mid-blue));
+  padding: 2rem;
+  margin-bottom: 2rem;
+}
+
+.kainos-page-banner__title {
+  color: #ffffff;
+  margin-bottom: 0.5rem;
+}
+
+.kainos-page-banner__count {
+  font-family: var(--kainos-font);
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #ffffff;
+  margin: 0;
+}
+
+.govuk-table__head .govuk-table__header {
+  color: var(--kainos-blue);
+  border-bottom: 2px solid var(--kainos-green);
+}

@@ -19,6 +19,18 @@ const env = nunjucks.configure(
 // A function, not a value, so the year is recomputed on every render.
 env.addGlobal("currentYear", () => new Date().getFullYear());
 
+// UTC keeps a calendar date from shifting a day in negative timezone offsets.
+env.addFilter("formatDate", (value: string | null) =>
+  value
+    ? new Date(value).toLocaleDateString("en-GB", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+        timeZone: "UTC",
+      })
+    : "Not specified",
+);
+
 app.use(
   "/assets",
   express.static(

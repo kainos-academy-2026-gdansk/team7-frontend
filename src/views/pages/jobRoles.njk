@@ -3,7 +3,10 @@
 {% block title %}Job roles{% endblock %}
 
 {% block content %}
-  <h1 class="govuk-heading-l">Job roles</h1>
+  <div class="kainos-page-banner">
+    <h1 class="govuk-heading-l kainos-page-banner__title">Job roles</h1>
+    <p class="kainos-page-banner__count">{{ jobRoles.length }} roles found</p>
+  </div>
 
   {% if jobRoles.length > 0 %}
     <table class="govuk-table">
@@ -21,9 +24,9 @@
           <tr class="govuk-table__row">
             <th scope="row" class="govuk-table__header">{{ jobRole.roleName }}</th>
             <td class="govuk-table__cell">{{ jobRole.location }}</td>
-            <td class="govuk-table__cell">{{ jobRole.capability.name }}</td>
-            <td class="govuk-table__cell">{{ jobRole.band.name }}</td>
-            <td class="govuk-table__cell">{{ jobRole.closingDate }}</td>
+            <td class="govuk-table__cell">{{ jobRole.capability}}</td>
+            <td class="govuk-table__cell">{{ jobRole.band}}</td>
+            <td class="govuk-table__cell">{{ jobRole.closingDate | formatDate }}</td>
           </tr>
         {% endfor %}
       </tbody>
