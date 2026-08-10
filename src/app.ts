@@ -3,7 +3,7 @@ import express from "express";
 import nunjucks from "nunjucks";
 const app = express();
 
-nunjucks.configure(
+const env = nunjucks.configure(
   [
     path.join(__dirname, "..", "src", "views"),
     path.join(__dirname, "..", "node_modules", "govuk-frontend", "dist"),
@@ -14,6 +14,9 @@ nunjucks.configure(
     noCache: true,
   },
 );
+
+// A function, not a value, so the year is recomputed on every render.
+env.addGlobal("currentYear", () => new Date().getFullYear());
 
 app.use(
   "/assets",

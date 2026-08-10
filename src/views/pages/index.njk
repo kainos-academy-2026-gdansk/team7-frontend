@@ -1,7 +1,20 @@
+
 {% extends "layouts/base.njk" %}
 
 {% block title %}Home{% endblock %}
 
 {% block content %}
-  <h1 class="govuk-heading-xl" style="text-align: center;">Welcome to Kainos Work</h1>
+  <section class="kainos-hero">
+    <div class="kainos-hero__content">
+      <h1 class="govuk-heading-xl kainos-hero__title">Find your next role at Kainos</h1>
+      <p class="kainos-hero__lead">
+        We build digital services that make a difference. Browse the roles we are
+        currently hiring for and find where you fit in.
+      </p>
+      <a class="kainos-button" href="/job-roles">View job roles</a>
+    </div>
+    <div class="kainos-hero__image">
+      <img src="/images/hero-illustration.png" alt="" width="1000" height="872" />
+    </div>
+  </section>
 {% endblock %}

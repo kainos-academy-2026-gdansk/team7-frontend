@@ -1,0 +1,245 @@
+:root {
+  --kainos-blue: #283583;
+  --kainos-mid-blue: #41679f;
+  --kainos-green: #61a83f;
+  --kainos-dark-green: #004631;
+  --kainos-grey: #575756;
+  --kainos-border: #d9d9d6;
+  --kainos-text: #0b0c0c;
+  --kainos-font: "Century Gothic", "Avenir Next", "Futura", "Trebuchet MS", Arial, sans-serif;
+}
+
+body,
+.govuk-body,
+.govuk-table,
+.govuk-link {
+  font-family: var(--kainos-font);
+}
+
+.govuk-body,
+.govuk-table {
+  color: var(--kainos-text);
+  font-size: 1.125rem;
+  line-height: 1.6;
+}
+
+.govuk-heading-xl,
+.govuk-heading-l,
+.govuk-heading-m {
+  font-family: var(--kainos-font);
+  color: var(--kainos-blue);
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+}
+
+.govuk-heading-xl {
+  font-size: 2.75rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+}
+
+.govuk-heading-l {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 1.25rem;
+}
+
+.govuk-heading-m {
+  font-size: 1.375rem;
+  font-weight: 600;
+}
+
+.govuk-link {
+  color: var(--kainos-mid-blue);
+  text-underline-offset: 0.15em;
+}
+
+.govuk-link:hover {
+  color: var(--kainos-blue);
+}
+
+.govuk-width-container {
+  max-width: 1200px;
+}
+
+.kainos-hero {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 3rem;
+  padding: 4rem 0 5rem;
+}
+
+.kainos-hero__content {
+  flex: 1 1 22rem;
+}
+
+.kainos-hero__image {
+  flex: 1 1 20rem;
+  max-width: 32rem;
+}
+
+.kainos-hero__image img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.kainos-hero__title {
+  margin-bottom: 1rem;
+}
+
+.kainos-hero__title::after {
+  content: "";
+  display: block;
+  width: 4rem;
+  height: 4px;
+  margin: 1.25rem 0 0;
+  background-color: var(--kainos-green);
+}
+
+.kainos-hero__lead {
+  font-family: var(--kainos-font);
+  font-size: 1.25rem;
+  line-height: 1.6;
+  color: var(--kainos-grey);
+  max-width: 40rem;
+  margin: 0 0 2rem;
+}
+
+.kainos-button {
+  display: inline-block;
+  font-family: var(--kainos-font);
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #ffffff;
+  background-color: var(--kainos-blue);
+  padding: 0.875rem 2rem;
+  border-bottom: 4px solid var(--kainos-green);
+  text-decoration: none;
+}
+
+.kainos-button:hover {
+  background-color: var(--kainos-mid-blue);
+  color: #ffffff;
+}
+
+.kainos-button:focus-visible {
+  outline: 3px solid var(--kainos-green);
+  outline-offset: 2px;
+}
+
+.kainos-header {
+  background-color: #ffffff;
+  border-bottom: 4px solid var(--kainos-green);
+}
+
+.kainos-header__container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+.kainos-header__logo {
+  display: inline-flex;
+  align-items: center;
+}
+
+.kainos-header__logo img {
+  display: block;
+  width: 120px;
+  height: auto;
+}
+
+.kainos-header__nav {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.kainos-header__link {
+  font-family: var(--kainos-font);
+  font-size: 1.0625rem;
+  font-weight: 600;
+  color: var(--kainos-blue);
+  text-decoration: none;
+  padding-bottom: 0.25rem;
+  border-bottom: 2px solid transparent;
+}
+
+.kainos-header__link:hover {
+  border-bottom-color: var(--kainos-green);
+}
+.kainos-footer {
+  margin-top: 4rem;
+  background-color: var(--kainos-blue);
+  color: #ffffff;
+}
+
+.kainos-footer__container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 3rem;
+  padding-top: 2.5rem;
+  padding-bottom: 2.5rem;
+}
+
+.kainos-footer__groups {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4rem;
+}
+
+.kainos-footer__heading {
+  font-family: var(--kainos-font);
+  font-size: 1.125rem;
+  font-weight: 700;
+  display: inline-block;
+  margin: 0 0 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 3px solid var(--kainos-green);
+}
+
+.kainos-footer__text {
+  font-family: var(--kainos-font);
+  max-width: 18rem;
+  margin: 0;
+  line-height: 1.6;
+}
+
+.kainos-footer__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  line-height: 2;
+}
+
+.kainos-footer__link {
+  font-family: var(--kainos-font);
+  color: #ffffff;
+  text-underline-offset: 0.15em;
+}
+
+.kainos-footer__link:hover {
+  text-decoration-thickness: 2px;
+}
+
+.kainos-footer__link:focus-visible {
+  outline: 3px solid var(--kainos-green);
+  outline-offset: 2px;
+}
+
+.kainos-footer__bar {
+  border-top: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.kainos-footer__copyright {
+  font-family: var(--kainos-font);
+  font-size: 0.875rem;
+  margin: 0;
+  padding: 0.625rem 0;
+  text-align: center;
+}
