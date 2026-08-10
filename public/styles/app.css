@@ -34,13 +34,11 @@ body > .govuk-main-wrapper {
 
 body,
 .govuk-body,
-.govuk-table,
 .govuk-link {
   font-family: var(--kainos-font);
 }
 
-.govuk-body,
-.govuk-table {
+.govuk-body {
   color: var(--kainos-text);
   font-size: 1.125rem;
   line-height: 1.6;
@@ -404,33 +402,4 @@ body,
   width: 2rem;
   height: 2rem;
   flex-shrink: 0;
-}
-
-/* Opaque so the page gradient never bleeds under the data. */
-.govuk-table {
-  background-color: #ffffff;
-  border-top: 3px solid var(--kainos-green);
-}
-
-.govuk-table__head .govuk-table__header {
-  background-color: var(--kainos-blue);
-  color: #ffffff;
-  border-bottom: 3px solid var(--kainos-green);
-  padding: 0.75rem 1rem;
-}
-
-.govuk-table__body .govuk-table__row:nth-child(odd) {
-  background-color: var(--kainos-tint);
-}
-
-.govuk-table__cell,
-.govuk-table__body .govuk-table__header {
-  border-bottom: 1px solid var(--kainos-border);
-  padding: 0.75rem 1rem;
-}
-
-/* Dates vary in length, so aligning right lines the years up. */
-.govuk-table__row > *:last-child {
-  text-align: right;
-  font-variant-numeric: tabular-nums;
 }
