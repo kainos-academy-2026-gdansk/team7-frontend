@@ -4,4 +4,5 @@ export interface JobRole {
   capability: string;
   band: string;
   closingDate: string | null;
+  status: "OPEN" | "CLOSED";
 }
