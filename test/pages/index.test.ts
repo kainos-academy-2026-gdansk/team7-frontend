@@ -7,11 +7,14 @@ const env = new nunjucks.Environment(
   { autoescape: true },
 );
 
+env.addGlobal("currentYear", () => new Date().getFullYear());
+
 describe("pages/index.njk", () => {
   it("fills the layout blocks", () => {
     const html = env.render("pages/index.njk");
 
     expect(html).toContain("<title>Home</title>");
-    expect(html).toContain("Welcome to Kainos Work");
+    expect(html).toContain("Find your next role at Kainos");
+    expect(html).toContain('alt="Kainos"');
   });
 });
