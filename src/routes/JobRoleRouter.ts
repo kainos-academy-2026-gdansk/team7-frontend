@@ -1,6 +1,5 @@
 import { Router } from "express";
 import apiClient from "../client/axiosClient";
-//import { getJobRolesPage } from "../controllers/JobRoleController";
 import { JobRoleController } from "../controllers/JobRoleController";
 import { BandService } from "../services/BandService";
 import { CapabilityService } from "../services/CapabilityService";
