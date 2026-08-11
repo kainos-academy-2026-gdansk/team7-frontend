@@ -1,7 +1,8 @@
 import path from "node:path";
 import express from "express";
 import nunjucks from "nunjucks";
-import { getJobRolesPage } from "./controllers/JobRoleController";
+import JobRoleRouter from "./routes/JobRoleRouter";
+
 const app = express();
 
 const env = nunjucks.configure(
@@ -72,8 +73,6 @@ app.get("/health", (_req, res) => {
   res.status(200).json({ status: "UP", timestamp: new Date().toISOString() });
 });
 
-app.get("/", (_req, res) => {
-  res.render("pages/index.njk");
-});
-app.get("/job-roles", getJobRolesPage);
+app.use("/", JobRoleRouter);
+
 export default app;

@@ -1,0 +1,68 @@
+{% extends "layouts/base.njk" %}
+
+{% block title %}{{ jobRole.jobRoleName }}{% endblock %}
+
+{% block content %}
+  <a href="/job-roles" class="govuk-back-link">Back to job roles</a>
+
+  <div class="kainos-job-detail">
+    <div class="kainos-job-detail__header">
+      <h2 class="kainos-job-detail__title">{{ jobRole.jobRoleName }}</h2>
+      <span class="kainos-job-detail__status kainos-job-detail__status--{{ jobRole.status | lower }}">
+        {{ jobRole.status }}
+      </span>
+    </div>
+
+    <div class="kainos-job-detail__content">
+      <div class="kainos-job-detail__main">
+        <section class="kainos-job-detail__section">
+          <h3 class="kainos-job-detail__section-title">Description</h3>
+          <p class="govuk-body">{{ jobRole.description }}</p>
+        </section>
+
+        <section class="kainos-job-detail__section">
+          <h3 class="kainos-job-detail__section-title">Responsibilities</h3>
+          {% if jobRole.responsibilities %}
+            <p class="govuk-body">{{ jobRole.responsibilities }}</p>
+          {% else %}
+            <p class="govuk-body">Check out the Sharepoint link for more information on this role.</p>
+          {% endif %}
+        </section>
+
+        {% if jobRole.link %}
+          <section class="kainos-job-detail__section">
+            <h3 class="kainos-job-detail__section-title">Sharepoint link</h3>
+            <a href="{{ jobRole.link }}" class="govuk-link kainos-job-detail__link" target="_blank" rel="noopener noreferrer">{{ jobRole.link }}</a>
+          </section>
+        {% endif %}
+      </div>
+
+      <dl class="kainos-job-detail__side">
+        <div class="kainos-job-detail__fact">
+          <dt class="kainos-job-detail__label">Location</dt>
+          <dd class="kainos-job-detail__value">{{ jobRole.location }}</dd>
+        </div>
+
+        <div class="kainos-job-detail__fact">
+          <dt class="kainos-job-detail__label">Capability</dt>
+          <dd class="kainos-job-detail__value">{{ jobRole.capability }}</dd>
+        </div>
+
+        <div class="kainos-job-detail__fact">
+          <dt class="kainos-job-detail__label">Band</dt>
+          <dd class="kainos-job-detail__value">{{ jobRole.band }}</dd>
+        </div>
+
+        <div class="kainos-job-detail__fact">
+          <dt class="kainos-job-detail__label">Open positions</dt>
+          <dd class="kainos-job-detail__value">{{ jobRole.numberOfOpenPositions }}</dd>
+        </div>
+
+        <div class="kainos-job-detail__fact">
+          <dt class="kainos-job-detail__label">Closing date</dt>
+          <dd class="kainos-job-detail__value">{{ jobRole.closingDate | formatDate if jobRole.closingDate else "Not specified" }}</dd>
+        </div>
+      </dl>
+    </div>
+  </div>
+{% endblock %}

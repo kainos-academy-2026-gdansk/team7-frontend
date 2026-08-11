@@ -1,5 +1,9 @@
 import type { Request, Response } from "express";
-import { getJobRoles } from "../services/JobRoleService";
+import {
+  JobRoleNotFoundError,
+  getJobRoleInformation,
+  getJobRoles,
+} from "../services/JobRoleService";
 
 // Pagination is parked until the team agrees on a page size; every open role is listed for now.
 // const PAGE_SIZE = 5;
@@ -27,6 +31,38 @@ export async function getJobRolesPage(_req: Request, res: Response): Promise<voi
       message:
         "We could not reach the service that holds our job roles. This is usually temporary, so please try again in a moment.",
       retryUrl: "/job-roles",
+    });
+  }
+}
+
+export async function getJobRoleInformationPage(req: Request, res: Response): Promise<void> {
+  try {
+    const id = Number(req.params.id);
+    const jobRole = await getJobRoleInformation(id);
+
+    res.render("pages/jobRoleInformation.njk", {
+      jobRole,
+    });
+  } catch (error) {
+    if (error instanceof JobRoleNotFoundError) {
+      console.error("Job role not found", error);
+
+      res.status(404).render("pages/error.njk", {
+        heading: "Job role not found",
+        message:
+          "The job role you are looking for does not exist. Please check the ID and try again.",
+        retryUrl: "/job-roles/",
+      });
+      return;
+    }
+
+    console.error("Could not load job role", error);
+
+    res.status(503).render("pages/error.njk", {
+      heading: "Job role is unavailable",
+      message:
+        "We could not reach the service that holds our job role. This is usually temporary, so please try again in a moment.",
+      retryUrl: "/job-roles/",
     });
   }
 }

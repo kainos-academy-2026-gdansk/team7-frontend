@@ -30,9 +30,12 @@
               {{ fact("Capability", jobRole.capability, "capability") }}
               {{ fact("Band", jobRole.band, "band") }}
             </p>
-            <p class="kainos-job__facts kainos-job__closing">
-              {{ fact("Closing date", jobRole.closingDate | formatDate, "closing-date") }}
-            </p>
+            <div style="display: flex; flex-direction: column;">
+              <p class="kainos-job__facts kainos-job__closing">
+                {{ fact("Closing date", jobRole.closingDate | formatDate, "closing-date") }}
+              </p>
+              <a href="/job-roles/{{ jobRole.id }}" class="govuk-button" style="width: fit-content; margin-top: 15px; margin-bottom: 0;">View offer</a>
+            </div>
           </li>
         {% endfor %}
       </ul>
