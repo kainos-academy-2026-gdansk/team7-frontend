@@ -1,0 +1,71 @@
+
+{% macro errorSummary(errorList) %}
+  {% if errorList | length %}
+    <div class="govuk-error-summary kainos-error-summary" data-module="govuk-error-summary">
+      <div role="alert">
+        <h2 class="govuk-error-summary__title kainos-error-summary__title">There is a problem</h2>
+        <div class="govuk-error-summary__body">
+          <ul class="govuk-list govuk-error-summary__list kainos-error-summary__list">
+            {% for error in errorList %}
+              <li><a href="#{{ error.field }}">{{ error.message }}</a></li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+{% endmacro %}
+
+{% macro _label(name, label, hint, error) %}
+  <label class="govuk-label kainos-form__label" for="{{ name }}">{{ label }}</label>
+  {% if hint %}<div class="govuk-hint kainos-form__hint" id="{{ name }}-hint">{{ hint }}</div>{% endif %}
+  {% if error %}
+    <p class="govuk-error-message kainos-form__error" id="{{ name }}-error">
+      <span class="govuk-visually-hidden">Error:</span> {{ error }}
+    </p>
+  {% endif %}
+{% endmacro %}
+
+{% macro _describedBy(name, hint, error) %}
+  {%- if hint or error %} aria-describedby="{% if hint %}{{ name }}-hint {% endif %}{% if error %}{{ name }}-error{% endif %}"{% endif -%}
+{% endmacro %}
+
+{% macro textInput(name, label, value, error = "", type = "text", hint = "") %}
+  <div class="govuk-form-group kainos-form__group {% if error %}govuk-form-group--error kainos-form__group--error{% endif %}">
+    {{ _label(name, label, hint, error) }}
+    <input class="govuk-input kainos-form__input {% if error %}govuk-input--error{% endif %}"
+           id="{{ name }}"
+           name="{{ name }}"
+           type="{{ type }}"
+           value="{{ value }}"
+           {{ _describedBy(name, hint, error) }} />
+  </div>
+{% endmacro %}
+
+{% macro select(name, label, value, options, error = "", hint = "", placeholder = "", valueKey = "value", labelKey = "label") %}
+  <div class="govuk-form-group kainos-form__group {% if error %}govuk-form-group--error kainos-form__group--error{% endif %}">
+    {{ _label(name, label, hint, error) }}
+    <select class="govuk-select kainos-form__select {% if error %}govuk-select--error{% endif %}"
+            id="{{ name }}"
+            name="{{ name }}"
+            {{ _describedBy(name, hint, error) }}>
+      {% if placeholder %}
+        <option value="" {% if not value %}selected{% endif %}>{{ placeholder }}</option>
+      {% endif %}
+      {% for option in options %}
+        <option value="{{ option[valueKey] }}" {% if value == option[valueKey] | string %}selected{% endif %}>{{ option[labelKey] }}</option>
+      {% endfor %}
+    </select>
+  </div>
+{% endmacro %}
+
+{% macro textarea(name, label, value, error = "", hint = "", rows = 5) %}
+  <div class="govuk-form-group kainos-form__group {% if error %}govuk-form-group--error kainos-form__group--error{% endif %}">
+    {{ _label(name, label, hint, error) }}
+    <textarea class="govuk-textarea kainos-form__textarea {% if error %}govuk-textarea--error{% endif %}"
+              id="{{ name }}"
+              name="{{ name }}"
+              rows="{{ rows }}"
+              {{ _describedBy(name, hint, error) }}>{{ value }}</textarea>
+  </div>
+{% endmacro %}

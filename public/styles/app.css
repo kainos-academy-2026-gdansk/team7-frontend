@@ -294,6 +294,81 @@ body,
   margin: 0 auto 2rem;
 }
 
+.kainos-form-row {
+  display: flex;
+  justify-content: center;
+}
+
+.kainos-form-row > [class*="govuk-grid-column"] {
+  float: none;
+}
+
+.kainos-form {
+  background-color: #ffffff;
+  border: 1px solid var(--kainos-border);
+  border-top: 3px solid var(--kainos-green);
+  padding: 2rem;
+  margin-bottom: 3rem;
+}
+
+.kainos-form__group {
+  margin-bottom: 1.75rem;
+}
+
+.kainos-form__label {
+  font-family: var(--kainos-font);
+  font-size: 1.0625rem;
+  font-weight: 600;
+  color: var(--kainos-blue);
+}
+
+.kainos-form__hint,
+.kainos-form__error {
+  font-family: var(--kainos-font);
+  font-size: 1rem;
+}
+
+.kainos-form__hint {
+  color: var(--kainos-grey);
+}
+
+.kainos-form__input,
+.kainos-form__select,
+.kainos-form__textarea {
+  font-family: var(--kainos-font);
+  font-size: 1.0625rem;
+  width: 100%;
+  border: 2px solid var(--kainos-border);
+}
+
+.kainos-form__input:focus,
+.kainos-form__select:focus,
+.kainos-form__textarea:focus {
+  border-color: var(--kainos-blue);
+  outline: 3px solid var(--kainos-green);
+  outline-offset: 0;
+  box-shadow: none;
+}
+
+.kainos-form__submit {
+  border: 0;
+  cursor: pointer;
+}
+
+.kainos-error-summary {
+  background-color: #ffffff;
+  border-color: var(--kainos-blue);
+}
+
+.kainos-error-summary__title {
+  font-family: var(--kainos-font);
+  color: var(--kainos-blue);
+}
+
+.kainos-error-summary__list {
+  font-family: var(--kainos-font);
+}
+
 .kainos-job-list__count {
   font-family: var(--kainos-font);
   font-size: 1rem;
@@ -391,7 +466,6 @@ body,
   color: var(--kainos-text);
 }
 
-/* Matches the row gap above, so the date sits on the same rhythm as a wrapped line. */
 .kainos-job__closing {
   margin-top: 1rem;
 }

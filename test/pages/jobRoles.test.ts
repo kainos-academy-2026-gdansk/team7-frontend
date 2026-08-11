@@ -1,10 +1,11 @@
-import axios from "axios";
 import request from "supertest";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import app from "../../src/app";
 
+const apiClient = vi.hoisted(() => ({ get: vi.fn(), post: vi.fn() }));
+
 vi.mock("axios", () => ({
-  default: { get: vi.fn() },
+  default: { create: () => apiClient },
 }));
 
 const jobRoles = [
@@ -36,7 +37,7 @@ const jobRoles = [
 
 describe("GET /job-roles", () => {
   beforeEach(() => {
-    vi.mocked(axios.get).mockResolvedValue({ data: jobRoles });
+    apiClient.get.mockResolvedValue({ data: jobRoles });
   });
 
   it("renders a row for every job role", async () => {
@@ -64,7 +65,7 @@ describe("GET /job-roles", () => {
 
 describe("GET /job-roles when the API is unreachable", () => {
   beforeEach(() => {
-    vi.mocked(axios.get).mockRejectedValue(new Error("connect ECONNREFUSED 127.0.0.1:3000"));
+    apiClient.get.mockRejectedValue(new Error("connect ECONNREFUSED 127.0.0.1:3000"));
   });
 
   it("answers 503 with a message instead of crashing", async () => {
@@ -93,7 +94,7 @@ describe.skip("GET /job-roles pagination", () => {
   }));
 
   beforeEach(() => {
-    vi.mocked(axios.get).mockResolvedValue({ data: manyRoles });
+    apiClient.get.mockResolvedValue({ data: manyRoles });
   });
 
   it("shows the first five roles and counts them all", async () => {

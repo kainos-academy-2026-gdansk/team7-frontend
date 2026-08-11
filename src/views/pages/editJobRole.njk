@@ -1,0 +1,20 @@
+{% extends "layouts/base.njk" %}
+{% import "partials/jobRoleForm.njk" as jobRole %}
+
+{% block title %}Edit a job role{% endblock %}
+
+{% block banner %}
+  <div class="kainos-page-banner">
+    <div class="govuk-width-container">
+      <h1 class="govuk-heading-l kainos-page-banner__title">Edit a job role</h1>
+    </div>
+  </div>
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row kainos-form-row">
+    <div class="govuk-grid-column-two-thirds">
+      {{ jobRole.editJobRoleForm(formAction, values, errors, errorList, bands, capabilities, submitLabel) }}
+    </div>
+  </div>
+{% endblock %}
