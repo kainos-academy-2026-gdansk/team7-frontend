@@ -1,4 +1,5 @@
 import { Router } from "express";
+
 import apiClient from "../client/axiosClient";
 import { JobRoleController } from "../controllers/JobRoleController";
 import { BandService } from "../services/BandService";
@@ -9,6 +10,7 @@ const jobRoleService = new JobRoleService(apiClient);
 const bandService = new BandService(apiClient);
 const capabilityService = new CapabilityService(apiClient);
 const jobRoleController = new JobRoleController(jobRoleService, bandService, capabilityService);
+
 const router = Router();
 
 router.get("/", (_req, res) => {
@@ -19,6 +21,8 @@ router.get("/job-roles", jobRoleController.getJobRolesPage);
 
 router.get("/job-roles/new", jobRoleController.showCreateJobRoleForm);
 router.post("/job-roles/new", jobRoleController.createJobRole);
+
+router.get("/job-roles/:id", jobRoleController.getJobRoleInformationPage);
 
 router.get("/job-roles/:id/edit", jobRoleController.showEditJobRoleForm);
 router.post("/job-roles/:id/edit", jobRoleController.editJobRole);

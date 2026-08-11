@@ -4,6 +4,7 @@ export enum JobRoleStatus {
 }
 
 export interface JobRole {
+  id?: number;
   roleName: string;
   location: string;
   capability: string;
