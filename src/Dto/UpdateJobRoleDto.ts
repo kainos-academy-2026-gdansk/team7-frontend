@@ -12,7 +12,7 @@ import {
 export const updateJobRoleSchema = z.object({
   jobRoleName: requiredText("a role name", 100),
   location: requiredText("a location", 100),
-  status: z.enum(JobRoleStatus, { error: "Select a status" }),
+  status: z.nativeEnum(JobRoleStatus, { error: "Select a status" }),
   bandName: selectedName("a band"),
   capabilityName: selectedName("a capability"),
   description: optionalText("Description", 2000),
