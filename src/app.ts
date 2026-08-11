@@ -1,7 +1,8 @@
 import path from "node:path";
 import express from "express";
 import nunjucks from "nunjucks";
-import { getJobRolesPage } from "./controllers/JobRoleController";
+import JobRoleRouter from "./routes/JobRoleRouter";
+
 const app = express();
 
 const env = nunjucks.configure(
@@ -16,10 +17,8 @@ const env = nunjucks.configure(
   },
 );
 
-// A function, not a value, so the year is recomputed on every render.
 env.addGlobal("currentYear", () => new Date().getFullYear());
 
-// UTC keeps a calendar date from shifting a day in negative timezone offsets.
 env.addFilter("formatDate", (value: string | null) =>
   value
     ? new Date(value).toLocaleDateString("en-GB", {
@@ -72,8 +71,6 @@ app.get("/health", (_req, res) => {
   res.status(200).json({ status: "UP", timestamp: new Date().toISOString() });
 });
 
-app.get("/", (_req, res) => {
-  res.render("pages/index.njk");
-});
-app.get("/job-roles", getJobRolesPage);
+app.use("/", JobRoleRouter);
+
 export default app;

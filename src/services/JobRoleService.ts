@@ -1,13 +1,35 @@
-import axios from "axios";
-import type { JobRole } from "../models/JobRole";
+import type { AxiosInstance } from "axios";
+import type { CreateJobRoleDto } from "../Dto/CreateJobRoleDto";
+import type { UpdateJobRoleDto } from "../Dto/UpdateJobRoleDto";
+import type { JobRole, JobRoleDetailed } from "../models/JobRole";
+import { JobRoleStatus } from "../models/JobRole";
+export class JobRoleService {
+  constructor(private readonly apiClient: AxiosInstance) {
+    this.apiClient = apiClient;
+  }
 
-const API_BASE_URL = process.env.API_BASE_URL ?? "http://localhost:3000";
+  async getJobRoles(): Promise<JobRole[]> {
+    const response = await this.apiClient.get<JobRole[]>("/api/job-roles");
 
-export async function getJobRoles(): Promise<JobRole[]> {
-  const response = await axios.get<JobRole[]>(`${API_BASE_URL}/api/job-roles`, {
-    timeout: 5000,
-  });
+    // The API returns every role, so applicants only see the open ones.
+    return response.data.filter((jobRole) => jobRole.status === JobRoleStatus.OPEN);
+  }
 
-  // The API returns every role, so applicants only see the open ones.
-  return response.data.filter((jobRole) => jobRole.status === "OPEN");
+  async createJobRole(jobRole: CreateJobRoleDto): Promise<JobRole> {
+    const response = await this.apiClient.post<JobRole>("/api/job-roles", jobRole);
+
+    return response.data;
+  }
+
+  async getJobRoleById(id: number): Promise<JobRoleDetailed> {
+    const response = await this.apiClient.get<JobRoleDetailed>(`/api/job-roles/${id}`);
+
+    return response.data;
+  }
+
+  async updateJobRole(id: number, jobRole: UpdateJobRoleDto): Promise<JobRoleDetailed> {
+    const response = await this.apiClient.put<JobRoleDetailed>(`/api/job-roles/${id}`, jobRole);
+
+    return response.data;
+  }
 }
