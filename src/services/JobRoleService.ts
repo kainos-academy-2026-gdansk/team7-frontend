@@ -1,4 +1,3 @@
-import { isAxiosError } from "axios";
 import type { AxiosInstance } from "axios";
 import type { CreateJobRoleDto } from "../Dto/CreateJobRoleDto";
 import type { UpdateJobRoleDto } from "../Dto/UpdateJobRoleDto";
@@ -67,8 +66,11 @@ export class JobRoleService {
 
       return jobRole;
     } catch (error) {
-      if (isAxiosError(error) && error.response?.status === 404) {
-        throw new JobRoleNotFoundError(id);
+      if (error instanceof Error && "response" in error) {
+        const response = (error as { response?: { status: number } }).response;
+        if (response?.status === 404) {
+          throw new JobRoleNotFoundError(id);
+        }
       }
       throw error;
     }

@@ -101,7 +101,9 @@ describe("JobRoleService", () => {
     });
 
     it("translates an API 404 into JobRoleNotFoundError", async () => {
-      apiClient.get.mockRejectedValue({ isAxiosError: true, response: { status: 404 } });
+      apiClient.get.mockRejectedValue(
+        Object.assign(new Error("Request failed"), { response: { status: 404 } }),
+      );
 
       await expect(service.getJobRoleInformation(7)).rejects.toEqual(new JobRoleNotFoundError(7));
     });
