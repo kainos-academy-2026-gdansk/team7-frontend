@@ -11,7 +11,7 @@ export class JobRoleService {
     const response = await this.apiClient.get<JobRole[]>("/api/job-roles");
 
     // The API returns every role, so applicants only see the open ones.
-    return response.data.filter((jobRole) => jobRole.status === "OPEN");
+    return response.data.filter((jobRole) => jobRole.status === JobRoleStatus.OPEN);
   }
 
   async createJobRole(jobRole: CreateJobRoleDto): Promise<JobRole> {
