@@ -1,7 +1,8 @@
 import type { AxiosInstance } from "axios";
 import type { CreateJobRoleDto } from "../Dto/CreateJobRoleDto";
 import type { UpdateJobRoleDto } from "../Dto/UpdateJobRoleDto";
-import type { JobRole, JobRoleDetailed } from "../models/JobRole";
+import { type JobRole, type JobRoleDetailed, JobRoleStatus } from "../models/JobRole";
+
 export class JobRoleService {
   constructor(private readonly apiClient: AxiosInstance) {
     this.apiClient = apiClient;
