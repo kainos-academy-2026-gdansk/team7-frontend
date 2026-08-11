@@ -102,7 +102,7 @@ describe("GET /job-roles/:id", () => {
       const result = await request(app).get("/job-roles/1");
 
       expect(result.text).toContain(
-        "Check out the Sharepoint link for more information on this role.",
+        "Check out the SharePoint link for more information on this role.",
       );
     });
   });
@@ -118,7 +118,7 @@ describe("GET /job-roles/:id", () => {
     it("does not render the SharePoint link section", async () => {
       const result = await request(app).get("/job-roles/1");
 
-      expect(result.text).not.toContain("Sharepoint link");
+      expect(result.text).not.toContain("SharePoint link");
     });
   });
 

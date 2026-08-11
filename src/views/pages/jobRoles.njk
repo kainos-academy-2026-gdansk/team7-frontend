@@ -34,7 +34,9 @@
               <p class="kainos-job__facts kainos-job__closing">
                 {{ fact("Closing date", jobRole.closingDate | formatDate, "closing-date") }}
               </p>
-              <a href="/job-roles/{{ jobRole.id }}" class="govuk-button" style="width: fit-content; margin-top: 15px; margin-bottom: 0;">View offer</a>
+              {% if jobRole.id %}
+                <a href="/job-roles/{{ jobRole.id }}" class="govuk-button govuk-!-margin-top-3 govuk-!-margin-bottom-0" role="button" draggable="false" data-module="govuk-button" aria-label="View offer for {{ jobRole.roleName }}">View offer</a>
+              {% endif %}
             </div>
           </li>
         {% endfor %}

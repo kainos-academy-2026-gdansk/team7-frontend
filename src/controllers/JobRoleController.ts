@@ -57,7 +57,6 @@ const toFormErrors = (fields: FormFields, error: z.ZodError): FormErrors => {
       errors[field] = message;
     }
   }
-
   return errors;
 };
 

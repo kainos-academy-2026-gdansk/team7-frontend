@@ -4,10 +4,24 @@ import type { CreateJobRoleDto } from "../Dto/CreateJobRoleDto";
 import type { UpdateJobRoleDto } from "../Dto/UpdateJobRoleDto";
 import { type JobRole, type JobRoleDetailed, JobRoleStatus } from "../models/JobRole";
 
+const ALLOWED_DOMAINS = ["sharepoint.com"];
+
 export class JobRoleNotFoundError extends Error {
   constructor(id: number) {
     super(`Job role with ID ${id} not found`);
     this.name = "JobRoleNotFoundError";
+  }
+}
+
+function isValidSharePointUrl(url: string | null): boolean {
+  if (!url) return true;
+
+  try {
+    const parsedUrl = new URL(url);
+    if (parsedUrl.protocol !== "https:") return false;
+    return ALLOWED_DOMAINS.some((domain) => parsedUrl.hostname.endsWith(domain));
+  } catch {
+    return false;
   }
 }
 
@@ -24,7 +38,6 @@ export class JobRoleService {
 
   async createJobRole(jobRole: CreateJobRoleDto): Promise<JobRole> {
     const response = await this.apiClient.post<JobRole>("/api/job-roles", jobRole);
-
     return response.data;
   }
 
@@ -45,7 +58,14 @@ export class JobRoleService {
       const response = await this.apiClient.get<JobRoleDetailed>(`/api/job-roles/${id}`, {
         timeout: 5000,
       });
-      return response.data;
+
+      const jobRole = response.data;
+
+      if (!isValidSharePointUrl(jobRole.link)) {
+        jobRole.link = null;
+      }
+
+      return jobRole;
     } catch (error) {
       if (isAxiosError(error) && error.response?.status === 404) {
         throw new JobRoleNotFoundError(id);

@@ -7,7 +7,7 @@
 
   <div class="kainos-job-detail">
     <div class="kainos-job-detail__header">
-      <h2 class="kainos-job-detail__title">{{ jobRole.jobRoleName }}</h2>
+      <h1 class="kainos-job-detail__title">{{ jobRole.jobRoleName }}</h1>
       <span class="kainos-job-detail__status kainos-job-detail__status--{{ jobRole.status | lower }}">
         {{ jobRole.status }}
       </span>
@@ -17,11 +17,15 @@
       <div class="kainos-job-detail__main">
         <section class="kainos-job-detail__section">
           <h3 class="kainos-job-detail__section-title">Description</h3>
+<<<<<<< HEAD
           {% if jobRole.description %}
           <p class="govuk-body">{{ jobRole.description }}</p>
           {% else %}
           <p class="govuk-body"> There was no description provided for this role</p>
           {% endif %}
+=======
+          <p class="govuk-body">{{ jobRole.description or "Not specified" }}</p>
+>>>>>>> a2ede7e (Copilot fixes)
         </section>
 
         <section class="kainos-job-detail__section">
@@ -29,13 +33,13 @@
           {% if jobRole.responsibilities %}
             <p class="govuk-body">{{ jobRole.responsibilities }}</p>
           {% else %}
-            <p class="govuk-body">Check out the Sharepoint link for more information on this role.</p>
+            <p class="govuk-body">Check out the SharePoint link for more information on this role.</p>
           {% endif %}
         </section>
 
         {% if jobRole.link %}
           <section class="kainos-job-detail__section">
-            <h3 class="kainos-job-detail__section-title">Sharepoint link</h3>
+            <h3 class="kainos-job-detail__section-title">SharePoint link</h3>
             <a href="{{ jobRole.link }}" class="govuk-link kainos-job-detail__link" target="_blank" rel="noopener noreferrer">{{ jobRole.link }}</a>
           </section>
         {% endif %}
