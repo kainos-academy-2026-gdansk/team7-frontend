@@ -62,7 +62,27 @@ describe("GET /job-roles", () => {
   });
 });
 
-describe("GET /job-roles pagination", () => {
+describe("GET /job-roles when the API is unreachable", () => {
+  beforeEach(() => {
+    vi.mocked(axios.get).mockRejectedValue(new Error("connect ECONNREFUSED 127.0.0.1:3000"));
+  });
+
+  it("answers 503 with a message instead of crashing", async () => {
+    const result = await request(app).get("/job-roles");
+
+    expect(result.status).toBe(503);
+    expect(result.text).toContain("Job roles are unavailable");
+  });
+
+  it("keeps the underlying error out of the page", async () => {
+    const result = await request(app).get("/job-roles");
+
+    expect(result.text).not.toContain("ECONNREFUSED");
+  });
+});
+
+// Skipped while pagination is parked; the page lists every open role.
+describe.skip("GET /job-roles pagination", () => {
   const manyRoles = Array.from({ length: 7 }, (_, index) => ({
     roleName: `Role number ${index + 1}`,
     location: "Belfast",

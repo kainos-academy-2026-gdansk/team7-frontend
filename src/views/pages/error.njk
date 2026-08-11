@@ -1,0 +1,18 @@
+{% extends "layouts/base.njk" %}
+
+{% block title %}{{ heading }}{% endblock %}
+
+{% block banner %}
+  <div class="kainos-page-banner">
+    <div class="govuk-width-container">
+      <h1 class="govuk-heading-l kainos-page-banner__title">{{ heading }}</h1>
+    </div>
+  </div>
+{% endblock %}
+
+{% block content %}
+  <p class="govuk-body">{{ message }}</p>
+  <p class="govuk-body">
+    <a class="govuk-link" href="{{ retryUrl }}">Try again</a>
+  </p>
+{% endblock %}

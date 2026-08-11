@@ -151,6 +151,9 @@ body,
 }
 
 .kainos-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
   background-color: #ffffff;
   border-bottom: 4px solid var(--kainos-green);
 }
@@ -272,7 +275,8 @@ body,
 .kainos-page-banner {
   background-image: linear-gradient(120deg, var(--kainos-blue), var(--kainos-dark-green));
   padding: 3rem 0;
-  margin-bottom: 2.5rem;
+  /* Leaves room for the filter bar that lands above the list later. */
+  margin-bottom: 5rem;
 }
 
 .kainos-page-banner__title {

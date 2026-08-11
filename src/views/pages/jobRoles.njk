@@ -38,6 +38,7 @@
       </ul>
     </div>
 
+    {# Pagination parked until the team agrees on a page size.
     {% if totalPages > 1 %}
       <nav class="kainos-pagination" aria-label="Job roles pagination">
         {% if page > 1 %}
@@ -62,6 +63,7 @@
         {% endif %}
       </nav>
     {% endif %}
+    #}
   {% else %}
     <p class="govuk-body">There are no job roles available at the moment.</p>
   {% endif %}
