@@ -4,7 +4,7 @@
 
 ```text
 Memory -> Intake -> Planning -> Implementation -> Validation -> Dev handover
-       -> Manual verification -> Retrospective -> Approved memory update
+       -> Manual verification -> Retrospective -> Memory update
                                  | declined -> Planning
 ```
 
