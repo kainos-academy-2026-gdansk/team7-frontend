@@ -53,6 +53,7 @@ pids/
 tmp/
 temp/
 *.tmp
+.ai/
 
 # Editors / IDEs
 .idea/
