@@ -14,10 +14,12 @@
 {% block content %}
   <div class="govuk-grid-row kainos-form-row">
     <div class="govuk-grid-column-one-half">
-      {# Adres /login nie ma jeszcze obsługi POST - czeka na endpoint z backendu. #}
+      {{ form.errorSummary(errorList) }}
+
+      {# Adres /login czeka na endpoint logowania w API. #}
       <form class="kainos-form" method="post" action="/login" novalidate>
-        {{ form.textInput("email", "Email address", "", "", "email") }}
-        {{ form.textInput("password", "Password", "", "", "password") }}
+        {{ form.textInput("email", "Email address", values.email, errors.email, "email", autocomplete = "email") }}
+        {{ form.textInput("password", "Password", "", errors.password, "password", autocomplete = "current-password") }}
 
         <button class="kainos-button kainos-form__submit" type="submit">Log in</button>
       </form>
