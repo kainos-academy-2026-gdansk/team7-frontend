@@ -53,6 +53,7 @@ pids/
 tmp/
 temp/
 *.tmp
+.ai/
 
 # Editors / IDEs
 .idea/
@@ -70,3 +71,4 @@ temp/
 ehthumbs.db
 Thumbs.db
 desktop.ini
+code_reviews/
