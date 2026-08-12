@@ -1,5 +1,6 @@
 import { isAxiosError } from "axios";
 import type { Request, Response } from "express";
+
 import { z } from "zod";
 import { createJobRoleSchema } from "../Dto/CreateJobRoleDto";
 import { updateJobRoleSchema } from "../Dto/UpdateJobRoleDto";
@@ -7,6 +8,7 @@ import type { JobRoleDetailed } from "../models/JobRole";
 import type { BandService } from "../services/BandService";
 import type { CapabilityService } from "../services/CapabilityService";
 import type { JobRoleService } from "../services/JobRoleService";
+import { JobRoleNotFoundError } from "../services/JobRoleService";
 
 const CREATE_FIELDS = [
   "roleName",
@@ -55,7 +57,6 @@ const toFormErrors = (fields: FormFields, error: z.ZodError): FormErrors => {
       errors[field] = message;
     }
   }
-
   return errors;
 };
 
@@ -103,8 +104,6 @@ const toEditFormValues = (jobRole: JobRoleDetailed): FormValues => ({
   closingDate: jobRole.closingDate?.slice(0, 10) ?? "",
 });
 
-// Pagination is parked until the team agrees on a page size; every open role is listed for now.
-// const PAGE_SIZE = 5;
 export class JobRoleController {
   constructor(
     private readonly jobRoleService: JobRoleService,
@@ -120,6 +119,8 @@ export class JobRoleController {
     try {
       const jobRoles = await this.jobRoleService.getJobRoles();
 
+      // Pagination is parked until the team agrees on a page size; every open role is listed for now.
+      // const PAGE_SIZE = 5;
       // const totalPages = Math.max(1, Math.ceil(jobRoles.length / PAGE_SIZE));
       // The page number comes straight from the URL, so clamp it rather than trust it.
       // const requested = Number.parseInt(String(_req.query.page ?? "1"), 10);
@@ -331,5 +332,37 @@ export class JobRoleController {
       message: "We could not find that job role. It may have been removed.",
       retryUrl: "/job-roles",
     });
+  };
+
+  getJobRoleInformationPage = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const id = Number(req.params.id);
+      const jobRole = await this.jobRoleService.getJobRoleById(id);
+
+      res.render("pages/jobRoleInformation.njk", {
+        jobRole,
+      });
+    } catch (error) {
+      if (error instanceof JobRoleNotFoundError) {
+        console.error("Job role not found", error);
+
+        res.status(404).render("pages/error.njk", {
+          heading: "Job role not found",
+          message:
+            "The job role you are looking for does not exist. Please check the ID and try again.",
+          retryUrl: "/job-roles/",
+        });
+        return;
+      }
+
+      console.error("Could not load job role", error);
+
+      res.status(503).render("pages/error.njk", {
+        heading: "Job role is unavailable",
+        message:
+          "We could not reach the service that holds our job role. This is usually temporary, so please try again in a moment.",
+        retryUrl: "/job-roles/",
+      });
+    }
   };
 }
