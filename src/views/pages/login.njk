@@ -1,0 +1,26 @@
+{% extends "layouts/base.njk" %}
+{% import "partials/formMacros.njk" as form %}
+
+{% block title %}Log in{% endblock %}
+
+{% block banner %}
+  <div class="kainos-page-banner">
+    <div class="govuk-width-container">
+      <h1 class="govuk-heading-l kainos-page-banner__title">Log in</h1>
+    </div>
+  </div>
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row kainos-form-row">
+    <div class="govuk-grid-column-one-half">
+      {# Adres /login nie ma jeszcze obsługi POST - czeka na endpoint z backendu. #}
+      <form class="kainos-form" method="post" action="/login" novalidate>
+        {{ form.textInput("email", "Email address", "", "", "email") }}
+        {{ form.textInput("password", "Password", "", "", "password") }}
+
+        <button class="kainos-button kainos-form__submit" type="submit">Log in</button>
+      </form>
+    </div>
+  </div>
+{% endblock %}

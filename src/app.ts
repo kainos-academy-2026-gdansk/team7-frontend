@@ -1,6 +1,7 @@
 import path from "node:path";
 import express from "express";
 import nunjucks from "nunjucks";
+import AuthRouter from "./routes/AuthRouter";
 import JobRoleRouter from "./routes/JobRoleRouter";
 
 const app = express();
@@ -72,5 +73,6 @@ app.get("/health", (_req, res) => {
 });
 
 app.use("/", JobRoleRouter);
+app.use("/", AuthRouter);
 
 export default app;
