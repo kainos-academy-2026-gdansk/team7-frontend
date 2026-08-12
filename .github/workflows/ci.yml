@@ -37,7 +37,7 @@ jobs:
           file: ./Dockerfile
           push: false
           load: true
-          tags: team7-backend:${{ github.sha }}
+          tags: team7-frontend:${{ github.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
-      - run: docker run --rm team7-backend:${{ github.sha }} node --version
+      - run: docker run --rm team7-frontend:${{ github.sha }} node --version
