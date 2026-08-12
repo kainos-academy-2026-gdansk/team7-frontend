@@ -58,6 +58,11 @@ export class AuthController {
     });
   };
 
+  public logOut = (_req: Request, res: Response): void => {
+    // Nie ma jeszcze sesji do skasowania - dojdzie razem z obsługą tokena.
+    res.redirect("/");
+  };
+
   private renderLoginForm = (
     res: Response,
     status: number,

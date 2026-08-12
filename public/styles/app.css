@@ -196,6 +196,14 @@ body,
 .kainos-header__link:hover {
   border-bottom-color: var(--kainos-green);
 }
+
+/* Wylogowanie zmienia stan, więc idzie przez POST - to przycisk udający link. */
+button.kainos-header__link {
+  background: none;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+}
 .kainos-footer {
   background-color: var(--kainos-blue);
   color: #ffffff;

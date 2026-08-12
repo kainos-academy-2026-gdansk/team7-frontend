@@ -66,3 +66,25 @@ describe("POST /login", () => {
     expect(response.text).toContain("Logging in is unavailable");
   });
 });
+
+describe("logging out", () => {
+  it("offers a log out button that submits a form", async () => {
+    const response = await request(app).get("/");
+
+    expect(response.text).toContain('action="/logout"');
+    expect(response.text).toContain("Log out");
+  });
+
+  it("sends the user back to the home page", async () => {
+    const response = await request(app).post("/logout");
+
+    expect(response.status).toBe(302);
+    expect(response.headers.location).toBe("/");
+  });
+
+  it("cannot be triggered by a GET, so another site cannot log the user out", async () => {
+    const response = await request(app).get("/logout");
+
+    expect(response.status).toBe(404);
+  });
+});
