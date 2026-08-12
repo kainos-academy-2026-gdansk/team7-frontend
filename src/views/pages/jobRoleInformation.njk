@@ -33,10 +33,10 @@
           {% endif %}
         </section>
 
-        {% if jobRole.link %}
+        {% if jobRole.sharepointUrl %}
           <section class="kainos-job-detail__section">
             <h3 class="kainos-job-detail__section-title">SharePoint link</h3>
-            <a href="{{ jobRole.link }}" class="govuk-link kainos-job-detail__link" target="_blank" rel="noopener noreferrer">{{ jobRole.link }}</a>
+            <a href="{{ jobRole.sharepointUrl }}" class="govuk-link kainos-job-detail__link" target="_blank" rel="noopener noreferrer">{{ jobRole.sharepointUrl }}</a>
           </section>
         {% endif %}
       </div>

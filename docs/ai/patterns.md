@@ -13,7 +13,13 @@ service is needed, match these first instead of inventing a new shape.
   const jobRoleService = new JobRoleService(apiClient);
   const bandService = new BandService(apiClient);
   const capabilityService = new CapabilityService(apiClient);
-  const jobRoleController = new JobRoleController(jobRoleService, bandService, capabilityService);
+  const statusService = new StatusService(apiClient);
+  const jobRoleController = new JobRoleController(
+    jobRoleService,
+    bandService,
+    capabilityService,
+    statusService,
+  );
   ```
 
 - Routes are one line each and only wire a path to a controller method; no logic in the router.
@@ -49,8 +55,10 @@ service is needed, match these first instead of inventing a new shape.
   Axios directly, and never import Express types.
 - One method per backend call, named after the action (`getJobRoles`, `createJobRole`,
   `getJobRoleById`, `updateJobRole`). Return `response.data` typed against a model interface.
+- A backend lookup table gets its own read-only one-method service copied from `BandService`
+  (`BandService`, `CapabilityService`, `StatusService`) rather than extra methods on `JobRoleService`.
 - Frontend-only business rules that don't belong in a controller live here (for example
-  `getJobRoles` filtering to `JobRoleStatus.OPEN`, or `isValidSharePointUrl` dropping an untrusted
+  `getJobRoles` filtering to the `OPEN` status name, or `isValidSharePointUrl` dropping an untrusted
   link before it reaches the view).
 - Translate a backend `404` into a small typed error (`JobRoleNotFoundError extends Error`) instead
   of leaking a raw Axios error up to the controller.

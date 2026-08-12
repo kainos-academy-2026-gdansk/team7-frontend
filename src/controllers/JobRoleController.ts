@@ -5,10 +5,12 @@ import { z } from "zod";
 import { createJobRoleSchema } from "../Dto/CreateJobRoleDto";
 import { updateJobRoleSchema } from "../Dto/UpdateJobRoleDto";
 import type { JobRoleDetailed } from "../models/JobRole";
+import type { Status } from "../models/Status";
 import type { BandService } from "../services/BandService";
 import type { CapabilityService } from "../services/CapabilityService";
 import type { JobRoleService } from "../services/JobRoleService";
 import { JobRoleNotFoundError } from "../services/JobRoleService";
+import type { StatusService } from "../services/StatusService";
 
 const CREATE_FIELDS = [
   "roleName",
@@ -17,21 +19,21 @@ const CREATE_FIELDS = [
   "capabilityId",
   "description",
   "responsibilities",
-  "openPositions",
-  "sharePointLink",
+  "numberOfOpenPositions",
+  "sharepointUrl",
   "closingDate",
 ] as const;
 
 const EDIT_FIELDS = [
   "jobRoleName",
   "location",
-  "status",
+  "statusId",
   "bandName",
   "capabilityName",
   "description",
   "responsibilities",
-  "openPositions",
-  "sharePointLink",
+  "numberOfOpenPositions",
+  "sharepointUrl",
   "closingDate",
 ] as const;
 
@@ -94,13 +96,13 @@ const readId = (value: unknown): number | null => {
 const toEditFormValues = (jobRole: JobRoleDetailed): FormValues => ({
   jobRoleName: jobRole.jobRoleName,
   location: jobRole.location,
-  status: jobRole.status,
+  statusId: "",
   bandName: jobRole.band,
   capabilityName: jobRole.capability,
   description: jobRole.description ?? "",
   responsibilities: jobRole.responsibilities ?? "",
-  sharePointLink: jobRole.link ?? "",
-  openPositions: String(jobRole.numberOfOpenPositions ?? ""),
+  sharepointUrl: jobRole.sharepointUrl ?? "",
+  numberOfOpenPositions: String(jobRole.numberOfOpenPositions ?? ""),
   closingDate: jobRole.closingDate?.slice(0, 10) ?? "",
 });
 
@@ -109,10 +111,12 @@ export class JobRoleController {
     private readonly jobRoleService: JobRoleService,
     private readonly bandService: BandService,
     private readonly capabilityService: CapabilityService,
+    private readonly statusService: StatusService,
   ) {
     this.jobRoleService = jobRoleService;
     this.bandService = bandService;
     this.capabilityService = capabilityService;
+    this.statusService = statusService;
   }
 
   public getJobRolesPage = async (_req: Request, res: Response): Promise<void> => {
@@ -190,7 +194,7 @@ export class JobRoleController {
     try {
       const jobRole = await this.jobRoleService.getJobRoleById(id);
 
-      await this.renderEditForm(res, 200, id, toEditFormValues(jobRole), {});
+      await this.renderEditForm(res, 200, id, toEditFormValues(jobRole), {}, jobRole.status);
     } catch (error) {
       if (isAxiosError(error) && error.response?.status === 404) {
         this.renderNotFound(res);
@@ -266,6 +270,7 @@ export class JobRoleController {
       errors,
       formAction: "/job-roles/new",
       submitLabel: "Add job role",
+      needsStatuses: false,
     });
 
   private renderEditForm = (
@@ -274,6 +279,7 @@ export class JobRoleController {
     id: number,
     values: FormValues,
     errors: FormErrors,
+    statusName?: string,
   ): Promise<void> =>
     this.renderForm(res, {
       page: "pages/editJobRole.njk",
@@ -283,6 +289,8 @@ export class JobRoleController {
       errors,
       formAction: `/job-roles/${id}/edit`,
       submitLabel: "Save changes",
+      needsStatuses: true,
+      statusName,
     });
 
   private renderForm = async (
@@ -295,32 +303,56 @@ export class JobRoleController {
       errors: FormErrors;
       formAction: string;
       submitLabel: string;
+      needsStatuses: boolean;
+      statusName?: string;
     },
   ): Promise<void> => {
-    const { page, status, fields, values, errors, formAction, submitLabel } = options;
+    const {
+      page,
+      status,
+      fields,
+      values,
+      errors,
+      formAction,
+      submitLabel,
+      needsStatuses,
+      statusName,
+    } = options;
 
     try {
-      const [bands, capabilities] = await Promise.all([
+      const [bands, capabilities, statuses] = await Promise.all([
         this.bandService.getBands(),
         this.capabilityService.getCapabilities(),
+        needsStatuses ? this.statusService.getStatuses() : Promise.resolve<Status[]>([]),
       ]);
 
+      // The API returns the status name, but the form posts its id, so match them up here.
+      const formValues = statusName
+        ? {
+            ...values,
+            statusId: String(
+              statuses.find((option) => option.statusName === statusName)?.statusId ?? "",
+            ),
+          }
+        : values;
+
       res.status(status).render(page, {
-        values,
+        values: formValues,
         errors,
         errorList: toErrorList(fields, errors),
         bands,
         capabilities,
+        statuses,
         formAction,
         submitLabel,
       });
     } catch (error) {
-      console.error("Could not load bands and capabilities", error);
+      console.error("Could not load the job role form reference data", error);
 
       res.status(503).render("pages/error.njk", {
         heading: "The job role form is unavailable",
         message:
-          "We could not load the bands and capabilities needed by this form. This is usually temporary, so please try again in a moment.",
+          "We could not load the information this form needs. This is usually temporary, so please try again in a moment.",
         retryUrl: formAction,
       });
     }

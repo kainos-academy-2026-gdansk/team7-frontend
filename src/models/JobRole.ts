@@ -1,7 +1,4 @@
-export enum JobRoleStatus {
-  OPEN = "OPEN",
-  CLOSED = "CLOSED",
-}
+export const OPEN_STATUS_NAME = "OPEN";
 
 export interface JobRole {
   id: number;
@@ -10,7 +7,7 @@ export interface JobRole {
   capability: string;
   band: string;
   closingDate: string | null;
-  status: JobRoleStatus;
+  status: string;
 }
 
 export interface JobRoleDetailed {
@@ -18,11 +15,11 @@ export interface JobRoleDetailed {
   jobRoleName: string;
   description: string | null;
   responsibilities: string;
-  link: string | null;
+  sharepointUrl: string | null;
   location: string;
   capability: string;
   band: string;
   closingDate: string | null;
-  status: JobRoleStatus;
+  status: string;
   numberOfOpenPositions: number;
 }

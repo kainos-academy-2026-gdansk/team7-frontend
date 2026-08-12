@@ -1,10 +1,10 @@
 import type { Request, Response } from "express";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { JobRoleController } from "../../src/controllers/JobRoleController";
-import { JobRoleStatus } from "../../src/models/JobRole";
 import type { BandService } from "../../src/services/BandService";
 import type { CapabilityService } from "../../src/services/CapabilityService";
 import { JobRoleNotFoundError, type JobRoleService } from "../../src/services/JobRoleService";
+import type { StatusService } from "../../src/services/StatusService";
 
 const jobRoleService = {
   getJobRoles: vi.fn(),
@@ -19,17 +19,21 @@ const capabilityService = {
   getCapabilities: vi.fn(),
 };
 
+const statusService = {
+  getStatuses: vi.fn(),
+};
+
 const jobRole = {
   id: 7,
   jobRoleName: "Front-End Engineer",
   description: "Build interfaces.",
   responsibilities: "Ship features.",
-  link: "https://example.sharepoint.com/role",
+  sharepointUrl: "https://example.sharepoint.com/role",
   location: "Gdansk",
   capability: "Engineering",
   band: "Associate",
   closingDate: "2026-08-31T00:00:00.000Z",
-  status: JobRoleStatus.OPEN,
+  status: "OPEN",
   numberOfOpenPositions: 3,
 };
 
@@ -48,6 +52,7 @@ const controller = new JobRoleController(
   jobRoleService as unknown as JobRoleService,
   bandService as unknown as BandService,
   capabilityService as unknown as CapabilityService,
+  statusService as unknown as StatusService,
 );
 
 beforeEach(() => {

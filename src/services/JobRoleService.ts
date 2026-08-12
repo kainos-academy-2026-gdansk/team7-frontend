@@ -1,7 +1,7 @@
 import type { AxiosInstance } from "axios";
 import type { CreateJobRoleDto } from "../Dto/CreateJobRoleDto";
 import type { UpdateJobRoleDto } from "../Dto/UpdateJobRoleDto";
-import { type JobRole, type JobRoleDetailed, JobRoleStatus } from "../models/JobRole";
+import { type JobRole, type JobRoleDetailed, OPEN_STATUS_NAME } from "../models/JobRole";
 
 const ALLOWED_DOMAINS = ["sharepoint.com"];
 
@@ -32,7 +32,7 @@ export class JobRoleService {
   async getJobRoles(): Promise<JobRole[]> {
     const response = await this.apiClient.get<JobRole[]>("/api/job-roles");
 
-    return response.data.filter((jobRole) => jobRole.status === JobRoleStatus.OPEN);
+    return response.data.filter((jobRole) => jobRole.status === OPEN_STATUS_NAME);
   }
 
   async createJobRole(jobRole: CreateJobRoleDto): Promise<JobRole> {
@@ -60,8 +60,8 @@ export class JobRoleService {
 
       const jobRole = response.data;
 
-      if (!isValidSharePointUrl(jobRole.link)) {
-        jobRole.link = null;
+      if (!isValidSharePointUrl(jobRole.sharepointUrl)) {
+        jobRole.sharepointUrl = null;
       }
 
       return jobRole;

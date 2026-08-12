@@ -15,8 +15,8 @@ export const createJobRoleSchema = z.object({
   capabilityId: selectedId("a capability"),
   description: optionalText("Description", 2000),
   responsibilities: optionalText("Responsibilities", 2000),
-  openPositions: optionalOpenPositions,
-  sharePointLink: optionalUrl,
+  numberOfOpenPositions: optionalOpenPositions,
+  sharepointUrl: optionalUrl,
   closingDate: optionalClosingDate,
 });
 

@@ -19,12 +19,17 @@ const capabilities = [
   { id: 4, name: "Data" },
 ];
 
+const statuses = [
+  { statusId: 1, statusName: "OPEN" },
+  { statusId: 2, statusName: "CLOSED" },
+];
+
 const existingJobRole = {
   id: 7,
   jobRoleName: "Front-End Engineer",
   description: "Builds the client side.",
   responsibilities: "Ship features.",
-  link: "https://example.com/role",
+  sharepointUrl: "https://example.com/role",
   location: "Gdansk",
   capability: "Engineering",
   band: "Associate",
@@ -36,13 +41,13 @@ const existingJobRole = {
 const validForm = {
   jobRoleName: "Senior Front-End Engineer",
   location: "Belfast",
-  status: "CLOSED",
+  statusId: "2",
   bandName: "Associate",
   capabilityName: "Engineering",
   description: "Builds the client side.",
   responsibilities: "Ship features.",
-  openPositions: "3",
-  sharePointLink: "https://example.com/role",
+  numberOfOpenPositions: "3",
+  sharepointUrl: "https://example.com/role",
   closingDate: "2026-08-31",
 };
 
@@ -61,6 +66,7 @@ beforeEach(() => {
   apiClient.get.mockImplementation((url: string) => {
     if (url === "/api/bands") return Promise.resolve({ data: bands });
     if (url === "/api/capabilities") return Promise.resolve({ data: capabilities });
+    if (url === "/api/statuses") return Promise.resolve({ data: statuses });
     return Promise.resolve({ data: existingJobRole });
   });
   apiClient.put.mockResolvedValue({ data: existingJobRole });
@@ -90,7 +96,7 @@ describe("GET /job-roles/:id/edit", () => {
 
     expect(result.text).toContain('<option value="Associate" selected>');
     expect(result.text).toContain('<option value="Engineering" selected>');
-    expect(result.text).toContain('<option value="OPEN" selected>');
+    expect(result.text).toContain('<option value="1" selected>');
   });
 
   it("answers 404 when the id is not a positive integer", async () => {
@@ -101,9 +107,25 @@ describe("GET /job-roles/:id/edit", () => {
     expect(apiClient.get).not.toHaveBeenCalled();
   });
 
+  it("leaves the status unselected when the role's status is not in the statuses list", async () => {
+    apiClient.get.mockImplementation((url: string) => {
+      if (url === "/api/bands") return Promise.resolve({ data: bands });
+      if (url === "/api/capabilities") return Promise.resolve({ data: capabilities });
+      if (url === "/api/statuses") return Promise.resolve({ data: statuses });
+      return Promise.resolve({ data: { ...existingJobRole, status: "ARCHIVED" } });
+    });
+
+    const result = await request(app).get("/job-roles/7/edit");
+
+    expect(result.status).toBe(200);
+    expect(result.text).toContain('<option value="" selected>Choose a status</option>');
+    expect(result.text).not.toContain('<option value="1" selected>');
+    expect(result.text).not.toContain('<option value="2" selected>');
+  });
+
   it("answers 404 when the API does not know the role", async () => {
     apiClient.get.mockImplementation((url: string) =>
-      url === "/api/bands" || url === "/api/capabilities"
+      url === "/api/bands" || url === "/api/capabilities" || url === "/api/statuses"
         ? Promise.resolve({ data: [] })
         : Promise.reject(apiError(404)),
     );
@@ -133,13 +155,13 @@ describe("POST /job-roles/:id/edit", () => {
     expect(apiClient.put).toHaveBeenCalledWith("/api/job-roles/7", {
       jobRoleName: "Senior Front-End Engineer",
       location: "Belfast",
-      status: "CLOSED",
+      statusId: 2,
       bandName: "Associate",
       capabilityName: "Engineering",
       description: "Builds the client side.",
       responsibilities: "Ship features.",
-      openPositions: 3,
-      sharePointLink: "https://example.com/role",
+      numberOfOpenPositions: 3,
+      sharepointUrl: "https://example.com/role",
       closingDate: "2026-08-31T00:00:00.000Z",
     });
   });
@@ -148,16 +170,16 @@ describe("POST /job-roles/:id/edit", () => {
     await editJobRole({
       description: "",
       responsibilities: "",
-      openPositions: "",
-      sharePointLink: "",
+      numberOfOpenPositions: "",
+      sharepointUrl: "",
       closingDate: "",
     });
 
     expect(apiClient.put.mock.calls[0][1]).toMatchObject({
       description: null,
       responsibilities: null,
-      openPositions: null,
-      sharePointLink: null,
+      numberOfOpenPositions: null,
+      sharepointUrl: null,
       closingDate: null,
     });
   });
@@ -180,7 +202,7 @@ describe("POST /job-roles/:id/edit", () => {
   });
 
   it("rejects an unknown status", async () => {
-    const result = await editJobRole({ status: "MAYBE" });
+    const result = await editJobRole({ statusId: "" });
 
     expect(result.status).toBe(400);
     expect(result.text).toContain("Select a status");

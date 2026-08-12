@@ -5,11 +5,18 @@ import { JobRoleController } from "../controllers/JobRoleController";
 import { BandService } from "../services/BandService";
 import { CapabilityService } from "../services/CapabilityService";
 import { JobRoleService } from "../services/JobRoleService";
+import { StatusService } from "../services/StatusService";
 
 const jobRoleService = new JobRoleService(apiClient);
 const bandService = new BandService(apiClient);
 const capabilityService = new CapabilityService(apiClient);
-const jobRoleController = new JobRoleController(jobRoleService, bandService, capabilityService);
+const statusService = new StatusService(apiClient);
+const jobRoleController = new JobRoleController(
+  jobRoleService,
+  bandService,
+  capabilityService,
+  statusService,
+);
 
 const router = Router();
 

@@ -179,10 +179,10 @@ src/
 ├── client/
 │   └── axiosClient.ts      # the single shared axios.create() instance (default export)
 ├── controllers/            # HTTP only               (JobRoleController.ts)
-├── services/                # backend calls + frontend rules (JobRoleService.ts, BandService.ts, CapabilityService.ts)
+├── services/                # backend calls + frontend rules (JobRoleService.ts, BandService.ts, CapabilityService.ts, StatusService.ts)
 ├── routes/                   # routers + dependency wiring (JobRoleRouter.ts)
 ├── Dto/                       # Zod schemas + request DTO types (CreateJobRoleDto.ts, UpdateJobRoleDto.ts, formFields.ts)
-├── models/                     # TypeScript interfaces for backend response shapes (JobRole.ts, Band.ts, Capability.ts)
+├── models/                     # TypeScript interfaces for backend response shapes (JobRole.ts, Band.ts, Capability.ts, Status.ts)
 └── views/
     ├── layouts/base.njk         # HTML shell: head, header, main, footer, GOV.UK scripts
     ├── pages/                    # one template per route (jobRoles.njk, addJobRole.njk, editJobRole.njk, ...)
@@ -223,7 +223,13 @@ Dependencies are composed **explicitly in the router file**. No DI container, no
 const jobRoleService = new JobRoleService(apiClient);
 const bandService = new BandService(apiClient);
 const capabilityService = new CapabilityService(apiClient);
-const jobRoleController = new JobRoleController(jobRoleService, bandService, capabilityService);
+const statusService = new StatusService(apiClient);
+const jobRoleController = new JobRoleController(
+  jobRoleService,
+  bandService,
+  capabilityService,
+  statusService,
+);
 ```
 
 Services receive the shared `AxiosInstance` via constructor injection
@@ -275,10 +281,11 @@ Register static routes before parameterised ones in the same router, e.g. `/job-
 - `export class XService` with a constructor-injected `AxiosInstance`.
 - No `req` / `res` / `next` and no Express imports — ever.
 - One method per backend call, named after the action (`getJobRoles`, `createJobRole`,
-  `getJobRoleById`, `updateJobRole`, `getBands`, `getCapabilities`). Return `response.data` typed
+  `getJobRoleById`, `updateJobRole`, `getBands`, `getCapabilities`, `getStatuses`). Return
+  `response.data` typed
   against a model interface.
 - Frontend-only business rules that are not the controller's concern live here — e.g. filtering the
-  role list down to `JobRoleStatus.OPEN`, or dropping a job-role link that fails
+  role list down to the `OPEN` status name, or dropping a job-role link that fails
   `isValidSharePointUrl` before it reaches the view.
 - Translate an expected backend failure into a small typed error
   (`class JobRoleNotFoundError extends Error`) instead of letting a raw Axios error reach the
@@ -306,7 +313,8 @@ Register static routes before parameterised ones in the same router, e.g. `/job-
 ### 5.7 Models
 
 - Plain TypeScript interfaces/enums describing what the backend returns
-  (`src/models/JobRole.ts`, `Band.ts`, `Capability.ts`). No methods, no validation, no classes.
+  (`src/models/JobRole.ts`, `Band.ts`, `Capability.ts`, `Status.ts`). No methods, no validation, no
+  classes.
 - A "detailed" variant (`JobRoleDetailed`) exists for the single-resource endpoint where the backend
   returns more fields than the list endpoint (`JobRole`) — follow this split rather than reusing one
   shape for both when the API genuinely differs.

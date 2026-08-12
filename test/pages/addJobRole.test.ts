@@ -19,6 +19,11 @@ const capabilities = [
   { id: 4, name: "Data" },
 ];
 
+const statuses = [
+  { statusId: 1, statusName: "OPEN" },
+  { statusId: 2, statusName: "CLOSED" },
+];
+
 const validForm = {
   roleName: "Front-End Engineer",
   location: "Gdansk",
@@ -26,8 +31,8 @@ const validForm = {
   capabilityId: "3",
   description: "Builds the client side.",
   responsibilities: "Ship features.",
-  openPositions: "3",
-  sharePointLink: "https://example.com/role",
+  numberOfOpenPositions: "3",
+  sharepointUrl: "https://example.com/role",
   closingDate: "2026-08-31",
 };
 
@@ -43,9 +48,11 @@ const apiError = (status: number, data: unknown) =>
 beforeEach(() => {
   apiClient.get.mockReset();
   apiClient.post.mockReset();
-  apiClient.get.mockImplementation((url: string) =>
-    Promise.resolve({ data: url === "/api/bands" ? bands : capabilities }),
-  );
+  apiClient.get.mockImplementation((url: string) => {
+    if (url === "/api/bands") return Promise.resolve({ data: bands });
+    if (url === "/api/statuses") return Promise.resolve({ data: statuses });
+    return Promise.resolve({ data: capabilities });
+  });
   apiClient.post.mockResolvedValue({ data: {} });
 });
 
@@ -69,6 +76,19 @@ describe("GET /job-roles/new", () => {
     expect(result.status).toBe(503);
     expect(result.text).toContain("The job role form is unavailable");
   });
+
+  it("does not depend on the statuses endpoint, which this form has no field for", async () => {
+    apiClient.get.mockImplementation((url: string) => {
+      if (url === "/api/bands") return Promise.resolve({ data: bands });
+      if (url === "/api/capabilities") return Promise.resolve({ data: capabilities });
+      return Promise.reject(new Error("connect ECONNREFUSED 127.0.0.1:3000"));
+    });
+
+    const result = await request(app).get("/job-roles/new");
+
+    expect(result.status).toBe(200);
+    expect(apiClient.get).not.toHaveBeenCalledWith("/api/statuses");
+  });
 });
 
 describe("POST /job-roles/new", () => {
@@ -84,8 +104,8 @@ describe("POST /job-roles/new", () => {
       capabilityId: 3,
       description: "Builds the client side.",
       responsibilities: "Ship features.",
-      openPositions: 3,
-      sharePointLink: "https://example.com/role",
+      numberOfOpenPositions: 3,
+      sharepointUrl: "https://example.com/role",
       closingDate: "2026-08-31T00:00:00.000Z",
     });
   });
@@ -94,16 +114,16 @@ describe("POST /job-roles/new", () => {
     await postJobRole({
       description: "",
       responsibilities: "",
-      openPositions: "",
-      sharePointLink: "",
+      numberOfOpenPositions: "",
+      sharepointUrl: "",
       closingDate: "",
     });
 
     expect(apiClient.post.mock.calls[0][1]).toMatchObject({
       description: null,
       responsibilities: null,
-      openPositions: null,
-      sharePointLink: null,
+      numberOfOpenPositions: null,
+      sharepointUrl: null,
       closingDate: null,
     });
   });
@@ -126,7 +146,7 @@ describe("POST /job-roles/new", () => {
   });
 
   it("rejects a SharePoint link that is not a URL", async () => {
-    const result = await postJobRole({ sharePointLink: "not-a-link" });
+    const result = await postJobRole({ sharepointUrl: "not-a-link" });
 
     expect(result.status).toBe(400);
     expect(result.text).toContain("Enter a valid link");
