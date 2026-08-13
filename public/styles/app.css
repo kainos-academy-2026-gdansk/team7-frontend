@@ -197,7 +197,7 @@ body,
   border-bottom-color: var(--kainos-green);
 }
 
-/* Wylogowanie zmienia stan, więc idzie przez POST - to przycisk udający link. */
+/* Logging out changes state, so it is a POST - this is a button styled as a link. */
 button.kainos-header__link {
   background: none;
   border: 0;
@@ -373,7 +373,7 @@ button.kainos-header__link {
   color: var(--kainos-blue);
 }
 
-/* Ramka logowania pokazuje sam nagłówek, więc odstęp na listę jest zbędny. */
+/* The login banner shows the heading only, so the gap left for the list is not needed. */
 .kainos-error-summary--compact .kainos-error-summary__title {
   margin-bottom: 0;
   text-align: center;

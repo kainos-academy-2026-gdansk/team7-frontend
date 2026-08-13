@@ -49,7 +49,7 @@ export class AuthController {
       return;
     }
 
-    // Poprawne dane nie mają jeszcze dokąd trafić - czeka na endpoint logowania w API.
+    // Valid credentials have nowhere to go yet - waiting for the login endpoint in the API.
     res.status(503).render("pages/error.njk", {
       heading: "Logging in is unavailable",
       message:
@@ -59,7 +59,7 @@ export class AuthController {
   };
 
   public logOut = (_req: Request, res: Response): void => {
-    // Nie ma jeszcze sesji do skasowania - dojdzie razem z obsługą tokena.
+    // There is no session to clear yet - that comes with the token handling.
     res.redirect("/");
   };
 
@@ -70,7 +70,7 @@ export class AuthController {
     errors: FormErrors,
   ): void => {
     res.status(status).render("pages/login.njk", {
-      // Hasło nigdy nie wraca na stronę, nawet po błędzie walidacji.
+      // The password never goes back to the page, not even after a validation error.
       values: { ...values, password: "" },
       errors,
       errorList: toErrorList(errors),

@@ -61,7 +61,7 @@ export const requiredEmail = z
   .min(1, "Enter your email address")
   .pipe(z.email({ error: "Enter an email address in the correct format, like name@example.com" }));
 
-// Hasło bez .trim(), bo spacja na początku lub na końcu jest w nim prawidłowym znakiem.
+// No .trim() here, because a leading or trailing space is a valid password character.
 export const requiredPassword = z
   .string({ error: "Enter your password" })
   .min(1, "Enter your password");

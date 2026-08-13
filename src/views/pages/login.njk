@@ -20,7 +20,7 @@
         </div>
       {% endif %}
 
-      {# Adres /login czeka na endpoint logowania w API. #}
+      {# This action waits for the login endpoint in the API. #}
       <form class="kainos-form" method="post" action="/login" novalidate>
         {{ form.textInput("email", "Email address", values.email, errors.email, "email", autocomplete = "email") }}
         {{ form.textInput("password", "Password", "", errors.password, "password", autocomplete = "current-password") }}
