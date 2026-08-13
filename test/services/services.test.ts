@@ -2,10 +2,10 @@ import type { AxiosInstance } from "axios";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { CreateJobRoleDto } from "../../src/Dto/CreateJobRoleDto";
 import type { UpdateJobRoleDto } from "../../src/Dto/UpdateJobRoleDto";
-import { JobRoleStatus } from "../../src/models/JobRole";
 import { BandService } from "../../src/services/BandService";
 import { CapabilityService } from "../../src/services/CapabilityService";
 import { JobRoleNotFoundError, JobRoleService } from "../../src/services/JobRoleService";
+import { StatusService } from "../../src/services/StatusService";
 
 const apiClient = {
   get: vi.fn(),
@@ -18,12 +18,12 @@ const jobRole = {
   jobRoleName: "Front-End Engineer",
   description: "Build interfaces.",
   responsibilities: "Ship features.",
-  link: "https://example.sharepoint.com/role",
+  sharepointUrl: "https://example.sharepoint.com/role",
   location: "Gdansk",
   capability: "Engineering",
   band: "Associate",
   closingDate: "2026-08-31T00:00:00.000Z",
-  status: JobRoleStatus.OPEN,
+  status: "OPEN",
   numberOfOpenPositions: 3,
 };
 
@@ -40,7 +40,7 @@ describe("JobRoleService", () => {
       ...openRole,
       id: 8,
       roleName: "Closed role",
-      status: JobRoleStatus.CLOSED,
+      status: "CLOSED",
     };
     apiClient.get.mockResolvedValue({ data: [openRole, closedRole] });
 
@@ -56,8 +56,8 @@ describe("JobRoleService", () => {
       capabilityId: 3,
       description: null,
       responsibilities: null,
-      openPositions: 3,
-      sharePointLink: null,
+      numberOfOpenPositions: 3,
+      sharepointUrl: null,
       closingDate: null,
     };
     apiClient.post.mockResolvedValue({ data: jobRole });
@@ -77,13 +77,13 @@ describe("JobRoleService", () => {
     const payload: UpdateJobRoleDto = {
       jobRoleName: "Senior Front-End Engineer",
       location: "Gdansk",
-      status: JobRoleStatus.OPEN,
+      statusId: 1,
       bandName: "Associate",
       capabilityName: "Engineering",
       description: null,
       responsibilities: null,
-      sharePointLink: null,
-      openPositions: 2,
+      sharepointUrl: null,
+      numberOfOpenPositions: 2,
       closingDate: null,
     };
     apiClient.put.mockResolvedValue({ data: jobRole });
@@ -138,5 +138,20 @@ describe("CapabilityService", () => {
       new CapabilityService(apiClient as unknown as AxiosInstance).getCapabilities(),
     ).resolves.toEqual(capabilities);
     expect(apiClient.get).toHaveBeenCalledWith("/api/capabilities");
+  });
+});
+
+describe("StatusService", () => {
+  it("returns statuses from the API", async () => {
+    const statuses = [
+      { statusId: 1, statusName: "OPEN" },
+      { statusId: 2, statusName: "CLOSED" },
+    ];
+    apiClient.get.mockResolvedValue({ data: statuses });
+
+    await expect(
+      new StatusService(apiClient as unknown as AxiosInstance).getStatuses(),
+    ).resolves.toEqual(statuses);
+    expect(apiClient.get).toHaveBeenCalledWith("/api/statuses");
   });
 });

@@ -20,7 +20,7 @@
   </form>
 {% endmacro %}
 
-{% macro editJobRoleForm(action, values, errors, errorList, bands, capabilities, submitLabel) %}
+{% macro editJobRoleForm(action, values, errors, errorList, bands, capabilities, statuses, submitLabel) %}
   {{ form.errorSummary(errorList) }}
 
   <form class="kainos-form" method="post" action="{{ action }}" novalidate>
@@ -35,9 +35,8 @@
       error = errors.capabilityName, placeholder = "Choose a capability", valueKey = "name", labelKey = "name"
     ) }}
     {{ form.select(
-      "status", "Status", values.status,
-      [{ value: "OPEN", label: "Open" }, { value: "CLOSED", label: "Closed" }],
-      error = errors.status
+      "statusId", "Status", values.statusId, statuses,
+      error = errors.statusId, placeholder = "Choose a status", valueKey = "statusId", labelKey = "statusName"
     ) }}
     {{ optionalFields(values, errors) }}
 
@@ -50,9 +49,9 @@
     "Optional. Up to 2000 characters.") }}
   {{ form.textarea("responsibilities", "Responsibilities", values.responsibilities, errors.responsibilities,
     "Optional. Up to 2000 characters.") }}
-  {{ form.textInput("openPositions", "Open positions", values.openPositions, errors.openPositions,
+  {{ form.textInput("numberOfOpenPositions", "Open positions", values.numberOfOpenPositions, errors.numberOfOpenPositions,
     "number", "Optional. Leave blank if the number is not known yet.") }}
-  {{ form.textInput("sharePointLink", "SharePoint link", values.sharePointLink, errors.sharePointLink,
+  {{ form.textInput("sharepointUrl", "SharePoint link", values.sharepointUrl, errors.sharepointUrl,
     "url", "Optional. The full URL of the job specification.") }}
   {{ form.textInput("closingDate", "Closing date", values.closingDate, errors.closingDate,
     "date", "Optional. Leave blank if the role has no closing date.") }}

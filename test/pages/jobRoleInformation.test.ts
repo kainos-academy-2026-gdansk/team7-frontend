@@ -19,7 +19,7 @@ const jobRoleDetail = {
   jobRoleName: "Front-End Engineer",
   description: "Build amazing web interfaces",
   responsibilities: "Develop and maintain frontend components",
-  link: "https://sharepoint.com/sites/jobs/front-end-engineer",
+  sharepointUrl: "https://sharepoint.com/sites/jobs/front-end-engineer",
   location: "Gdansk",
   capability: "Engineering",
   band: "Associate",
@@ -111,7 +111,7 @@ describe("GET /job-roles/:id", () => {
     beforeEach(() => {
       vi.clearAllMocks();
       apiClient.get.mockResolvedValue({
-        data: { ...jobRoleDetail, link: null },
+        data: { ...jobRoleDetail, sharepointUrl: null },
       });
     });
 

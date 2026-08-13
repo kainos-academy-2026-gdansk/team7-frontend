@@ -14,3 +14,8 @@ Durable facts approved for use in future tasks.
   browser verification are the current end-to-end confidence boundary.
 - 2026-08-12: User stories are currently taken from developer-attached CSV files. Microsoft Planner
   MCP remains a guarded pilot described in `mcp-planner.md`.
+- 2026-08-12: The backend replaced the `JobRoleStatus` enum with a `Status` lookup table
+  (`db-refactor`). Job-role responses now carry `status` as a plain name string, `PUT
+  /api/job-roles/:id` takes `statusId`, and `GET /api/statuses` supplies the dropdown options.
+- 2026-08-12: Backend field renames applied across this repository: `link` -> `sharepointUrl`,
+  `sharePointLink` -> `sharepointUrl`, `openPositions` -> `numberOfOpenPositions`.

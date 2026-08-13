@@ -1,24 +1,24 @@
 import { z } from "zod";
-import { JobRoleStatus } from "../models/JobRole";
 import {
   optionalClosingDate,
   optionalOpenPositions,
   optionalText,
   optionalUrl,
   requiredText,
+  selectedId,
   selectedName,
 } from "./formFields";
 
 export const updateJobRoleSchema = z.object({
   jobRoleName: requiredText("a role name", 100),
   location: requiredText("a location", 100),
-  status: z.nativeEnum(JobRoleStatus, { error: "Select a status" }),
+  statusId: selectedId("a status"),
   bandName: selectedName("a band"),
   capabilityName: selectedName("a capability"),
   description: optionalText("Description", 2000),
   responsibilities: optionalText("Responsibilities", 2000),
-  sharePointLink: optionalUrl,
-  openPositions: optionalOpenPositions,
+  sharepointUrl: optionalUrl,
+  numberOfOpenPositions: optionalOpenPositions,
   closingDate: optionalClosingDate,
 });
 
