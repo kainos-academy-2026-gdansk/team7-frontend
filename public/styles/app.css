@@ -373,6 +373,12 @@ button.kainos-header__link {
   color: var(--kainos-blue);
 }
 
+/* Ramka logowania pokazuje sam nagłówek, więc odstęp na listę jest zbędny. */
+.kainos-error-summary--compact .kainos-error-summary__title {
+  margin-bottom: 0;
+  text-align: center;
+}
+
 .kainos-error-summary__list {
   font-family: var(--kainos-font);
 }
