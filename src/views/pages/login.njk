@@ -1,0 +1,32 @@
+{% extends "layouts/base.njk" %}
+{% import "partials/formMacros.njk" as form %}
+
+{% block title %}Log in{% endblock %}
+
+{% block banner %}
+  <div class="kainos-page-banner">
+    <div class="govuk-width-container">
+      <h1 class="govuk-heading-l kainos-page-banner__title">Log in</h1>
+    </div>
+  </div>
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row kainos-form-row">
+    <div class="govuk-grid-column-one-half">
+      {% if errorList | length %}
+        <div class="govuk-error-summary kainos-error-summary kainos-error-summary--compact" data-module="govuk-error-summary" tabindex="-1" role="alert" aria-labelledby="error-summary-title">
+          <h2 class="govuk-error-summary__title kainos-error-summary__title" id="error-summary-title">There is a problem</h2>
+        </div>
+      {% endif %}
+
+      {# This action waits for the login endpoint in the API. #}
+      <form class="kainos-form" method="post" action="/login" novalidate>
+        {{ form.textInput("email", "Email address", values.email, errors.email, "email", autocomplete = "email") }}
+        {{ form.textInput("password", "Password", "", errors.password, "password", autocomplete = "current-password") }}
+
+        <button class="kainos-button kainos-form__submit" type="submit">Log in</button>
+      </form>
+    </div>
+  </div>
+{% endblock %}

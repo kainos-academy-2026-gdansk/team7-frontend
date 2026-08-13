@@ -28,7 +28,7 @@
   {%- if hint or error %} aria-describedby="{% if hint %}{{ name }}-hint {% endif %}{% if error %}{{ name }}-error{% endif %}"{% endif -%}
 {% endmacro %}
 
-{% macro textInput(name, label, value, error = "", type = "text", hint = "") %}
+{% macro textInput(name, label, value, error = "", type = "text", hint = "", autocomplete = "") %}
   <div class="govuk-form-group kainos-form__group {% if error %}govuk-form-group--error kainos-form__group--error{% endif %}">
     {{ _label(name, label, hint, error) }}
     <input class="govuk-input kainos-form__input {% if error %}govuk-input--error{% endif %}"
@@ -36,6 +36,7 @@
            name="{{ name }}"
            type="{{ type }}"
            value="{{ value }}"
+           {% if autocomplete %}autocomplete="{{ autocomplete }}"{% endif %}
            {{ _describedBy(name, hint, error) }} />
   </div>
 {% endmacro %}

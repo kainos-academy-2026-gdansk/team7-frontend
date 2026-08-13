@@ -196,6 +196,14 @@ body,
 .kainos-header__link:hover {
   border-bottom-color: var(--kainos-green);
 }
+
+/* Logging out changes state, so it is a POST - this is a button styled as a link. */
+button.kainos-header__link {
+  background: none;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+}
 .kainos-footer {
   background-color: var(--kainos-blue);
   color: #ffffff;
@@ -363,6 +371,12 @@ body,
 .kainos-error-summary__title {
   font-family: var(--kainos-font);
   color: var(--kainos-blue);
+}
+
+/* The login banner shows the heading only, so the gap left for the list is not needed. */
+.kainos-error-summary--compact .kainos-error-summary__title {
+  margin-bottom: 0;
+  text-align: center;
 }
 
 .kainos-error-summary__list {

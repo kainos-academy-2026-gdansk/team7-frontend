@@ -54,3 +54,14 @@ export const optionalClosingDate = z.preprocess((value) => {
     ? `${date}T00:00:00.000Z`
     : date;
 }, z.iso.datetime({ error: "Enter a closing date in the format YYYY-MM-DD" }).nullable());
+
+export const requiredEmail = z
+  .string({ error: "Enter your email address" })
+  .trim()
+  .min(1, "Enter your email address")
+  .pipe(z.email({ error: "Enter an email address in the correct format, like name@example.com" }));
+
+// No .trim() here, because a leading or trailing space is a valid password character.
+export const requiredPassword = z
+  .string({ error: "Enter your password" })
+  .min(1, "Enter your password");
