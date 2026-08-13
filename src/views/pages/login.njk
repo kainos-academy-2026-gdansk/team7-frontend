@@ -21,11 +21,15 @@
       {% endif %}
 
       {# This action waits for the login endpoint in the API. #}
-      <form class="kainos-form" method="post" action="/login" novalidate>
+      <form class="kainos-form kainos-auth-form" method="post" action="/login" novalidate>
         {{ form.textInput("email", "Email address", values.email, errors.email, "email", autocomplete = "email") }}
         {{ form.textInput("password", "Password", "", errors.password, "password", autocomplete = "current-password") }}
 
         <button class="kainos-button kainos-form__submit" type="submit">Log in</button>
+
+        <p class="govuk-body govuk-!-text-align-right govuk-!-margin-bottom-0 kainos-form__supporting-text">
+          Do not have an account? <a class="govuk-link kainos-link" href="/register">Register</a>
+        </p>
       </form>
     </div>
   </div>

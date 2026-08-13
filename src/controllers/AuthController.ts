@@ -40,6 +40,10 @@ export class AuthController {
     this.renderLoginForm(res, 200, { email: "", password: "" }, {});
   };
 
+  public showRegisterPage = (_req: Request, res: Response): void => {
+    res.render("pages/register.njk");
+  };
+
   public logIn = (req: Request, res: Response): void => {
     const values = readFormValues(req.body);
     const result = loginSchema.safeParse(values);

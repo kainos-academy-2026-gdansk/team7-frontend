@@ -15,6 +15,12 @@ describe("GET /login", () => {
     expect(response.text).toContain("Password");
   });
 
+  it("links to the registration page", async () => {
+    const response = await request(app).get("/login");
+
+    expect(response.text).toContain('href="/register"');
+  });
+
   it("sends the form over POST so credentials never reach the URL", async () => {
     const response = await request(app).get("/login");
 
