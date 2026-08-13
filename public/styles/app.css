@@ -83,6 +83,13 @@ body,
   max-width: 1400px;
 }
 
+@media (min-width: 63.75em) and (max-width: 91.249em) {
+  .govuk-width-container {
+    margin-right: 30px;
+    margin-left: 30px;
+  }
+}
+
 .kainos-hero {
   display: flex;
   flex-wrap: wrap;
@@ -317,6 +324,14 @@ button.kainos-header__link {
   border-top: 3px solid var(--kainos-green);
   padding: 2rem;
   margin-bottom: 3rem;
+}
+
+.kainos-auth-form {
+  width: 100%;
+  max-width: 30rem;
+  box-sizing: border-box;
+  margin-right: auto;
+  margin-left: auto;
 }
 
 .kainos-form__group {

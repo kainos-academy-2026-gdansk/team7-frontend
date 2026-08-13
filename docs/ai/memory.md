@@ -19,3 +19,32 @@ Durable facts approved for use in future tasks.
   /api/job-roles/:id` takes `statusId`, and `GET /api/statuses` supplies the dropdown options.
 - 2026-08-12: Backend field renames applied across this repository: `link` -> `sharepointUrl`,
   `sharePointLink` -> `sharepointUrl`, `openPositions` -> `numberOfOpenPositions`.
+- 2026-08-13: User stories in this repository are frontend-only for this developer. Do not implement
+  backend logic, database changes, password hashing, JWT handling, or API authentication unless the
+  developer explicitly asks for them.
+- 2026-08-13: Implement exactly the requirements written in the ticket. Do not add optional
+  features, propose alternative team decisions, or expand the scope without explicit approval.
+- 2026-08-13: Communication with this developer is in Polish. Code, test names, UI copy, and code
+  comments remain in English unless the ticket says otherwise.
+- 2026-08-13: Work one step at a time. The developer types suggested code herself; the agent checks
+  the current file after each step and fixes misplaced or malformed code when needed.
+- 2026-08-13: Do not change branches or perform branch cleanup unless the developer explicitly asks.
+- 2026-08-13: Login and registration pages use matching auth-form styling and a narrower centered
+  white form on large screens.
+- 2026-08-13: Preserve the existing flow: route -> controller -> service -> shared Axios client,
+  with Nunjucks views rendered by controllers. Routes contain wiring only; views contain presentation
+  only; services never import Express types.
+- 2026-08-13: Reuse the single configured Axios client from `src/client/axiosClient.ts`. Do not create
+  another Axios instance or hardcode the backend URL.
+- 2026-08-13: Keep `src/app.ts` free of `listen()`; only `src/index.ts` starts the server.
+- 2026-08-13: Keep Nunjucks `autoescape: true` and never use the `safe` filter for user or API data.
+- 2026-08-13: Use Zod schemas and `safeParse` at form boundaries. Derive DTO types with `z.infer`
+  instead of duplicating request interfaces.
+- 2026-08-13: New form controls must use GOV.UK classes together with Kainos classes and preserve
+  accessible labels, hints, error messages, error summaries, and keyboard navigation.
+- 2026-08-13: Tests use Vitest and Supertest without a live backend. New routes, controllers, forms,
+  and views need focused tests.
+- 2026-08-13: Do not add dependencies, architectural layers, client-side frameworks, or new API
+  contracts without explicit approval.
+- 2026-08-13: Before handover, run `npm run ci:check`, `npx tsc --noEmit -p tsconfig.json`,
+  `npm test`, and `npm run build` when applicable.
