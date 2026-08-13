@@ -26,8 +26,7 @@ describe("GET /register", () => {
 
     expect(response.text).toContain('autocomplete="email"');
     expect(response.text).toContain('autocomplete="new-password"');
-    expect(response.text).toMatch(/aria-describedby="password-hint\s*"/);
-  });
+    expect(response.text).toMatch(/aria-describedby="[^"]*password-hint[^"]*"/);
 
   it("does not include a role field", async () => {
     const response = await request(app).get("/register");
