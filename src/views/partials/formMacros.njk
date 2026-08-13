@@ -3,6 +3,13 @@
   {% if errorList | length %}
     <div class="govuk-error-summary kainos-error-summary" data-module="govuk-error-summary" tabindex="-1" role="alert" aria-labelledby="error-summary-title">
       <h2 class="govuk-error-summary__title kainos-error-summary__title" id="error-summary-title">There is a problem</h2>
+      <div class="govuk-error-summary__body">
+        <ul class="govuk-list govuk-error-summary__list kainos-error-summary__list">
+          {% for error in errorList %}
+            <li><a href="#{{ error.field }}">{{ error.message }}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
     </div>
   {% endif %}
 {% endmacro %}
