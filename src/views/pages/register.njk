@@ -14,14 +14,16 @@
 {% block content %}
   <div class="govuk-grid-row kainos-form-row">
     <div class="govuk-grid-column-one-half">
+      {{ form.errorSummary(errorList) }}
+
       <form class="kainos-form kainos-auth-form" method="post" action="/register" novalidate>
-        {{ form.textInput("email", "Email address", "", "", "email", autocomplete = "email") }}
+        {{ form.textInput("email", "Email address", values.email, errors.email, "email", autocomplete = "email") }}
 
         {{ form.textInput(
           "password",
           "Password",
           "",
-          "",
+          errors.password,
           "password",
           "Your password must be at least 8 characters and include an uppercase letter, a lowercase letter and a special character.",
           autocomplete = "new-password"

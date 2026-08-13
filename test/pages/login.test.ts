@@ -1,6 +1,17 @@
 import request from "supertest";
-import { describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import app from "../../src/app";
+
+const apiClient = vi.hoisted(() => ({ post: vi.fn() }));
+
+vi.mock("axios", () => ({
+  default: { create: () => apiClient },
+  isAxiosError: (error: unknown) => Boolean((error as { isAxiosError?: boolean })?.isAxiosError),
+}));
+
+beforeEach(() => {
+  vi.clearAllMocks();
+});
 
 const postLogin = (values: Record<string, string>) =>
   request(app).post("/login").type("form").send(values);
@@ -19,6 +30,12 @@ describe("GET /login", () => {
     const response = await request(app).get("/login");
 
     expect(response.text).toContain('href="/register"');
+  });
+
+  it("loads the client-side authentication script", async () => {
+    const response = await request(app).get("/login");
+
+    expect(response.text).toContain('<script src="/js/auth.js"></script>');
   });
 
   it("sends the form over POST so credentials never reach the URL", async () => {
@@ -65,11 +82,63 @@ describe("POST /login", () => {
     expect(response.text).not.toContain("hunter2");
   });
 
-  it("explains that logging in is not available yet", async () => {
+  it("shows a form error when the credentials are invalid", async () => {
+    apiClient.post.mockRejectedValue({
+      isAxiosError: true,
+      response: { status: 401 },
+    });
+
     const response = await postLogin({ email: "zuzanna@kainos.com", password: "hunter2" });
+
+    expect(response.status).toBe(401);
+    expect(response.text).toContain("Invalid email or password");
+  });
+
+  it("returns the token after a successful login", async () => {
+    apiClient.post.mockResolvedValue({
+      data: {
+        token: "test-jwt-token",
+        user: { id: 1, email: "zuzanna@kainos.com", role: "APPLICANT" },
+      },
+    });
+
+    const response = await postLogin({
+      email: "zuzanna@kainos.com",
+      password: "Password1!",
+    });
+
+    expect(apiClient.post).toHaveBeenCalledWith("/api/auth/login", {
+      email: "zuzanna@kainos.com",
+      password: "Password1!",
+    });
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual({
+      token: "test-jwt-token",
+      user: { id: 1, email: "zuzanna@kainos.com", role: "APPLICANT" },
+    });
+  });
+
+  it("renders a 503 page when the login API is unavailable", async () => {
+    apiClient.post.mockRejectedValue(new Error("Connection refused"));
+
+    const response = await postLogin({
+      email: "zuzanna@kainos.com",
+      password: "Password1!",
+    });
 
     expect(response.status).toBe(503);
     expect(response.text).toContain("Logging in is unavailable");
+    expect(response.text).not.toContain("Connection refused");
+  });
+});
+
+describe("client-side token handling", () => {
+  it("serves the script that stores and clears the auth token", async () => {
+    const response = await request(app).get("/js/auth.js");
+
+    expect(response.status).toBe(200);
+    expect(response.text).toContain('sessionStorage.setItem("authToken", token)');
+    expect(response.text).toContain('sessionStorage.removeItem("authToken")');
   });
 });
 
