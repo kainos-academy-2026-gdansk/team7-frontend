@@ -67,14 +67,30 @@ const readApiFieldErrors = (error: unknown): FormErrors | null => {
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  public showLoginPage = (_req: Request, res: Response): void => {
+  public showLoginPage = (req: Request, res: Response): void => {
+    if (req.session.authToken) {
+      res.redirect(req.session.authRole === "USER" ? "/my-profile" : "/");
+      return;
+    }
+
     this.renderLoginForm(res, 200, { email: "", password: "" }, {});
   };
 
-  public showRegisterPage = (_req: Request, res: Response): void => {
+  public showRegisterPage = (req: Request, res: Response): void => {
+    if (req.session.authToken) {
+      res.redirect(req.session.authRole === "USER" ? "/my-profile" : "/");
+      return;
+    }
+
     this.renderRegisterForm(res, 200, { email: "", password: "" }, {});
   };
-  public showMyProfilePage = (_req: Request, res: Response): void => {
+
+  public showMyProfilePage = (req: Request, res: Response): void => {
+    if (!req.session.authToken || req.session.authRole !== "USER") {
+      res.redirect("/");
+      return;
+    }
+
     res.render("pages/myProfile.njk");
   };
 
@@ -117,10 +133,13 @@ export class AuthController {
 
     try {
       const loginResponse = await this.authService.login(result.data);
-      res.status(200).json(loginResponse);
+      req.session.authToken = loginResponse.token;
+      req.session.authRole = loginResponse.user.role;
+      res.redirect("/my-profile");
     } catch (error) {
       if (isAxiosError(error) && error.response?.status === 401) {
         this.renderLoginForm(res, 401, values, {
+          email: "Invalid email or password",
           password: "Invalid email or password",
         });
         return;
@@ -136,9 +155,20 @@ export class AuthController {
     }
   };
 
-  public logOut = (_req: Request, res: Response): void => {
-    // There is no session to clear yet - that comes with the token handling.
-    res.redirect("/");
+  public logOut = (req: Request, res: Response): void => {
+    req.session.destroy((error) => {
+      if (error) {
+        console.error("Failed to log out", error);
+        res.status(503).render("pages/error.njk", {
+          heading: "Logging out is unavailable",
+          message: "We could not end your session. Please try again in a moment.",
+          retryUrl: "/my-profile",
+        });
+        return;
+      }
+
+      res.redirect("/");
+    });
   };
 
   private renderRegisterForm = (

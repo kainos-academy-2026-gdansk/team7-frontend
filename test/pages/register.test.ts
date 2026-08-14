@@ -80,7 +80,7 @@ describe("POST /register", () => {
 
   it("redirects to login after a successful registration", async () => {
     apiClient.post.mockResolvedValue({
-      data: { id: 1, email: "zuzanna@kainos.com", role: "APPLICANT" },
+      data: { id: 1, email: "zuzanna@kainos.com", role: "USER" },
     });
 
     const response = await request(app).post("/register").type("form").send({

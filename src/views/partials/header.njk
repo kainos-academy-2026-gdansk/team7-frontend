@@ -8,12 +8,17 @@
     <nav class="kainos-header__nav" aria-label="Main navigation">
       <a class="kainos-header__link" href="/">Home</a>
       <a class="kainos-header__link" href="/job-roles">Job roles</a>
-      <a class="kainos-header__link" href="/login" data-auth-login>Log in</a>
-      <a class="kainos-header__link" href="/register" data-auth-register>Register</a>
-      <a class="kainos-header__link" href="/my-profile" data-auth-profile hidden>My Profile</a>
-      <form class="kainos-header__logout" method="post" action="/logout" data-auth-logout hidden>
-        <button class="kainos-header__link" type="submit">Log out</button>
-      </form>
+      {% if isAuthenticated %}
+        {% if isProfileUser %}
+        <a class="kainos-header__link" href="/my-profile">My Profile</a>
+        {% endif %}
+        <form class="kainos-header__logout" method="post" action="/logout">
+          <button class="kainos-header__link" type="submit">Log out</button>
+        </form>
+      {% else %}
+        <a class="kainos-header__link" href="/login">Log in</a>
+        <a class="kainos-header__link" href="/register">Register</a>
+      {% endif %}
     </nav>
   </div>
 </header>
