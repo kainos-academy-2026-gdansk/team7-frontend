@@ -48,3 +48,10 @@ Durable facts approved for use in future tasks.
   contracts without explicit approval.
 - 2026-08-13: Before handover, run `npm run ci:check`, `npx tsc --noEmit -p tsconfig.json`,
   `npm test`, and `npm run build` when applicable.
+- 2026-08-13: After each completed task, update this memory with important technical decisions,
+  project rules, and workflow lessons learned during the task.
+- 2026-08-13: Auth integration uses `POST /api/auth/register` and `POST /api/auth/login`
+  through `AuthController` -> `AuthService` -> the shared Axios client. Login returns `{ token, user }`;
+  `public/js/auth.js` stores `token` as `authToken` in browser sessionStorage and clears it on POST logout.
+  Page tests mock Axios with `vi.hoisted` and manually verified browser flows cover registration, login,
+  token storage, and logout.

@@ -65,3 +65,11 @@ export const requiredEmail = z
 export const requiredPassword = z
   .string({ error: "Enter your password" })
   .min(1, "Enter your password");
+
+export const registrationPassword = z
+  .string({ error: "Enter your password" })
+  .min(1, "Enter your password")
+  .min(8, "Password must be at least 8 characters")
+  .regex(/[A-Z]/, "Password must include an uppercase letter")
+  .regex(/[a-z]/, "Password must include a lowercase letter")
+  .regex(/[^A-Za-z0-9]/, "Password must include a special character");

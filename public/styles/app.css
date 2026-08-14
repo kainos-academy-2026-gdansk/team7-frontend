@@ -326,7 +326,24 @@ button.kainos-header__link {
   margin-bottom: 3rem;
 }
 
+.kainos-empty-state {
+  background-color: #ffffff;
+  border: 1px solid var(--kainos-border);
+  border-top: 3px solid var(--kainos-green);
+  max-width: 38rem;
+  padding: 2rem;
+  margin: 0 auto;
+}
+
 .kainos-auth-form {
+  width: 100%;
+  max-width: 30rem;
+  box-sizing: border-box;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.kainos-auth-error-summary {
   width: 100%;
   max-width: 30rem;
   box-sizing: border-box;
@@ -386,12 +403,6 @@ button.kainos-header__link {
 .kainos-error-summary__title {
   font-family: var(--kainos-font);
   color: var(--kainos-blue);
-}
-
-/* The login banner shows the heading only, so the gap left for the list is not needed. */
-.kainos-error-summary--compact .kainos-error-summary__title {
-  margin-bottom: 0;
-  text-align: center;
 }
 
 .kainos-error-summary__list {

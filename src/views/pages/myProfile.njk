@@ -1,0 +1,17 @@
+{% extends "layouts/base.njk" %}
+
+{% block title %}My Profile{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row govuk-!-margin-top-6 kainos-form-row">
+    <div class="govuk-grid-column-two-thirds govuk-!-text-align-centre">
+      <div class="kainos-empty-state">
+        <h1 class="govuk-heading-xl">You do not have any applications yet...</h1>
+        <p class="govuk-body">
+          Explore our available job roles to find your next opportunity.
+        </p>
+        <a class="govuk-link" href="/job-roles">Find your next opportunity</a>
+      </div>
+    </div>
+  </div>
+{% endblock %}

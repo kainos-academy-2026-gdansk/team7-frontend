@@ -1,7 +1,10 @@
 import type { AxiosInstance } from "axios";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { CreateJobRoleDto } from "../../src/Dto/CreateJobRoleDto";
+import type { LoginDto } from "../../src/Dto/LoginDto";
+import type { RegisterDto } from "../../src/Dto/RegisterDto";
 import type { UpdateJobRoleDto } from "../../src/Dto/UpdateJobRoleDto";
+import { AuthService } from "../../src/services/AuthService";
 import { BandService } from "../../src/services/BandService";
 import { CapabilityService } from "../../src/services/CapabilityService";
 import { JobRoleNotFoundError, JobRoleService } from "../../src/services/JobRoleService";
@@ -29,6 +32,45 @@ const jobRole = {
 
 beforeEach(() => {
   vi.clearAllMocks();
+});
+
+describe("AuthService", () => {
+  const service = new AuthService(apiClient as unknown as AxiosInstance);
+
+  it("registers a user with the supplied credentials", async () => {
+    const credentials: RegisterDto = {
+      email: "applicant@example.com",
+      password: "Password!",
+    };
+    const registeredUser = {
+      id: 1,
+      email: "applicant@example.com",
+      role: "USER",
+    };
+    apiClient.post.mockResolvedValue({ data: registeredUser });
+
+    await expect(service.register(credentials)).resolves.toEqual(registeredUser);
+    expect(apiClient.post).toHaveBeenCalledWith("/api/auth/register", credentials);
+  });
+
+  it("logs in with the supplied credentials", async () => {
+    const credentials: LoginDto = {
+      email: "applicant@example.com",
+      password: "Password!",
+    };
+    const loginResponse = {
+      token: "jwt-token",
+      user: {
+        id: 1,
+        email: "applicant@example.com",
+        role: "USER",
+      },
+    };
+    apiClient.post.mockResolvedValue({ data: loginResponse });
+
+    await expect(service.login(credentials)).resolves.toEqual(loginResponse);
+    expect(apiClient.post).toHaveBeenCalledWith("/api/auth/login", credentials);
+  });
 });
 
 describe("JobRoleService", () => {
