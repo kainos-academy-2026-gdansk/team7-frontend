@@ -1,10 +1,44 @@
 import path from "node:path";
 import express from "express";
+import session from "express-session";
 import nunjucks from "nunjucks";
+import type { UserRole } from "./models/Auth";
 import AuthRouter from "./routes/AuthRouter";
 import JobRoleRouter from "./routes/JobRoleRouter";
 
 const app = express();
+
+declare module "express-session" {
+  interface SessionData {
+    authToken?: string;
+    authRole?: UserRole;
+  }
+}
+
+const sessionSecret = process.env.SESSION_SECRET;
+
+if (!sessionSecret && process.env.NODE_ENV !== "test") {
+  throw new Error("SESSION_SECRET must be set");
+}
+
+app.use(
+  session({
+    secret: sessionSecret ?? "test-session-secret",
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      httpOnly: true,
+      sameSite: "lax",
+      secure: process.env.NODE_ENV === "production",
+    },
+  }),
+);
+
+app.use((req, res, next) => {
+  res.locals.isAuthenticated = Boolean(req.session.authToken);
+  res.locals.isProfileUser = req.session.authRole === "USER";
+  next();
+});
 
 const env = nunjucks.configure(
   [

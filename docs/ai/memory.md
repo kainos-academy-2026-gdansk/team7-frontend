@@ -51,7 +51,5 @@ Durable facts approved for use in future tasks.
 - 2026-08-13: After each completed task, update this memory with important technical decisions,
   project rules, and workflow lessons learned during the task.
 - 2026-08-13: Auth integration uses `POST /api/auth/register` and `POST /api/auth/login`
-  through `AuthController` -> `AuthService` -> the shared Axios client. Login returns `{ token, user }`;
-  `public/js/auth.js` stores `token` as `authToken` in browser sessionStorage and clears it on POST logout.
-  Page tests mock Axios with `vi.hoisted` and manually verified browser flows cover registration, login,
-  token storage, and logout.
+  through `AuthController` -> `AuthService` -> the shared Axios client. A successful login establishes
+  a server-side Express session; protected routes must use session state rather than browser storage.

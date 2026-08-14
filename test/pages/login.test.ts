@@ -15,6 +15,39 @@ beforeEach(() => {
 
 const postLogin = (values: Record<string, string>) =>
   request(app).post("/login").type("form").send(values);
+const createAuthenticatedAgent = async () => {
+  apiClient.post.mockResolvedValue({
+    data: {
+      token: "test-jwt-token",
+      user: { id: 1, email: "zuzanna@kainos.com", role: "USER" },
+    },
+  });
+
+  const agent = request.agent(app);
+  await agent.post("/login").type("form").send({
+    email: "zuzanna@kainos.com",
+    password: "Password1!",
+  });
+
+  return agent;
+};
+
+const createAdminAgent = async () => {
+  apiClient.post.mockResolvedValue({
+    data: {
+      token: "test-admin-jwt-token",
+      user: { id: 1, email: "admin@kainos.local", role: "ADMIN" },
+    },
+  });
+
+  const agent = request.agent(app);
+  await agent.post("/login").type("form").send({
+    email: "admin@kainos.local",
+    password: "Admin!123",
+  });
+
+  return agent;
+};
 
 describe("GET /login", () => {
   it("renders the login page", async () => {
@@ -30,12 +63,6 @@ describe("GET /login", () => {
     const response = await request(app).get("/login");
 
     expect(response.text).toContain('href="/register"');
-  });
-
-  it("loads the client-side authentication script", async () => {
-    const response = await request(app).get("/login");
-
-    expect(response.text).toContain('<script src="/js/auth.js"></script>');
   });
 
   it("sends the form over POST so credentials never reach the URL", async () => {
@@ -61,25 +88,76 @@ describe("GET /login", () => {
   it("renders the signed-out header state by default", async () => {
     const response = await request(app).get("/");
 
-    expect(response.text).toContain('href="/login" data-auth-login>Log in</a>');
-    expect(response.text).toContain('href="/register" data-auth-register>Register</a>');
-    expect(response.text).toContain("data-auth-profile hidden");
-    expect(response.text).toContain("data-auth-logout hidden");
+    expect(response.text).toContain('href="/login">Log in</a>');
+    expect(response.text).toContain('href="/register">Register</a>');
+    expect(response.text).not.toContain('href="/my-profile">My Profile</a>');
+    expect(response.text).not.toContain('action="/logout"');
   });
 });
 
 describe("GET /my-profile", () => {
-  it("renders an empty applications state with a job roles link", async () => {
+  it("redirects an unauthenticated user to the home page", async () => {
     const response = await request(app).get("/my-profile");
+
+    expect(response.status).toBe(302);
+    expect(response.headers.location).toBe("/");
+  });
+
+  it("redirects an administrator to the home page", async () => {
+    const agent = await createAdminAgent();
+    const response = await agent.get("/my-profile");
+
+    expect(response.status).toBe(302);
+    expect(response.headers.location).toBe("/");
+  });
+
+  it("renders the profile for an authenticated user", async () => {
+    const agent = await createAuthenticatedAgent();
+    const response = await agent.get("/my-profile");
 
     expect(response.status).toBe(200);
     expect(response.text).toContain("<title>My Profile</title>");
     expect(response.text).toContain('class="kainos-empty-state"');
     expect(response.text).toContain("You do not have any applications yet...");
-    expect(response.text).toContain(
-      "Explore our available job roles to find your next opportunity.",
-    );
     expect(response.text).toContain('href="/job-roles">Find your next opportunity</a>');
+  });
+});
+
+describe("administrator header", () => {
+  it("hides My Profile and shows Log out", async () => {
+    const agent = await createAdminAgent();
+    const response = await agent.get("/");
+
+    expect(response.status).toBe(200);
+    expect(response.text).not.toContain('href="/my-profile">My Profile</a>');
+    expect(response.text).toContain('action="/logout"');
+    expect(response.text).toContain(">Log out</button>");
+  });
+});
+
+describe("authenticated-only pages", () => {
+  it("redirects an authenticated user away from login and register", async () => {
+    const agent = await createAuthenticatedAgent();
+
+    const loginResponse = await agent.get("/login");
+    const registerResponse = await agent.get("/register");
+
+    expect(loginResponse.status).toBe(302);
+    expect(loginResponse.headers.location).toBe("/my-profile");
+    expect(registerResponse.status).toBe(302);
+    expect(registerResponse.headers.location).toBe("/my-profile");
+  });
+
+  it("redirects an administrator away from login and register", async () => {
+    const agent = await createAdminAgent();
+
+    const loginResponse = await agent.get("/login");
+    const registerResponse = await agent.get("/register");
+
+    expect(loginResponse.status).toBe(302);
+    expect(loginResponse.headers.location).toBe("/");
+    expect(registerResponse.status).toBe(302);
+    expect(registerResponse.headers.location).toBe("/");
   });
 });
 
@@ -118,14 +196,15 @@ describe("POST /login", () => {
     const response = await postLogin({ email: "zuzanna@kainos.com", password: "hunter2" });
 
     expect(response.status).toBe(401);
-    expect(response.text).toContain("Invalid email or password");
+    expect(response.text).toContain('href="#email">Invalid email or password</a>');
+    expect(response.text).toContain('href="#password">Invalid email or password</a>');
   });
 
-  it("returns the token after a successful login", async () => {
+  it("creates a session and redirects to the profile after a successful login", async () => {
     apiClient.post.mockResolvedValue({
       data: {
         token: "test-jwt-token",
-        user: { id: 1, email: "zuzanna@kainos.com", role: "APPLICANT" },
+        user: { id: 1, email: "zuzanna@kainos.com", role: "USER" },
       },
     });
 
@@ -138,11 +217,9 @@ describe("POST /login", () => {
       email: "zuzanna@kainos.com",
       password: "Password1!",
     });
-    expect(response.status).toBe(200);
-    expect(response.body).toEqual({
-      token: "test-jwt-token",
-      user: { id: 1, email: "zuzanna@kainos.com", role: "APPLICANT" },
-    });
+    expect(response.status).toBe(302);
+    expect(response.headers.location).toBe("/my-profile");
+    expect(response.headers["set-cookie"]).toBeDefined();
   });
 
   it("renders a 503 page when the login API is unavailable", async () => {
@@ -159,30 +236,30 @@ describe("POST /login", () => {
   });
 });
 
-describe("client-side token handling", () => {
-  it("serves the script that manages the authentication session", async () => {
-    const response = await request(app).get("/js/auth.js");
-
-    expect(response.status).toBe(200);
-    expect(response.text).toContain('sessionStorage.setItem("authToken", token)');
-    expect(response.text).toContain('window.location.assign("/my-profile")');
-    expect(response.text).toContain('sessionStorage.removeItem("authToken")');
-  });
-});
-
 describe("logging out", () => {
-  it("offers a log out button that submits a form", async () => {
-    const response = await request(app).get("/");
+  it("renders the signed-in header state", async () => {
+    const agent = await createAuthenticatedAgent();
+    const response = await agent.get("/");
 
+    expect(response.text).toContain('href="/my-profile">My Profile</a>');
     expect(response.text).toContain('action="/logout"');
     expect(response.text).toContain("Log out");
+    expect(response.text).not.toContain('href="/login">Log in</a>');
+    expect(response.text).not.toContain('href="/register">Register</a>');
   });
 
-  it("sends the user back to the home page", async () => {
-    const response = await request(app).post("/logout");
+  it("ends the session and sends the user back to the home page", async () => {
+    const agent = await createAuthenticatedAgent();
 
-    expect(response.status).toBe(302);
-    expect(response.headers.location).toBe("/");
+    const logoutResponse = await agent.post("/logout");
+
+    expect(logoutResponse.status).toBe(302);
+    expect(logoutResponse.headers.location).toBe("/");
+
+    const profileResponse = await agent.get("/my-profile");
+
+    expect(profileResponse.status).toBe(302);
+    expect(profileResponse.headers.location).toBe("/");
   });
 
   it("cannot be triggered by a GET, so another site cannot log the user out", async () => {
