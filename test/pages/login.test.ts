@@ -57,6 +57,25 @@ describe("GET /login", () => {
 
     expect(response.text).toContain('href="/login"');
   });
+
+  it("renders the signed-out header state by default", async () => {
+    const response = await request(app).get("/");
+
+    expect(response.text).toContain('href="/login" data-auth-login>Log in</a>');
+    expect(response.text).toContain("data-auth-profile hidden");
+    expect(response.text).toContain("data-auth-logout hidden");
+  });
+});
+
+describe("GET /my-profile", () => {
+  it("renders the profile greeting placeholder", async () => {
+    const response = await request(app).get("/my-profile");
+
+    expect(response.status).toBe(200);
+    expect(response.text).toContain("<title>My Profile</title>");
+    expect(response.text).toContain("data-auth-greeting");
+    expect(response.text).toContain("Hello");
+  });
 });
 
 describe("POST /login", () => {
@@ -133,12 +152,15 @@ describe("POST /login", () => {
 });
 
 describe("client-side token handling", () => {
-  it("serves the script that stores and clears the auth token", async () => {
+  it("serves the script that manages the authentication session", async () => {
     const response = await request(app).get("/js/auth.js");
 
     expect(response.status).toBe(200);
     expect(response.text).toContain('sessionStorage.setItem("authToken", token)');
+    expect(response.text).toContain('sessionStorage.setItem("authDisplayName", displayName)');
+    expect(response.text).toContain('window.location.assign("/my-profile")');
     expect(response.text).toContain('sessionStorage.removeItem("authToken")');
+    expect(response.text).toContain('sessionStorage.removeItem("authDisplayName")');
   });
 });
 

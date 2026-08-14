@@ -74,6 +74,10 @@ export class AuthController {
   public showRegisterPage = (_req: Request, res: Response): void => {
     this.renderRegisterForm(res, 200, { email: "", password: "" }, {});
   };
+  public showMyProfilePage = (_req: Request, res: Response): void => {
+    res.render("pages/myProfile.njk");
+  };
+
   public register = async (req: Request, res: Response): Promise<void> => {
     const values = readFormValues(req.body);
     const result = registerSchema.safeParse(values);

@@ -10,6 +10,7 @@ const router = Router();
 
 router.get("/login", authController.showLoginPage);
 router.get("/register", authController.showRegisterPage);
+router.get("/my-profile", authController.showMyProfilePage);
 router.post("/register", authController.register);
 router.post("/login", authController.logIn);
 router.post("/logout", authController.logOut);
