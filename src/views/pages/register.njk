@@ -14,7 +14,9 @@
 {% block content %}
   <div class="govuk-grid-row kainos-form-row">
     <div class="govuk-grid-column-one-half">
-      {{ form.errorSummary(errorList) }}
+      <div class="kainos-auth-error-summary">
+        {{ form.errorSummary(errorList) }}
+      </div>
 
       <form class="kainos-form kainos-auth-form" method="post" action="/register" novalidate>
         {{ form.textInput("email", "Email address", values.email, errors.email, "email", autocomplete = "email") }}

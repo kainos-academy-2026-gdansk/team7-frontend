@@ -61,6 +61,9 @@ describe("POST /register", () => {
     });
 
     expect(response.status).toBe(400);
+    expect(response.text).toContain('class="kainos-auth-error-summary"');
+    expect(response.text).toContain("govuk-error-summary__list");
+    expect(response.text).toContain('href="#email">Enter your email address</a>');
     expect(response.text).toContain("Enter your email address");
     expect(response.text).toContain("Enter your password");
   });

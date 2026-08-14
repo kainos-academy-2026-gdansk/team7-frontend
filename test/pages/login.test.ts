@@ -62,19 +62,24 @@ describe("GET /login", () => {
     const response = await request(app).get("/");
 
     expect(response.text).toContain('href="/login" data-auth-login>Log in</a>');
+    expect(response.text).toContain('href="/register" data-auth-register>Register</a>');
     expect(response.text).toContain("data-auth-profile hidden");
     expect(response.text).toContain("data-auth-logout hidden");
   });
 });
 
 describe("GET /my-profile", () => {
-  it("renders the profile greeting placeholder", async () => {
+  it("renders an empty applications state with a job roles link", async () => {
     const response = await request(app).get("/my-profile");
 
     expect(response.status).toBe(200);
     expect(response.text).toContain("<title>My Profile</title>");
-    expect(response.text).toContain("data-auth-greeting");
-    expect(response.text).toContain("Hello");
+    expect(response.text).toContain('class="kainos-empty-state"');
+    expect(response.text).toContain("You do not have any applications yet...");
+    expect(response.text).toContain(
+      "Explore our available job roles to find your next opportunity.",
+    );
+    expect(response.text).toContain('href="/job-roles">Find your next opportunity</a>');
   });
 });
 
@@ -83,6 +88,9 @@ describe("POST /login", () => {
     const response = await postLogin({ email: "", password: "" });
 
     expect(response.status).toBe(400);
+    expect(response.text).toContain('class="kainos-auth-error-summary"');
+    expect(response.text).toContain("govuk-error-summary__list");
+    expect(response.text).toContain('href="#email">Enter your email address</a>');
     expect(response.text).toContain("Enter your email address");
     expect(response.text).toContain("Enter your password");
   });
@@ -157,10 +165,8 @@ describe("client-side token handling", () => {
 
     expect(response.status).toBe(200);
     expect(response.text).toContain('sessionStorage.setItem("authToken", token)');
-    expect(response.text).toContain('sessionStorage.setItem("authDisplayName", displayName)');
     expect(response.text).toContain('window.location.assign("/my-profile")');
     expect(response.text).toContain('sessionStorage.removeItem("authToken")');
-    expect(response.text).toContain('sessionStorage.removeItem("authDisplayName")');
   });
 });
 

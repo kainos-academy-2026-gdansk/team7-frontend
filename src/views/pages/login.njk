@@ -14,11 +14,9 @@
 {% block content %}
   <div class="govuk-grid-row kainos-form-row">
     <div class="govuk-grid-column-one-half">
-      {% if errorList | length %}
-        <div class="govuk-error-summary kainos-error-summary kainos-error-summary--compact" data-module="govuk-error-summary" tabindex="-1" role="alert" aria-labelledby="error-summary-title">
-          <h2 class="govuk-error-summary__title kainos-error-summary__title" id="error-summary-title">There is a problem</h2>
-        </div>
-      {% endif %}
+      <div class="kainos-auth-error-summary">
+        {{ form.errorSummary(errorList) }}
+      </div>
 
       {# This action waits for the login endpoint in the API. #}
       <form class="kainos-form kainos-auth-form" method="post" action="/login" novalidate>
