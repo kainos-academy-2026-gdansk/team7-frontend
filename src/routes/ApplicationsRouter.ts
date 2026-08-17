@@ -7,6 +7,6 @@ const applicationService = new ApplicationService(apiClient);
 const applicationController = new ApplicationController(applicationService);
 const router = Router();
 
-router.get("/admin/job-roles/:id/applications", applicationController.showAllApplicationsPage);
+router.get("/admin/job-roles/:id/applications", applicationController.showJobRoleApplicationsPage);
 
 export default router;

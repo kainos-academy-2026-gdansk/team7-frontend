@@ -4,8 +4,12 @@
   --kainos-green: #61a83f;
   --kainos-dark-green: #004631;
   --kainos-red: #d4351c;
+<<<<<<< HEAD
   --kainos-status-green: #8fbd73;
   --kainos-status-red: #e78276;
+=======
+  --kainos-dark-red: #b10e1e;
+>>>>>>> 98e6179 (admin operations on jobrole, displaying applications for role)
   --kainos-grey: #575756;
   --kainos-border: #d9d9d6;
   --kainos-tint: #f2f7ef;
@@ -677,9 +681,39 @@ button.kainos-header__link {
 .kainos-job-detail__delete {
   background-color: var(--kainos-dark-green);
 }
+.kainos-job-detail__view {
+  background-color: var(--kainos-green);
+}
 
 .kainos-job-detail__delete:hover {
   background-color: var(--kainos-grey);
+}
+
+.kainos-application__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.kainos-application__actions .kainos-button {
+  margin: 0;
+}
+
+.kainos-application__hire {
+  background-color: var(--kainos-green);
+}
+
+.kainos-application__hire:hover {
+  background-color: var(--kainos-dark-green);
+}
+
+.kainos-application__reject {
+  background-color: var(--kainos-red);
+}
+
+.kainos-application__reject:hover {
+  background-color: var(--kainos-dark-red);
 }
 
 .kainos-job-detail__content {
