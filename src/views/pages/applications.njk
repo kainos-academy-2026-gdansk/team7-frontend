@@ -1,0 +1,58 @@
+{% extends "layouts/base.njk" %}
+
+{% block title %}
+  All applications
+{% endblock %}
+
+{% block banner %}
+<div class="kainos-page-banner">
+  <div class="govuk-width-container">
+    <h1 class="govuk-heading-l kainos-page-banner__title">
+      All applications
+    </h1>
+  </div>
+</div>
+{% endblock %}
+
+{% macro fact(label, value, icon) %}
+<span class="kainos-job__fact">
+  <img
+    class="kainos-job__icon"
+    src="/images/icons/{{ icon }}.png"
+    alt=""
+    width="289"
+    height="289"
+  />
+  <span class="govuk-visually-hidden">{{ label }}:</span>{{ value }}
+</span>
+{% endmacro %}
+
+{% block content %}
+
+  {% if isAdmintalCount %} total applications found
+      </p>
+
+      <ul class="kainos-job-list__items">
+        {% for jobRole in jobRoles %}
+          <li class="kainos-job_title">
+            <p class="kainos-job__facts">
+              Render działa
+            </p>
+          </li>
+        {% else %}
+          <li class="kainos-job_title">
+            <p class="kainos-job__facts">
+              Brak aplikacji do wyświetlenia
+            </p>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+
+  {% else %}
+
+    <p>Access denied. User is not admin.</p>
+
+  {% endif %}
+
+{% endblock %}

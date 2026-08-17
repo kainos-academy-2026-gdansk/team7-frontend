@@ -3,9 +3,9 @@ import express from "express";
 import session from "express-session";
 import nunjucks from "nunjucks";
 import type { UserRole } from "./models/Auth";
+import ApplicationRouter from "./routes/ApplicationsRouter";
 import AuthRouter from "./routes/AuthRouter";
 import JobRoleRouter from "./routes/JobRoleRouter";
-
 const app = express();
 
 declare module "express-session" {
@@ -109,5 +109,6 @@ app.get("/health", (_req, res) => {
 
 app.use("/", JobRoleRouter);
 app.use("/", AuthRouter);
+app.use("/", ApplicationRouter);
 
 export default app;
