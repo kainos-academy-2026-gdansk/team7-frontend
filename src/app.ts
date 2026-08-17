@@ -38,6 +38,7 @@ app.use(
 app.use((req, res, next) => {
   res.locals.isAuthenticated = Boolean(req.session.authToken);
   res.locals.isProfileUser = req.session.authRole === "USER";
+  res.locals.isAdmin = req.session.authRole === "ADMIN";
   next();
 });
 
