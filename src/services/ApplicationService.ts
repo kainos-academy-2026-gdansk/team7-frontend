@@ -1,6 +1,7 @@
 import type { AxiosInstance } from "axios";
 import type { CreateApplicationDto } from "../Dto/CreateApplicationDto";
 import type { Application } from "../models/Application";
+import type { AdminViewApplication } from "../models/Application";
 
 export class ApplicationService {
   constructor(private readonly apiClient: AxiosInstance) {}
@@ -24,7 +25,17 @@ export class ApplicationService {
         Authorization: `Bearer ${authToken}`,
       },
     });
-
+    return response.data;
+  }
+  async getAllApplications(jobRoleId: number, token: string): Promise<AdminViewApplication[]> {
+    const response = await this.apiClient.get<AdminViewApplication[]>(
+      `/api/admin/job-roles/${jobRoleId}/applications`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
     return response.data;
   }
 }
