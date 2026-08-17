@@ -119,6 +119,15 @@ export class JobRoleController {
     this.statusService = statusService;
   }
 
+  private requireAdmin = (req: Request, res: Response): string | null => {
+    if (!req.session.authToken || req.session.authRole !== "ADMIN") {
+      res.redirect("/");
+      return null;
+    }
+
+    return req.session.authToken;
+  };
+
   public getJobRolesPage = async (_req: Request, res: Response): Promise<void> => {
     try {
       const jobRoles = await this.jobRoleService.getJobRoles();
@@ -149,10 +158,14 @@ export class JobRoleController {
   };
 
   public showCreateJobRoleForm = async (_req: Request, res: Response): Promise<void> => {
+    if (!this.requireAdmin(_req, res)) return;
     await this.renderCreateForm(res, 200, readFormValues(CREATE_FIELDS, {}), {});
   };
 
   public createJobRole = async (req: Request, res: Response): Promise<void> => {
+    const token = this.requireAdmin(req, res);
+    if (!token) return;
+
     const values = readFormValues(CREATE_FIELDS, req.body);
     const result = createJobRoleSchema.safeParse(values);
 
@@ -162,7 +175,7 @@ export class JobRoleController {
     }
 
     try {
-      await this.jobRoleService.createJobRole(result.data);
+      await this.jobRoleService.createJobRole(result.data, token);
 
       res.redirect("/job-roles");
     } catch (error) {
@@ -184,6 +197,10 @@ export class JobRoleController {
   };
 
   public showEditJobRoleForm = async (req: Request, res: Response): Promise<void> => {
+    const token = this.requireAdmin(req, res);
+    if (!token) {
+      return;
+    }
     const id = readId(req.params.id);
 
     if (id === null) {
@@ -213,6 +230,8 @@ export class JobRoleController {
   };
 
   public editJobRole = async (req: Request, res: Response): Promise<void> => {
+    const token = this.requireAdmin(req, res);
+    if (!token) return;
     const id = readId(req.params.id);
 
     if (id === null) {
@@ -229,7 +248,7 @@ export class JobRoleController {
     }
 
     try {
-      await this.jobRoleService.updateJobRole(id, result.data);
+      await this.jobRoleService.updateJobRole(id, result.data, token);
 
       res.redirect("/job-roles");
     } catch (error) {
@@ -252,6 +271,65 @@ export class JobRoleController {
         message:
           "We could not reach the service that stores our job roles. This is usually temporary, so please try again in a moment.",
         retryUrl: `/job-roles/${id}/edit`,
+      });
+    }
+  };
+
+  public showDeleteJobRoleConfirmation = async (req: Request, res: Response): Promise<void> => {
+    const token = this.requireAdmin(req, res);
+    if (!token) return;
+
+    const id = readId(req.params.id);
+    if (id === null) {
+      this.renderNotFound(res);
+      return;
+    }
+
+    try {
+      const jobRole = await this.jobRoleService.getJobRoleById(id);
+
+      res.render("pages/deleteJobRole.njk", { jobRole });
+    } catch (error) {
+      if (isAxiosError(error) && error.response?.status === 404) {
+        this.renderNotFound(res);
+        return;
+      }
+
+      console.error("Could not load job role for deletion", error);
+      res.status(503).render("pages/error.njk", {
+        heading: "The job role is unavailable",
+        message:
+          "We could not reach the service that holds our job roles. This is usually temporary, so please try again in a moment.",
+        retryUrl: `/job-roles/${id}/delete`,
+      });
+    }
+  };
+
+  public deleteJobRole = async (req: Request, res: Response): Promise<void> => {
+    const token = this.requireAdmin(req, res);
+    if (!token) return;
+
+    const id = readId(req.params.id);
+    if (id === null) {
+      this.renderNotFound(res);
+      return;
+    }
+
+    try {
+      await this.jobRoleService.deleteJobRole(id, token);
+      res.redirect("/job-roles");
+    } catch (error) {
+      if (isAxiosError(error) && error.response?.status === 404) {
+        this.renderNotFound(res);
+        return;
+      }
+
+      console.error("Could not delete job role", error);
+      res.status(503).render("pages/error.njk", {
+        heading: "The job role could not be deleted",
+        message:
+          "We could not reach the service that stores our job roles. This is usually temporary, so please try again in a moment.",
+        retryUrl: `/job-roles/${id}/delete`,
       });
     }
   };

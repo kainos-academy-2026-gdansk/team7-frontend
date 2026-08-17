@@ -29,9 +29,12 @@ router.get("/job-roles", jobRoleController.getJobRolesPage);
 router.get("/job-roles/new", jobRoleController.showCreateJobRoleForm);
 router.post("/job-roles/new", jobRoleController.createJobRole);
 
-router.get("/job-roles/:id", jobRoleController.getJobRoleInformationPage);
-
 router.get("/job-roles/:id/edit", jobRoleController.showEditJobRoleForm);
 router.post("/job-roles/:id/edit", jobRoleController.editJobRole);
+
+router.get("/job-roles/:id/delete", jobRoleController.showDeleteJobRoleConfirmation);
+router.post("/job-roles/:id/delete", jobRoleController.deleteJobRole);
+
+router.get("/job-roles/:id", jobRoleController.getJobRoleInformationPage);
 
 export default router;

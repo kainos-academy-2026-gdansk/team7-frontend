@@ -309,6 +309,17 @@ button.kainos-header__link {
   margin: 0 auto 2rem;
 }
 
+.kainos-job-list__actions {
+  max-width: 38rem;
+  margin: 0 auto 2rem;
+  text-align: center;
+}
+
+.kainos-job-list__actions .kainos-button {
+  box-sizing: border-box;
+  width: 100%;
+}
+
 .kainos-form-row {
   display: flex;
   justify-content: center;
@@ -573,6 +584,33 @@ button.kainos-header__link {
   background-color: var(--kainos-grey);
 }
 
+.kainos-job-detail__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding: 0 2rem 1.75rem;
+}
+
+.kainos-job-detail__actions .kainos-button {
+  margin: 0;
+}
+
+.kainos-job-detail__edit {
+  background-color: var(--kainos-mid-blue);
+}
+
+.kainos-job-detail__edit:hover {
+  background-color: var(--kainos-blue);
+}
+
+.kainos-job-detail__delete {
+  background-color: var(--kainos-dark-green);
+}
+
+.kainos-job-detail__delete:hover {
+  background-color: var(--kainos-grey);
+}
+
 .kainos-job-detail__content {
   display: grid;
   /* minmax(0, Nfr) stops the long description/link text from forcing the side column to collapse */
@@ -636,6 +674,58 @@ button.kainos-header__link {
   word-break: break-word;
   display: inline-block;
   max-width: 100%;
+}
+
+.kainos-delete-confirmation {
+  background-color: #ffffff;
+  border: 1px solid var(--kainos-border);
+  border-top: 4px solid var(--kainos-green);
+  border-radius: 0.25rem;
+  max-width: 40rem;
+  margin: 0 auto 2rem;
+  padding: 2rem;
+  box-shadow: 0 2px 8px rgba(11, 12, 12, 0.08);
+}
+
+.kainos-delete-confirmation__back-link,
+.kainos-delete-confirmation__cancel {
+  font-family: var(--kainos-font);
+}
+
+.kainos-delete-confirmation__title {
+  margin-bottom: 1.5rem;
+}
+
+.kainos-delete-confirmation__warning {
+  margin-bottom: 1.5rem;
+}
+
+.kainos-delete-confirmation__warning-icon {
+  background-color: var(--kainos-blue);
+}
+
+.kainos-delete-confirmation__warning-text,
+.kainos-delete-confirmation__description {
+  font-family: var(--kainos-font);
+}
+
+.kainos-delete-confirmation__description {
+  margin-bottom: 2rem;
+}
+
+.kainos-delete-confirmation__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.kainos-delete-confirmation__actions form {
+  margin: 0;
+}
+
+.kainos-delete-confirmation__delete {
+  margin: 0;
 }
 
 @media (max-width: 40rem) {
