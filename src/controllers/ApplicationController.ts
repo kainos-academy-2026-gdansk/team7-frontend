@@ -11,12 +11,22 @@ export class ApplicationController {
 
     return req.session.authToken;
   };
-  public showAllApplicationsPage = async (req: Request, res: Response): Promise<void> => {
+  public showJobRoleApplicationsPage = async (req: Request, res: Response): Promise<void> => {
     const token = this.requireAdmin(req, res);
     if (!token) return;
+
+    const id = Number(req.params.id);
+    if (!Number.isInteger(id) || id <= 0) {
+      res.status(404).render("pages/error.njk", {
+        heading: "Job role not found",
+        message: "We could not find that job role. It may have been removed.",
+        retryUrl: "/job-roles",
+      });
+      return;
+    }
+
     try {
-      const id = Number(req.params.id);
-      const applications = await this.applicationService.getAllApplications(id, token);
+      const applications = await this.applicationService.getApplicationsForJobRole(id, token);
       res.render("pages/applications.njk", {
         applications,
         totalCount: applications.length,

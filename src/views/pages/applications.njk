@@ -1,58 +1,53 @@
 {% extends "layouts/base.njk" %}
 
 {% block title %}
-  All applications
+  Job role applications
 {% endblock %}
 
 {% block banner %}
 <div class="kainos-page-banner">
   <div class="govuk-width-container">
     <h1 class="govuk-heading-l kainos-page-banner__title">
-      All applications
+      Job role applications
     </h1>
   </div>
 </div>
 {% endblock %}
 
-{% macro fact(label, value, icon) %}
-<span class="kainos-job__fact">
-  <img
-    class="kainos-job__icon"
-    src="/images/icons/{{ icon }}.png"
-    alt=""
-    width="289"
-    height="289"
-  />
-  <span class="govuk-visually-hidden">{{ label }}:</span>{{ value }}
-</span>
-{% endmacro %}
-
 {% block content %}
-
-  {% if isAdmintalCount %} total applications found
-      </p>
+  {% if totalCount > 0 %}
+    <div class="kainos-job-list">
+      <p class="kainos-job-list__count">{{ totalCount }} applications found</p>
 
       <ul class="kainos-job-list__items">
-        {% for jobRole in jobRoles %}
-          <li class="kainos-job_title">
+        {% for application in applications %}
+          <li class="kainos-job">
+            <h2 class="kainos-job__title">{{ application.applicationEmail }}</h2>
+
             <p class="kainos-job__facts">
-              Render działa
+              <span class="kainos-job__fact">Status: {{ application.status }}</span>
+              <span class="kainos-job__fact">Experience: {{ application.experience }}</span>
+              <span class="kainos-job__fact">
+                Salary expectation: {{ application.salaryExpectation }}
+              </span>
+              <span class="kainos-job__fact">Skills: {{ application.skills }}</span>
             </p>
-          </li>
-        {% else %}
-          <li class="kainos-job_title">
-            <p class="kainos-job__facts">
-              Brak aplikacji do wyświetlenia
-            </p>
+
+            {% if application.status === "IN PROGRESS" %}
+              <div class="kainos-application__actions">
+                <button class="govuk-button kainos-button kainos-application__hire" type="button">
+                  Hire
+                </button>
+                <button class="govuk-button kainos-button kainos-application__reject" type="button">
+                  Reject
+                </button>
+              </div>
+            {% endif %}
           </li>
         {% endfor %}
       </ul>
     </div>
-
   {% else %}
-
-    <p>Access denied. User is not admin.</p>
-
+    <p class="govuk-body">There are no applications for this job role.</p>
   {% endif %}
-
 {% endblock %}
