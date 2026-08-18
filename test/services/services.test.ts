@@ -185,10 +185,10 @@ describe("ApplicationService", () => {
   const service = new ApplicationService(apiClient as unknown as AxiosInstance);
   const application = {
     id: 4,
-    applicationEmail: "applicant@example.com",
+    applicantEmail: "applicant@example.com",
     status: "IN_PROGRESS" as const,
     experience: "Three years",
-    salaryExpectation: 50000,
+    salaryExpectation: "50000",
     skills: "TypeScript",
   };
 
