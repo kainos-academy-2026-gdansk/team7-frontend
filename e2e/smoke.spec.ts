@@ -1,18 +1,26 @@
-import { expect, test } from "@playwright/test";
-import { HomePage } from "./pages/HomePage";
+import { expect, test } from "./fixtures/test";
+import { registerPublicBrowserLifecycle } from "./setup/publicBrowserLifecycle";
+import { readJson } from "./utils/readJson";
 
-test.describe("Public smoke paths", () => {
-  test("reports a healthy frontend", async ({ request }) => {
-    const response = await request.get("/health");
+type HealthResponse = {
+  status: string;
+};
+
+test.describe("Public API smoke paths", () => {
+  test("reports a healthy frontend", async ({ healthApi }) => {
+    const response = await healthApi.getHealth();
 
     await expect(response).toBeOK();
 
-    const body = await response.json();
-    expect(body).toHaveProperty("status", "UP");
+    const body = await readJson<HealthResponse>(response);
+    expect(body.status).toBe("UP");
   });
+});
 
-  test("renders the home page", async ({ page }) => {
-    const homePage = new HomePage(page);
+test.describe("Public browser smoke paths", () => {
+  registerPublicBrowserLifecycle();
+
+  test("renders the home page", async ({ homePage }) => {
     await homePage.goto();
 
     await expect(homePage.heading).toBeVisible();

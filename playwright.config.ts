@@ -1,11 +1,15 @@
 import { defineConfig } from "@playwright/test";
+import { e2eEnvironment } from "./e2e/config/environment";
 
 export default defineConfig({
   testDir: "./e2e",
   fullyParallel: true,
+  forbidOnly: Boolean(process.env.CI),
+  retries: process.env.CI ? 2 : 0,
+  workers: process.env.CI ? 1 : undefined,
   reporter: "html",
   use: {
-    baseURL: process.env.BASE_URL ?? `http://127.0.0.1:${process.env.E2E_PORT ?? "4000"}`,
+    baseURL: e2eEnvironment.baseUrl,
     trace: "on-first-retry",
     screenshot: "only-on-failure",
     video: "retain-on-failure",
@@ -18,12 +22,12 @@ export default defineConfig({
   ],
   webServer: {
     command: "npm run dev",
-    url: `http://127.0.0.1:${process.env.E2E_PORT ?? "4000"}/health`,
+    url: `${e2eEnvironment.localBaseUrl}/health`,
     reuseExistingServer: !process.env.CI,
     env: {
       ...process.env,
       NODE_ENV: "test",
-      PORT: process.env.E2E_PORT ?? "4000",
+      PORT: e2eEnvironment.port,
     },
   },
 });
