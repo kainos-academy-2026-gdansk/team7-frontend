@@ -606,7 +606,7 @@ button.kainos-header__link {
 }
 
 .kainos-job-detail__delete {
-  background-color: var(--kainos-dark-green);
+  background-color: var(--kainos-dark-red);
 }
 .kainos-job-detail__view {
   background-color: var(--kainos-green);
