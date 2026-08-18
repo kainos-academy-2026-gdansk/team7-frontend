@@ -52,7 +52,7 @@ const validForm = {
 };
 
 const editJobRole = (overrides: Record<string, string> = {}, id = 7) =>
-  request(app)
+  adminAgent
     .post(`/job-roles/${id}/edit`)
     .type("form")
     .send({ ...validForm, ...overrides });
@@ -60,8 +60,11 @@ const editJobRole = (overrides: Record<string, string> = {}, id = 7) =>
 const apiError = (status: number, data: unknown = {}) =>
   Object.assign(new Error("Request failed"), { isAxiosError: true, response: { status, data } });
 
-beforeEach(() => {
+let adminAgent: ReturnType<typeof request.agent>;
+
+beforeEach(async () => {
   apiClient.get.mockReset();
+  apiClient.post.mockReset();
   apiClient.put.mockReset();
   apiClient.get.mockImplementation((url: string) => {
     if (url === "/api/bands") return Promise.resolve({ data: bands });
@@ -70,11 +73,23 @@ beforeEach(() => {
     return Promise.resolve({ data: existingJobRole });
   });
   apiClient.put.mockResolvedValue({ data: existingJobRole });
+  apiClient.post.mockResolvedValueOnce({
+    data: {
+      token: "admin-token",
+      user: { id: 1, email: "admin@example.com", role: "ADMIN" },
+    },
+  });
+
+  adminAgent = request.agent(app);
+  await adminAgent.post("/login").type("form").send({
+    email: "admin@example.com",
+    password: "Password1!",
+  });
 });
 
 describe("GET /job-roles/:id/edit", () => {
   it("prefills the form with the role held by the API", async () => {
-    const result = await request(app).get("/job-roles/7/edit");
+    const result = await adminAgent.get("/job-roles/7/edit");
 
     expect(result.status).toBe(200);
     expect(apiClient.get).toHaveBeenCalledWith("/api/job-roles/7");
@@ -85,14 +100,14 @@ describe("GET /job-roles/:id/edit", () => {
   });
 
   it("trims the timestamp down to what a date input accepts", async () => {
-    const result = await request(app).get("/job-roles/7/edit");
+    const result = await adminAgent.get("/job-roles/7/edit");
 
     expect(result.text).toContain('value="2026-08-31"');
     expect(result.text).not.toContain("2026-08-31T00:00:00.000Z");
   });
 
   it("preselects the band, capability and status the role already has", async () => {
-    const result = await request(app).get("/job-roles/7/edit");
+    const result = await adminAgent.get("/job-roles/7/edit");
 
     expect(result.text).toContain('<option value="Associate" selected>');
     expect(result.text).toContain('<option value="Engineering" selected>');
@@ -100,7 +115,7 @@ describe("GET /job-roles/:id/edit", () => {
   });
 
   it("answers 404 when the id is not a positive integer", async () => {
-    const result = await request(app).get("/job-roles/drop-table/edit");
+    const result = await adminAgent.get("/job-roles/drop-table/edit");
 
     expect(result.status).toBe(404);
     expect(result.text).toContain("Job role not found");
@@ -115,7 +130,7 @@ describe("GET /job-roles/:id/edit", () => {
       return Promise.resolve({ data: { ...existingJobRole, status: "ARCHIVED" } });
     });
 
-    const result = await request(app).get("/job-roles/7/edit");
+    const result = await adminAgent.get("/job-roles/7/edit");
 
     expect(result.status).toBe(200);
     expect(result.text).toContain('<option value="" selected>Choose a status</option>');
@@ -130,7 +145,7 @@ describe("GET /job-roles/:id/edit", () => {
         : Promise.reject(apiError(404)),
     );
 
-    const result = await request(app).get("/job-roles/7/edit");
+    const result = await adminAgent.get("/job-roles/7/edit");
 
     expect(result.status).toBe(404);
     expect(result.text).toContain("Job role not found");
@@ -139,7 +154,7 @@ describe("GET /job-roles/:id/edit", () => {
   it("answers 503 when the API is unreachable", async () => {
     apiClient.get.mockRejectedValue(new Error("connect ECONNREFUSED 127.0.0.1:3000"));
 
-    const result = await request(app).get("/job-roles/7/edit");
+    const result = await adminAgent.get("/job-roles/7/edit");
 
     expect(result.status).toBe(503);
     expect(result.text).not.toContain("ECONNREFUSED");
@@ -152,18 +167,22 @@ describe("POST /job-roles/:id/edit", () => {
 
     expect(result.status).toBe(302);
     expect(result.headers.location).toBe("/job-roles");
-    expect(apiClient.put).toHaveBeenCalledWith("/api/job-roles/7", {
-      jobRoleName: "Senior Front-End Engineer",
-      location: "Belfast",
-      statusId: 2,
-      bandName: "Associate",
-      capabilityName: "Engineering",
-      description: "Builds the client side.",
-      responsibilities: "Ship features.",
-      numberOfOpenPositions: 3,
-      sharepointUrl: "https://example.com/role",
-      closingDate: "2026-08-31T00:00:00.000Z",
-    });
+    expect(apiClient.put).toHaveBeenCalledWith(
+      "/api/job-roles/7",
+      {
+        jobRoleName: "Senior Front-End Engineer",
+        location: "Belfast",
+        statusId: 2,
+        bandName: "Associate",
+        capabilityName: "Engineering",
+        description: "Builds the client side.",
+        responsibilities: "Ship features.",
+        numberOfOpenPositions: 3,
+        sharepointUrl: "https://example.com/role",
+        closingDate: "2026-08-31T00:00:00.000Z",
+      },
+      { headers: { Authorization: "Bearer admin-token" } },
+    );
   });
 
   it("sends null for the optional fields left blank", async () => {

@@ -37,7 +37,7 @@ const validForm = {
 };
 
 const postJobRole = (overrides: Record<string, string> = {}) =>
-  request(app)
+  adminAgent
     .post("/job-roles/new")
     .type("form")
     .send({ ...validForm, ...overrides });
@@ -45,7 +45,9 @@ const postJobRole = (overrides: Record<string, string> = {}) =>
 const apiError = (status: number, data: unknown) =>
   Object.assign(new Error("Request failed"), { isAxiosError: true, response: { status, data } });
 
-beforeEach(() => {
+let adminAgent: ReturnType<typeof request.agent>;
+
+beforeEach(async () => {
   apiClient.get.mockReset();
   apiClient.post.mockReset();
   apiClient.get.mockImplementation((url: string) => {
@@ -53,12 +55,26 @@ beforeEach(() => {
     if (url === "/api/statuses") return Promise.resolve({ data: statuses });
     return Promise.resolve({ data: capabilities });
   });
-  apiClient.post.mockResolvedValue({ data: {} });
+  apiClient.post
+    .mockResolvedValueOnce({
+      data: {
+        token: "admin-token",
+        user: { id: 1, email: "admin@example.com", role: "ADMIN" },
+      },
+    })
+    .mockResolvedValue({ data: {} });
+
+  adminAgent = request.agent(app);
+  await adminAgent.post("/login").type("form").send({
+    email: "admin@example.com",
+    password: "Password1!",
+  });
+  apiClient.post.mockClear();
 });
 
 describe("GET /job-roles/new", () => {
   it("renders the form with bands and capabilities in the dropdowns", async () => {
-    const result = await request(app).get("/job-roles/new");
+    const result = await adminAgent.get("/job-roles/new");
 
     expect(result.status).toBe(200);
     expect(result.text).toContain("Add a job role");
@@ -71,7 +87,7 @@ describe("GET /job-roles/new", () => {
   it("answers 503 when the reference data cannot be loaded", async () => {
     apiClient.get.mockRejectedValue(new Error("connect ECONNREFUSED 127.0.0.1:3000"));
 
-    const result = await request(app).get("/job-roles/new");
+    const result = await adminAgent.get("/job-roles/new");
 
     expect(result.status).toBe(503);
     expect(result.text).toContain("The job role form is unavailable");
@@ -84,7 +100,7 @@ describe("GET /job-roles/new", () => {
       return Promise.reject(new Error("connect ECONNREFUSED 127.0.0.1:3000"));
     });
 
-    const result = await request(app).get("/job-roles/new");
+    const result = await adminAgent.get("/job-roles/new");
 
     expect(result.status).toBe(200);
     expect(apiClient.get).not.toHaveBeenCalledWith("/api/statuses");
@@ -97,17 +113,21 @@ describe("POST /job-roles/new", () => {
 
     expect(result.status).toBe(302);
     expect(result.headers.location).toBe("/job-roles");
-    expect(apiClient.post).toHaveBeenCalledWith("/api/job-roles", {
-      roleName: "Front-End Engineer",
-      location: "Gdansk",
-      bandId: 2,
-      capabilityId: 3,
-      description: "Builds the client side.",
-      responsibilities: "Ship features.",
-      numberOfOpenPositions: 3,
-      sharepointUrl: "https://example.com/role",
-      closingDate: "2026-08-31T00:00:00.000Z",
-    });
+    expect(apiClient.post).toHaveBeenCalledWith(
+      "/api/job-roles",
+      {
+        roleName: "Front-End Engineer",
+        location: "Gdansk",
+        bandId: 2,
+        capabilityId: 3,
+        description: "Builds the client side.",
+        responsibilities: "Ship features.",
+        numberOfOpenPositions: 3,
+        sharepointUrl: "https://example.com/role",
+        closingDate: "2026-08-31T00:00:00.000Z",
+      },
+      { headers: { Authorization: "Bearer admin-token" } },
+    );
   });
 
   it("sends null for the optional fields left blank", async () => {

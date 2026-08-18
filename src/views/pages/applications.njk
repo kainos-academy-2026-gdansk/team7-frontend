@@ -17,7 +17,7 @@
 {% block content %}
   {% if totalCount > 0 %}
     <div class="kainos-job-list">
-      <p class="kainos-job-list__count">{{ totalCount }} applications found</p>
+      <p class="kainos-job-list__count">{{ totalCount }} applications found for job Role ID {{ jobRoleId }}</p>
 
       <ul class="kainos-job-list__items">
         {% for application in applications %}
@@ -33,14 +33,20 @@
               <span class="kainos-job__fact">Skills: {{ application.skills }}</span>
             </p>
 
-            {% if application.status === "IN PROGRESS" %}
+            {% if application.status === "IN_PROGRESS" %}
               <div class="kainos-application__actions">
-                <button class="govuk-button kainos-button kainos-application__hire" type="button">
+                <a
+                  class="govuk-button kainos-button kainos-application__hire"
+                  href="/admin/job-roles/{{ jobRoleId }}/applications/{{ application.id }}/hire"
+                >
                   Hire
-                </button>
-                <button class="govuk-button kainos-button kainos-application__reject" type="button">
+                </a>
+                <a
+                  class="govuk-button kainos-button kainos-application__reject"
+                  href="/admin/job-roles/{{ jobRoleId }}/applications/{{ application.id }}/reject"
+                >
                   Reject
-                </button>
+                </a>
               </div>
             {% endif %}
           </li>

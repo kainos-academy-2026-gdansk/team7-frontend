@@ -18,4 +18,7 @@ export interface AdminViewApplication {
   skills: string;
 }
 
-export type StatusEnum = "IN PROGRESS" | "REJECTED" | "HIRED";
+export interface ApplicationStatusChanged {
+  status: StatusEnum;
+}
+export type StatusEnum = "IN_PROGRESS" | "REJECTED" | "HIRED";
