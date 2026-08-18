@@ -1,9 +1,9 @@
 export interface AdminViewApplication {
   id: number;
-  applicationEmail: string;
+  applicantEmail: string;
   status: StatusEnum;
   experience: string;
-  salaryExpectation: number;
+  salaryExpectation: string;
   skills: string;
 }
 

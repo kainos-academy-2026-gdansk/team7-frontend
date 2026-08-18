@@ -16,10 +16,10 @@ vi.mock("axios", () => ({
 const applications = [
   {
     id: 4,
-    applicationEmail: "applicant@example.com",
+    applicantEmail: "applicant@example.com",
     status: "IN_PROGRESS",
     experience: "Three years",
-    salaryExpectation: 50000,
+    salaryExpectation: "50000",
     skills: "TypeScript",
   },
 ];
