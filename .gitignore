@@ -38,6 +38,8 @@ lerna-debug.log*
 coverage/
 *.lcov
 .nyc_output/
+playwright-report/
+test-results/
 
 # Package manager / runtime artifacts
 *.tgz
