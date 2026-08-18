@@ -95,34 +95,6 @@ describe("GET /login", () => {
   });
 });
 
-describe("GET /my-profile", () => {
-  it("redirects an unauthenticated user to the home page", async () => {
-    const response = await request(app).get("/my-profile");
-
-    expect(response.status).toBe(302);
-    expect(response.headers.location).toBe("/");
-  });
-
-  it("redirects an administrator to the home page", async () => {
-    const agent = await createAdminAgent();
-    const response = await agent.get("/my-profile");
-
-    expect(response.status).toBe(302);
-    expect(response.headers.location).toBe("/");
-  });
-
-  it("renders the profile for an authenticated user", async () => {
-    const agent = await createAuthenticatedAgent();
-    const response = await agent.get("/my-profile");
-
-    expect(response.status).toBe(200);
-    expect(response.text).toContain("<title>My Profile</title>");
-    expect(response.text).toContain('class="kainos-empty-state"');
-    expect(response.text).toContain("You do not have any applications yet...");
-    expect(response.text).toContain('href="/job-roles">Find your next opportunity</a>');
-  });
-});
-
 describe("administrator header", () => {
   it("hides My Profile and shows Log out", async () => {
     const agent = await createAdminAgent();

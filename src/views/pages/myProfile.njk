@@ -2,16 +2,45 @@
 
 {% block title %}My Profile{% endblock %}
 
+{% block banner %}
+  <div class="kainos-page-banner">
+    <div class="govuk-width-container">
+      <h1 class="govuk-heading-l kainos-page-banner__title">My applications</h1>
+    </div>
+  </div>
+{% endblock %}
+
 {% block content %}
-  <div class="govuk-grid-row govuk-!-margin-top-6 kainos-form-row">
+  <div class="govuk-grid-row kainos-form-row">
     <div class="govuk-grid-column-two-thirds govuk-!-text-align-centre">
-      <div class="kainos-empty-state">
-        <h1 class="govuk-heading-xl">You do not have any applications yet...</h1>
-        <p class="govuk-body">
-          Explore our available job roles to find your next opportunity.
-        </p>
-        <a class="govuk-link" href="/job-roles">Find your next opportunity</a>
-      </div>
+      {% if applications | length == 0 %}
+        <div class="kainos-empty-state">
+          <h2 class="govuk-heading-l">You do not have any applications yet...</h2>
+          <p class="govuk-body">
+            Explore our available job roles to find your next opportunity.
+          </p>
+          <a class="govuk-link" href="/job-roles">Find your next opportunity</a>
+        </div>
+      {% else %}
+        <dl class="govuk-summary-list kainos-profile__applications">
+          {% for application in applications %}
+            <div class="govuk-summary-list__row kainos-profile__application-row">
+              <dt class="govuk-summary-list__key kainos-profile__application-name">
+                <a class="govuk-link kainos-profile__application-link" href="/job-roles/{{ application.jobRoleId }}">
+                  {{ application.roleName }}
+                </a>
+              </dt>
+              <dd class="govuk-summary-list__value kainos-profile__application-details">
+                <span class="govuk-caption-m">Status</span>
+                <strong class="govuk-tag kainos-profile__application-status kainos-profile__application-status--{{ application.status | lower | replace("_", "-") }}">
+                  {{ application.status | lower | replace("_", " ") | capitalize }}
+                </strong>
+                <p class="govuk-body">Applied on {{ application.createdAt | formatDate }}</p>
+              </dd>
+            </div>
+          {% endfor %}
+        </dl>
+      {% endif %}
     </div>
   </div>
 {% endblock %}
