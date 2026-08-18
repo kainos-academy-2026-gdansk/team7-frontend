@@ -13,7 +13,7 @@
     "lint:fix:unsafe": "biome lint --write --unsafe .",
     "check": "biome check --write .",
     "ci:check": "biome ci .",
-    "test": "vitest run",
+    "test": "vitest run test",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "test:e2e": "playwright test",
