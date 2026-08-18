@@ -1,0 +1,53 @@
+{% extends "layouts/base.njk" %}
+{% import "partials/formMacros.njk" as form %}
+
+{% block title %}Apply for {{ jobRole.jobRoleName }}{% endblock %}
+
+{% block banner %}
+  <div class="kainos-page-banner">
+    <div class="govuk-width-container">
+      <h1 class="govuk-heading-l kainos-page-banner__title">Apply for {{ jobRole.jobRoleName }}</h1>
+    </div>
+  </div>
+{% endblock %}
+
+{% block content %}
+  <a href="/job-roles/{{ jobRole.id }}" class="govuk-back-link">Back to job role</a>
+
+  <div class="govuk-grid-row kainos-form-row">
+    <div class="govuk-grid-column-two-thirds">
+      {{ form.errorSummary(errorList) }}
+
+      <form class="kainos-form" method="post" action="{{ formAction }}" novalidate>
+        {{ form.textarea(
+          "experience",
+          "Experience",
+          values.experience,
+          errors.experience,
+          "Tell us about your relevant experience. Maximum 1000 characters.",
+          8
+        ) }}
+
+        {{ form.textInput(
+          "salaryExpectation",
+          "Salary expectation",
+          values.salaryExpectation,
+          errors.salaryExpectation,
+          "text",
+          "For example, £45,000 or negotiable. Maximum 100 characters."
+        ) }}
+
+        {{ form.textarea(
+          "skills",
+          "Skills",
+          values.skills,
+          errors.skills,
+          "Tell us about the skills you would bring to this role. Maximum 2000 characters.",
+          8
+        ) }}
+
+        <button class="kainos-button kainos-form__submit" type="submit">Apply for this role</button>
+      </form>
+    </div>
+  </div>
+{% endblock %}

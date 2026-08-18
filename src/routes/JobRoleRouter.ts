@@ -2,6 +2,7 @@ import { Router } from "express";
 
 import apiClient from "../client/axiosClient";
 import { JobRoleController } from "../controllers/JobRoleController";
+import { ApplicationService } from "../services/ApplicationService";
 import { BandService } from "../services/BandService";
 import { CapabilityService } from "../services/CapabilityService";
 import { JobRoleService } from "../services/JobRoleService";
@@ -11,11 +12,13 @@ const jobRoleService = new JobRoleService(apiClient);
 const bandService = new BandService(apiClient);
 const capabilityService = new CapabilityService(apiClient);
 const statusService = new StatusService(apiClient);
+const applicationService = new ApplicationService(apiClient);
 const jobRoleController = new JobRoleController(
   jobRoleService,
   bandService,
   capabilityService,
   statusService,
+  applicationService,
 );
 
 const router = Router();

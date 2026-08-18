@@ -4,6 +4,7 @@ import { z } from "zod";
 
 import { loginSchema } from "../Dto/LoginDto";
 import { registerSchema } from "../Dto/RegisterDto";
+import type { ApplicationService } from "../services/ApplicationService";
 import type { AuthService } from "../services/AuthService";
 
 const LOGIN_FIELDS = ["email", "password"] as const;
@@ -65,7 +66,10 @@ const readApiFieldErrors = (error: unknown): FormErrors | null => {
 };
 
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly applicationService: ApplicationService,
+  ) {}
 
   public showLoginPage = (req: Request, res: Response): void => {
     if (req.session.authToken) {
@@ -85,13 +89,29 @@ export class AuthController {
     this.renderRegisterForm(res, 200, { email: "", password: "" }, {});
   };
 
-  public showMyProfilePage = (req: Request, res: Response): void => {
-    if (!req.session.authToken || req.session.authRole !== "USER") {
+  public showMyProfilePage = async (req: Request, res: Response): Promise<void> => {
+    const authToken = req.session.authToken;
+
+    if (!authToken || req.session.authRole !== "USER") {
       res.redirect("/");
       return;
     }
 
-    res.render("pages/myProfile.njk");
+    try {
+      const applications = await this.applicationService.getMyApplications(authToken);
+
+      res.render("pages/myProfile.njk", {
+        applications,
+      });
+    } catch (error) {
+      console.error("Could not load applications", error);
+
+      res.status(503).render("pages/error.njk", {
+        heading: "Applications are unavailable",
+        message: "We could not load your applications. Please try again in a moment.",
+        retryUrl: "/my-profile",
+      });
+    }
   };
 
   public register = async (req: Request, res: Response): Promise<void> => {

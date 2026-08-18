@@ -69,4 +69,28 @@
       </dl>
     </div>
   </div>
+  {% if isProfileUser %}
+    {% if application %}
+      <section class="govuk-inset-text kainos-job-detail__user-apply">
+        <div class="kainos-job-detail__application-message">
+          <h2 class="govuk-heading-m">Your application</h2>
+          <p class="govuk-body">You have already applied for this role.</p>
+        </div>
+
+        <div class="kainos-job-detail__application-status-panel">
+          <span class="govuk-caption-m">Status</span>
+          <strong class="govuk-tag kainos-job-detail__application-status kainos-job-detail__application-status--{{ application.status | lower | replace("_", "-") }}">
+            {{ application.status | lower | replace("_", " ") | capitalize }}
+          </strong>
+        </div>
+      </section>
+      {% else %}
+      <section class="govuk-inset-text kainos-job-detail__user-apply">
+        <h2 class="govuk-heading-m">Interested in this role?</h2>
+        <a href="/job-roles/{{ jobRole.id }}/apply" class="govuk-button kainos-button">
+          Apply for this role
+        </a>
+      </section>
+    {% endif %}
+  {% endif %}
 {% endblock %}

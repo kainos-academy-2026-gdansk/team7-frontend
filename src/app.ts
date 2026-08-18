@@ -3,6 +3,7 @@ import express from "express";
 import session from "express-session";
 import nunjucks from "nunjucks";
 import type { UserRole } from "./models/Auth";
+import ApplicationRouter from "./routes/ApplicationRouter";
 import AuthRouter from "./routes/AuthRouter";
 import JobRoleRouter from "./routes/JobRoleRouter";
 
@@ -106,6 +107,7 @@ app.get("/health", (_req, res) => {
   res.status(200).json({ status: "UP", timestamp: new Date().toISOString() });
 });
 
+app.use("/", ApplicationRouter);
 app.use("/", JobRoleRouter);
 app.use("/", AuthRouter);
 

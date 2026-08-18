@@ -3,6 +3,9 @@
   --kainos-mid-blue: #41679f;
   --kainos-green: #61a83f;
   --kainos-dark-green: #004631;
+  --kainos-red: #d4351c;
+  --kainos-status-green: #8fbd73;
+  --kainos-status-red: #e78276;
   --kainos-grey: #575756;
   --kainos-border: #d9d9d6;
   --kainos-tint: #f2f7ef;
@@ -335,6 +338,74 @@ button.kainos-header__link {
   margin: 0 auto;
 }
 
+.kainos-profile__applications {
+  background-color: #ffffff;
+  border: 1px solid var(--kainos-border);
+  border-top: 3px solid var(--kainos-green);
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  max-width: 38rem;
+  margin: 0 auto 2rem;
+  padding: 0 1.5rem;
+  text-align: left;
+}
+
+.kainos-profile__application-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(10rem, 1fr);
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.kainos-profile__application-name,
+.kainos-profile__application-details {
+  display: block;
+  width: auto;
+  margin: 0;
+}
+
+.kainos-profile__application-name {
+  font-family: var(--kainos-font);
+  font-size: 1.125rem;
+}
+
+.kainos-profile__application-link {
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+.kainos-profile__application-details {
+  text-align: right;
+}
+
+.kainos-profile__application-details .govuk-caption-m {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--kainos-grey);
+}
+
+.kainos-profile__application-details .govuk-body {
+  margin: 0.75rem 0 0;
+  font-size: 0.95rem;
+}
+
+.kainos-profile__application-status,
+.kainos-job-detail__application-status {
+  font-family: var(--kainos-font);
+  text-transform: capitalize;
+}
+
+.kainos-profile__application-status--hired,
+.kainos-job-detail__application-status--hired {
+  background-color: var(--kainos-status-green);
+}
+
+.kainos-profile__application-status--rejected,
+.kainos-job-detail__application-status--rejected {
+  background-color: var(--kainos-status-red);
+}
+
 .kainos-auth-form {
   width: 100%;
   max-width: 30rem;
@@ -638,6 +709,35 @@ button.kainos-header__link {
   max-width: 100%;
 }
 
+.kainos-job-detail__user-apply {
+  background-color: #ffffff;
+  border: 1px solid var(--kainos-border);
+  border-top: 4px solid var(--kainos-green);
+  border-radius: 0.25rem;
+  max-width: 62rem;
+  margin: 0 auto 2rem;
+  box-shadow: 0 2px 8px rgba(11, 12, 12, 0.08);
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  min-height: auto;
+  align-items: center;
+}
+
+.kainos-job-detail__application-message,
+.kainos-job-detail__application-status-panel {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.kainos-job-detail__application-status-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+}
+
 @media (max-width: 40rem) {
   .kainos-job-detail__content {
     grid-template-columns: 1fr;
@@ -646,5 +746,28 @@ button.kainos-header__link {
   .kainos-job-detail__main {
     border-right: 0;
     border-bottom: 1px solid var(--kainos-border);
+  }
+
+  .kainos-job-detail__user-apply {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .kainos-job-detail__application-status-panel {
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .kainos-profile__applications {
+    padding: 0 1rem;
+  }
+
+  .kainos-profile__application-row {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .kainos-profile__application-details {
+    text-align: left;
   }
 }

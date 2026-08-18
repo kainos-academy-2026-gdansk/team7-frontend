@@ -4,8 +4,10 @@ import type { Request, Response } from "express";
 import { z } from "zod";
 import { createJobRoleSchema } from "../Dto/CreateJobRoleDto";
 import { updateJobRoleSchema } from "../Dto/UpdateJobRoleDto";
+import type { Application } from "../models/Application";
 import type { JobRoleDetailed } from "../models/JobRole";
 import type { Status } from "../models/Status";
+import type { ApplicationService } from "../services/ApplicationService";
 import type { BandService } from "../services/BandService";
 import type { CapabilityService } from "../services/CapabilityService";
 import type { JobRoleService } from "../services/JobRoleService";
@@ -112,11 +114,13 @@ export class JobRoleController {
     private readonly bandService: BandService,
     private readonly capabilityService: CapabilityService,
     private readonly statusService: StatusService,
+    private readonly applicationService: ApplicationService,
   ) {
     this.jobRoleService = jobRoleService;
     this.bandService = bandService;
     this.capabilityService = capabilityService;
     this.statusService = statusService;
+    this.applicationService = applicationService;
   }
 
   public getJobRolesPage = async (_req: Request, res: Response): Promise<void> => {
@@ -366,13 +370,35 @@ export class JobRoleController {
     });
   };
 
+  private getApplicationForRole = async (
+    req: Request,
+    jobRoleId: number,
+  ): Promise<Application | undefined> => {
+    const authToken = req.session.authToken;
+
+    if (!authToken || req.session.authRole !== "USER") {
+      return undefined;
+    }
+
+    try {
+      const applications = await this.applicationService.getMyApplications(authToken);
+
+      return applications.find((application) => application.jobRoleId === jobRoleId);
+    } catch (error) {
+      console.error("Could not load user applications", error);
+      return undefined;
+    }
+  };
+
   getJobRoleInformationPage = async (req: Request, res: Response): Promise<void> => {
     try {
       const id = Number(req.params.id);
       const jobRole = await this.jobRoleService.getJobRoleById(id);
+      const application = await this.getApplicationForRole(req, jobRole.id);
 
       res.render("pages/jobRoleInformation.njk", {
         jobRole,
+        application,
       });
     } catch (error) {
       if (error instanceof JobRoleNotFoundError) {
