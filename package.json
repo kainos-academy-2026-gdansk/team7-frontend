@@ -16,8 +16,10 @@
     "test": "vitest run test",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
-    "test:e2e": "playwright test",
-    "test:ui": "playwright test --ui"
+    "bddgen": "bddgen",
+    "test:bdd": "bddgen && playwright test --project=chromium",
+    "test:e2e": "bddgen && playwright test",
+    "test:ui": "bddgen && playwright test --ui"
   },
   "repository": {
     "type": "git",
@@ -38,6 +40,7 @@
     "@types/nunjucks": "^3.2.6",
     "@types/supertest": "^7.2.1",
     "@vitest/coverage-v8": "^4.1.10",
+    "playwright-bdd": "^9.2.0",
     "supertest": "^7.2.2",
     "tsx": "^4.23.9",
     "typescript": "^7.0.2",

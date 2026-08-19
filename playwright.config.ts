@@ -1,8 +1,15 @@
 import { defineConfig } from "@playwright/test";
+import { defineBddConfig } from "playwright-bdd";
 import { e2eEnvironment } from "./e2e/config/environment";
 
+const bddTestDir = defineBddConfig({
+  features: "./features/**/*.feature",
+  steps: "./e2e/steps/**/*.steps.ts",
+  outputDir: "./e2e/.features-gen",
+});
+
 export default defineConfig({
-  testDir: "./e2e",
+  testDir: bddTestDir,
   fullyParallel: true,
   forbidOnly: Boolean(process.env.CI),
   retries: process.env.CI ? 2 : 0,
@@ -17,6 +24,12 @@ export default defineConfig({
   projects: [
     {
       name: "chromium",
+      use: { browserName: "chromium" },
+    },
+    {
+      name: "smoke",
+      testDir: "./e2e",
+      testMatch: "**/smoke.spec.ts",
       use: { browserName: "chromium" },
     },
   ],

@@ -34,7 +34,7 @@ jobs:
           node-version: "22"
       - run: npm ci
       - run: npx playwright install --with-deps chromium
-      - run: npm run test:e2e
+      - run: npm run test:e2e -- --grep-invert @requires-backend
   build:
     runs-on: ubuntu-latest
     needs: [lint, test, e2e]
