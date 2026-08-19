@@ -39,6 +39,8 @@ npm run test:bdd
 The email and password are currently written directly in `features/login.feature` as a temporary
 exercise setup. The generated Playwright files are written to `e2e/.features-gen/` and ignored by
 Git. To run all browser tests, including the BDD scenarios and smoke tests, use `npm run test:e2e`.
+The login scenarios are tagged `@requires-backend`, so CI excludes them because this repository's
+workflow starts the frontend but does not start the separate backend service.
 
 ### Test framework structure
 
