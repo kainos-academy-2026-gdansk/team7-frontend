@@ -7,6 +7,7 @@ Feature: Applicant authentication
     And the user enters the password "Password1!"
     And submits the login form
     Then the user is logged in
+
   @requires-backend
   Scenario: non-registered applicant cannot log in
     Given the user is on the login page

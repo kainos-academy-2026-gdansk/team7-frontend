@@ -9,6 +9,7 @@ This directory is committed, team-owned context for AI-supported delivery.
 | [patterns.md](patterns.md) | Reusable implementation patterns and anti-patterns |
 | [decisions.md](decisions.md) | Approved technical and workflow decisions |
 | [testing.md](testing.md) | Test strategy, commands, and known constraints |
+| [skills.md](skills.md) | Inventory of proposed, active, and deprecated reusable skills |
 | [mcp-planner.md](mcp-planner.md) | Microsoft Planner MCP evaluation and guardrails |
 | [retrospectives/TEMPLATE.md](retrospectives/TEMPLATE.md) | Developer-reviewed learning template |
 
