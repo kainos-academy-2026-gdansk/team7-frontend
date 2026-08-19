@@ -2,9 +2,10 @@ import { Router } from "express";
 import apiClient from "../client/axiosClient";
 import { ApplicationController } from "../controllers/ApplicationController";
 import { ApplicationService } from "../services/ApplicationService";
-
+import { JobRoleService } from "../services/JobRoleService";
 const applicationService = new ApplicationService(apiClient);
-const applicationController = new ApplicationController(applicationService);
+const jobRoleService = new JobRoleService(apiClient);
+const applicationController = new ApplicationController(applicationService, jobRoleService);
 const router = Router();
 
 router.get(

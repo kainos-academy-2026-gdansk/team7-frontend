@@ -13,8 +13,8 @@
   </div>
 </div>
 {% endblock %}
-
 {% block content %}
+  <a href="/job-roles/{{ jobRoleId }}" class="govuk-back-link">Back to job role information</a>
   {% if totalCount > 0 %}
     <div class="kainos-job-list">
       <p class="kainos-job-list__count">{{ totalCount }} applications found for job Role ID {{ jobRoleId }}</p>

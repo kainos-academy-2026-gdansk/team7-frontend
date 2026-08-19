@@ -96,6 +96,7 @@ describe("GET /job-roles/:id/edit", () => {
     expect(result.text).toContain('value="Front-End Engineer"');
     expect(result.text).toContain('value="Gdansk"');
     expect(result.text).toContain('value="3"');
+    expect(result.text).toContain('href="/job-roles/7"');
     expect(result.text).not.toContain("There is a problem");
   });
 
@@ -168,7 +169,7 @@ describe("POST /job-roles/:id/edit", () => {
     expect(result.status).toBe(302);
     expect(result.headers.location).toBe("/job-roles");
     expect(apiClient.put).toHaveBeenCalledWith(
-      "/api/job-roles/7",
+      "/api/admin/job-roles/7",
       {
         jobRoleName: "Senior Front-End Engineer",
         location: "Belfast",

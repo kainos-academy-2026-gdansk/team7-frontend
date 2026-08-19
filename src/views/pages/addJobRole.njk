@@ -12,6 +12,7 @@
 {% endblock %}
 
 {% block content %}
+  <a href="/job-roles/" class="govuk-back-link">Back to job role</a>
   <div class="govuk-grid-row kainos-form-row">
     <div class="govuk-grid-column-two-thirds">
       {{ jobRole.createJobRoleForm(formAction, values, errors, errorList, bands, capabilities, submitLabel) }}

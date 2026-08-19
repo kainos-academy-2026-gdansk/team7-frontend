@@ -36,7 +36,7 @@ export class JobRoleService {
   }
 
   async createJobRole(jobRole: CreateJobRoleDto, token: string): Promise<JobRole> {
-    const response = await this.apiClient.post<JobRole>("/api/job-roles", jobRole, {
+    const response = await this.apiClient.post<JobRole>("/api/admin/job-roles", jobRole, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -55,11 +55,15 @@ export class JobRoleService {
     jobRole: UpdateJobRoleDto,
     token: string,
   ): Promise<JobRoleDetailed> {
-    const response = await this.apiClient.put<JobRoleDetailed>(`/api/job-roles/${id}`, jobRole, {
-      headers: {
-        Authorization: `Bearer ${token}`,
+    const response = await this.apiClient.put<JobRoleDetailed>(
+      `/api/admin/job-roles/${id}`,
+      jobRole,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       },
-    });
+    );
 
     return response.data;
   }

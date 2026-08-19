@@ -373,6 +373,7 @@ export class JobRoleController {
       submitLabel: "Save changes",
       needsStatuses: true,
       statusName,
+      jobRoleId: id,
     });
 
   private renderForm = async (
@@ -387,6 +388,7 @@ export class JobRoleController {
       submitLabel: string;
       needsStatuses: boolean;
       statusName?: string;
+      jobRoleId?: number;
     },
   ): Promise<void> => {
     const {
@@ -399,6 +401,7 @@ export class JobRoleController {
       submitLabel,
       needsStatuses,
       statusName,
+      jobRoleId,
     } = options;
 
     try {
@@ -427,6 +430,7 @@ export class JobRoleController {
         statuses,
         formAction,
         submitLabel,
+        jobRoleId,
       });
     } catch (error) {
       console.error("Could not load the job role form reference data", error);

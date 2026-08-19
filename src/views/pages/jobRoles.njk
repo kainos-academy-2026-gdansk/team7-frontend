@@ -24,6 +24,7 @@
         <a href="/job-roles/new" class="govuk-button kainos-button">Add a role</a>
       </div>
     {% endif %}
+
     <div class="kainos-job-list">
       <p class="kainos-job-list__count">{{ totalCount }} jobs found</p>
       <ul class="kainos-job-list__items">
@@ -40,18 +41,20 @@
                 {{ fact("Closing date", jobRole.closingDate | formatDate, "closing-date") }}
               </p>
               {% if jobRole.id %}
-                <a href="/job-roles/{{ jobRole.id }}" class="govuk-button govuk-!-margin-top-3 govuk-!-margin-bottom-0" role="button" draggable="false" data-module="govuk-button" aria-label="View offer for {{ jobRole.roleName }}">View offer</a>
+                <a
+                  href="/job-roles/{{ jobRole.id }}"
+                  class="govuk-button govuk-!-margin-top-3 govuk-!-margin-bottom-0"
+                  role="button"
+                  draggable="false"
+                  data-module="govuk-button"
+                  aria-label="View offer for {{ jobRole.roleName }}"
+                >View offer</a>
               {% endif %}
             </div>
           </li>
         {% endfor %}
       </ul>
     </div>
-    {% if isAdmin %}
-      <div class="kainos-job-list__actions">
-        <a href="/job-roles/new" class="govuk-button kainos-button">Add a role</a>
-      </div>
-    {% endif %}
 
     {# Pagination parked until the team agrees on a page size.
     {% if totalPages > 1 %}

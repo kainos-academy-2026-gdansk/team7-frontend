@@ -108,7 +108,7 @@ describe("JobRoleService", () => {
     apiClient.post.mockResolvedValue({ data: jobRole });
 
     await expect(service.createJobRole(payload, "admin-token")).resolves.toEqual(jobRole);
-    expect(apiClient.post).toHaveBeenCalledWith("/api/job-roles", payload, {
+    expect(apiClient.post).toHaveBeenCalledWith("/api/admin/job-roles", payload, {
       headers: {
         Authorization: "Bearer admin-token",
       },
@@ -138,7 +138,7 @@ describe("JobRoleService", () => {
     apiClient.put.mockResolvedValue({ data: jobRole });
 
     await expect(service.updateJobRole(7, payload, "admin-token")).resolves.toEqual(jobRole);
-    expect(apiClient.put).toHaveBeenCalledWith("/api/job-roles/7", payload, {
+    expect(apiClient.put).toHaveBeenCalledWith("/api/admin/job-roles/7", payload, {
       headers: {
         Authorization: "Bearer admin-token",
       },

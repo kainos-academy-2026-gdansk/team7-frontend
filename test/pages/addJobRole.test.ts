@@ -114,7 +114,7 @@ describe("POST /job-roles/new", () => {
     expect(result.status).toBe(302);
     expect(result.headers.location).toBe("/job-roles");
     expect(apiClient.post).toHaveBeenCalledWith(
-      "/api/job-roles",
+      "/api/admin/job-roles",
       {
         roleName: "Front-End Engineer",
         location: "Gdansk",
@@ -170,6 +170,14 @@ describe("POST /job-roles/new", () => {
 
     expect(result.status).toBe(400);
     expect(result.text).toContain("Enter a valid link");
+    expect(apiClient.post).not.toHaveBeenCalled();
+  });
+
+  it("rejects a closing date in the past without calling the API", async () => {
+    const result = await postJobRole({ closingDate: "2020-01-01" });
+
+    expect(result.status).toBe(400);
+    expect(result.text).toContain("Enter a closing date that is today or in the future");
     expect(apiClient.post).not.toHaveBeenCalled();
   });
 

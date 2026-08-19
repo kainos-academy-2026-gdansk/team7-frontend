@@ -4,12 +4,9 @@
   --kainos-green: #61a83f;
   --kainos-dark-green: #004631;
   --kainos-red: #d4351c;
-<<<<<<< HEAD
   --kainos-status-green: #8fbd73;
   --kainos-status-red: #e78276;
-=======
   --kainos-dark-red: #b10e1e;
->>>>>>> 98e6179 (admin operations on jobrole, displaying applications for role)
   --kainos-grey: #575756;
   --kainos-border: #d9d9d6;
   --kainos-tint: #f2f7ef;
@@ -679,7 +676,7 @@ button.kainos-header__link {
 }
 
 .kainos-job-detail__delete {
-  background-color: var(--kainos-dark-red);
+  background-color: var(--kainos-dark-green);
 }
 .kainos-job-detail__view {
   background-color: var(--kainos-green);
@@ -858,8 +855,16 @@ button.kainos-header__link {
   margin: 0;
 }
 
-.kainos-delete-confirmation__delete {
+.kainos-delete-confirmation__confirm {
   margin: 0;
+  color: #ffffff;
+  background-color: var(--kainos-red);
+  border-bottom-color: var(--kainos-dark-red);
+}
+
+.kainos-delete-confirmation__confirm:hover {
+  color: #ffffff;
+  background-color: var(--kainos-dark-red);
 }
 
 @media (max-width: 40rem) {
