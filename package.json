@@ -17,9 +17,9 @@
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "bddgen": "bddgen",
-    "test:bdd": "bddgen && playwright test .features-gen",
+    "test:bdd": "bddgen && playwright test --project=chromium",
     "test:e2e": "bddgen && playwright test",
-    "test:ui": "playwright test --ui"
+    "test:ui": "bddgen && playwright test --ui"
   },
   "repository": {
     "type": "git",

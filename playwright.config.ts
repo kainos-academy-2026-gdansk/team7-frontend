@@ -29,7 +29,7 @@ export default defineConfig({
     {
       name: "smoke",
       testDir: "./e2e",
-      testMatch: "**/*.spec.ts",
+      testMatch: "**/smoke.spec.ts",
       use: { browserName: "chromium" },
     },
   ],
