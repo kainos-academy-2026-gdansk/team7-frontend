@@ -1,0 +1,13 @@
+node_modules
+dist
+.git
+.github
+.vscode
+.env
+.env.*
+test
+code_reviews
+README.md
+Dockerfile
+.dockerignore
+biome.json

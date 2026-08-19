@@ -1,0 +1,102 @@
+import type { AxiosInstance } from "axios";
+import type { CreateJobRoleDto } from "../Dto/CreateJobRoleDto";
+import type { UpdateJobRoleDto } from "../Dto/UpdateJobRoleDto";
+import { type JobRole, type JobRoleDetailed, OPEN_STATUS_NAME } from "../models/JobRole";
+
+const ALLOWED_DOMAINS = ["sharepoint.com"];
+
+export class JobRoleNotFoundError extends Error {
+  constructor(id: number) {
+    super(`Job role with ID ${id} not found`);
+    this.name = "JobRoleNotFoundError";
+  }
+}
+
+function isValidSharePointUrl(url: string | null): boolean {
+  if (!url) return true;
+
+  try {
+    const parsedUrl = new URL(url);
+    if (parsedUrl.protocol !== "https:") return false;
+    return ALLOWED_DOMAINS.some((domain) => parsedUrl.hostname.endsWith(domain));
+  } catch {
+    return false;
+  }
+}
+
+export class JobRoleService {
+  constructor(private readonly apiClient: AxiosInstance) {
+    this.apiClient = apiClient;
+  }
+
+  async getJobRoles(): Promise<JobRole[]> {
+    const response = await this.apiClient.get<JobRole[]>("/api/job-roles");
+
+    return response.data.filter((jobRole) => jobRole.status === OPEN_STATUS_NAME);
+  }
+
+  async createJobRole(jobRole: CreateJobRoleDto, token: string): Promise<JobRole> {
+    const response = await this.apiClient.post<JobRole>("/api/admin/job-roles", jobRole, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  }
+
+  async getJobRoleById(id: number): Promise<JobRoleDetailed> {
+    const response = await this.apiClient.get<JobRoleDetailed>(`/api/job-roles/${id}`);
+
+    return response.data;
+  }
+
+  async updateJobRole(
+    id: number,
+    jobRole: UpdateJobRoleDto,
+    token: string,
+  ): Promise<JobRoleDetailed> {
+    const response = await this.apiClient.put<JobRoleDetailed>(
+      `/api/admin/job-roles/${id}`,
+      jobRole,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+
+    return response.data;
+  }
+
+  async deleteJobRole(id: number, token: string): Promise<void> {
+    await this.apiClient.delete(`/api/admin/job-roles/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  }
+
+  async getJobRoleInformation(id: number): Promise<JobRoleDetailed> {
+    try {
+      const response = await this.apiClient.get<JobRoleDetailed>(`/api/job-roles/${id}`, {
+        timeout: 5000,
+      });
+
+      const jobRole = response.data;
+
+      if (!isValidSharePointUrl(jobRole.sharepointUrl)) {
+        jobRole.sharepointUrl = null;
+      }
+
+      return jobRole;
+    } catch (error) {
+      if (error instanceof Error && "response" in error) {
+        const response = (error as { response?: { status: number } }).response;
+        if (response?.status === 404) {
+          throw new JobRoleNotFoundError(id);
+        }
+      }
+      throw error;
+    }
+  }
+}

@@ -1,0 +1,32 @@
+{% extends "layouts/base.njk" %}
+
+{% block title %}{{ actionLabel }} application{% endblock %}
+
+{% block content %}
+  <a href="{{ cancelUrl }}" class="govuk-back-link kainos-delete-confirmation__back-link">
+    Back to applications
+  </a>
+
+  <div class="kainos-delete-confirmation">
+    <h1 class="govuk-heading-l kainos-delete-confirmation__title">
+      {{ actionLabel }} {{ application.applicantEmail }}?
+    </h1>
+
+    <div class="govuk-warning-text kainos-delete-confirmation__warning" data-module="govuk-warning-text">
+      <span class="govuk-warning-text__icon kainos-delete-confirmation__warning-icon" aria-hidden="true">!</span>
+      <strong class="govuk-warning-text__text kainos-delete-confirmation__warning-text">
+        <span class="govuk-visually-hidden">Warning</span>
+        This action cannot be undone.
+      </strong>
+    </div>
+
+    <div class="kainos-delete-confirmation__actions">
+      <form method="post" action="{{ formAction }}">
+        <button class="govuk-button kainos-button kainos-delete-confirmation__confirm" type="submit">
+          {{ actionLabel }} applicant
+        </button>
+      </form>
+      <a class="govuk-link kainos-delete-confirmation__cancel" href="{{ cancelUrl }}">Cancel</a>
+    </div>
+  </div>
+{% endblock %}

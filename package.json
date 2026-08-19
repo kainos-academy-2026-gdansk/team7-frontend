@@ -1,0 +1,58 @@
+{
+  "name": "team7-frontend",
+  "version": "1.0.0",
+  "description": "Team7 Frontend",
+  "main": "index.ts",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/index.js",
+    "format": "biome format --write .",
+    "lint": "biome lint .",
+    "lint:fix": "biome lint --write .",
+    "lint:fix:unsafe": "biome lint --write --unsafe .",
+    "check": "biome check --write .",
+    "ci:check": "biome ci .",
+    "test": "vitest run test",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "bddgen": "bddgen",
+    "test:bdd": "bddgen && playwright test --project=chromium",
+    "test:e2e": "bddgen && playwright test",
+    "test:ui": "bddgen && playwright test --ui"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kainos-academy-2026-gdansk/team7-frontend.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kainos-academy-2026-gdansk/team7-frontend/issues"
+  },
+  "homepage": "https://github.com/kainos-academy-2026-gdansk/team7-frontend#readme",
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
+    "@playwright/test": "^1.62.1",
+    "@types/express": "^5.0.6",
+    "@types/express-session": "^1.19.0",
+    "@types/node": "^26.1.2",
+    "@types/nunjucks": "^3.2.6",
+    "@types/supertest": "^7.2.1",
+    "@vitest/coverage-v8": "^4.1.10",
+    "playwright-bdd": "^9.2.0",
+    "supertest": "^7.2.2",
+    "tsx": "^4.23.9",
+    "typescript": "^7.0.2",
+    "vitest": "^4.1.10"
+  },
+  "dependencies": {
+    "axios": "^1.19.0",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "express-session": "^1.19.0",
+    "govuk-frontend": "^6.4.0",
+    "nunjucks": "^3.2.4",
+    "zod": "^4.4.3"
+  }
+}

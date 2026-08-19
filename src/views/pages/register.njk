@@ -1,0 +1,42 @@
+{% extends "layouts/base.njk" %}
+{% import "partials/formMacros.njk" as form %}
+
+{% block title %}Register{% endblock %}
+
+{% block banner %}
+  <div class="kainos-page-banner">
+    <div class="govuk-width-container">
+      <h1 class="govuk-heading-l kainos-page-banner__title">Register</h1>
+    </div>
+  </div>
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row kainos-form-row">
+    <div class="govuk-grid-column-one-half">
+      <div class="kainos-auth-error-summary">
+        {{ form.errorSummary(errorList) }}
+      </div>
+
+      <form class="kainos-form kainos-auth-form" method="post" action="/register" novalidate>
+        {{ form.textInput("email", "Email address", values.email, errors.email, "email", autocomplete = "email") }}
+
+        {{ form.textInput(
+          "password",
+          "Password",
+          "",
+          errors.password,
+          "password",
+          "Your password must be at least 8 characters and include an uppercase letter, a lowercase letter and a special character.",
+          autocomplete = "new-password"
+        ) }}
+
+        <button class="kainos-button kainos-form__submit" type="submit">Register</button>
+
+        <p class="govuk-body govuk-!-text-align-right govuk-!-margin-bottom-0 kainos-form__supporting-text">
+          Already have an account? <a class="govuk-link kainos-link" href="/login">Log in</a>
+        </p>
+      </form>
+    </div>
+  </div>
+{% endblock %}

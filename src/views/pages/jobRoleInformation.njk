@@ -1,0 +1,110 @@
+{% extends "layouts/base.njk" %}
+
+{% block title %}{{ jobRole.jobRoleName }}{% endblock %}
+
+{% block content %}
+  <a href="/job-roles" class="govuk-back-link">Back to job roles</a>
+
+  <div class="kainos-job-detail">
+    <div class="kainos-job-detail__header">
+      <h1 class="kainos-job-detail__title">{{ jobRole.jobRoleName }}</h1>
+      <span class="kainos-job-detail__status kainos-job-detail__status--{{ jobRole.status | lower }}">
+        {{ jobRole.status }}
+      </span>
+    </div>
+
+    {% if isAdmin %}
+      <div class="kainos-job-detail__actions">
+        <a href="/job-roles/{{ jobRole.id }}/edit" class="govuk-button kainos-button kainos-job-detail__edit">
+          Edit job role
+        </a>
+        <a href="/job-roles/{{ jobRole.id }}/delete" class="govuk-button kainos-button kainos-job-detail__delete">
+          Delete job role
+        </a>
+        <a href="/admin/job-roles/{{ jobRole.id }}/applications" class="govuk-button kainos-button kainos-job-detail__view">
+          View applications
+        </a>
+      </div>
+    {% endif %}
+
+    <div class="kainos-job-detail__content">
+      <div class="kainos-job-detail__main">
+        <section class="kainos-job-detail__section">
+          <h3 class="kainos-job-detail__section-title">Description</h3>
+          {% if jobRole.description %}
+          <p class="govuk-body">{{ jobRole.description }}</p>
+          {% else %}
+          <p class="govuk-body"> There was no description provided for this role</p>
+          {% endif %}
+        </section>
+
+        <section class="kainos-job-detail__section">
+          <h3 class="kainos-job-detail__section-title">Responsibilities</h3>
+          {% if jobRole.responsibilities %}
+            <p class="govuk-body">{{ jobRole.responsibilities }}</p>
+          {% else %}
+            <p class="govuk-body">Check out the SharePoint link for more information on this role.</p>
+          {% endif %}
+        </section>
+
+        {% if jobRole.sharepointUrl %}
+          <section class="kainos-job-detail__section">
+            <h3 class="kainos-job-detail__section-title">SharePoint link</h3>
+            <a href="{{ jobRole.sharepointUrl }}" class="govuk-link kainos-job-detail__link" target="_blank" rel="noopener noreferrer">{{ jobRole.sharepointUrl }}</a>
+          </section>
+        {% endif %}
+      </div>
+
+      <dl class="kainos-job-detail__side">
+        <div class="kainos-job-detail__fact">
+          <dt class="kainos-job-detail__label">Location</dt>
+          <dd class="kainos-job-detail__value">{{ jobRole.location }}</dd>
+        </div>
+
+        <div class="kainos-job-detail__fact">
+          <dt class="kainos-job-detail__label">Capability</dt>
+          <dd class="kainos-job-detail__value">{{ jobRole.capability }}</dd>
+        </div>
+
+        <div class="kainos-job-detail__fact">
+          <dt class="kainos-job-detail__label">Band</dt>
+          <dd class="kainos-job-detail__value">{{ jobRole.band }}</dd>
+        </div>
+
+        <div class="kainos-job-detail__fact">
+          <dt class="kainos-job-detail__label">Open positions</dt>
+          <dd class="kainos-job-detail__value">{{ jobRole.numberOfOpenPositions }}</dd>
+        </div>
+
+        <div class="kainos-job-detail__fact">
+          <dt class="kainos-job-detail__label">Closing date</dt>
+          <dd class="kainos-job-detail__value">{{ jobRole.closingDate | formatDate if jobRole.closingDate else "Not specified" }}</dd>
+        </div>
+      </dl>
+    </div>
+  </div>
+  {% if isProfileUser %}
+    {% if application %}
+      <section class="govuk-inset-text kainos-job-detail__user-apply">
+        <div class="kainos-job-detail__application-message">
+          <h2 class="govuk-heading-m">Your application</h2>
+          <p class="govuk-body">You have already applied for this role.</p>
+        </div>
+
+        <div class="kainos-job-detail__application-status-panel">
+          <span class="govuk-caption-m">Status</span>
+          <strong class="govuk-tag kainos-job-detail__application-status kainos-job-detail__application-status--{{ application.status | lower | replace("_", "-") }}">
+            {{ application.status | lower | replace("_", " ") | capitalize }}
+          </strong>
+        </div>
+      </section>
+      {% else %}
+      <section class="govuk-inset-text kainos-job-detail__user-apply">
+        <h2 class="govuk-heading-m">Interested in this role?</h2>
+        <a href="/job-roles/{{ jobRole.id }}/apply" class="govuk-button kainos-button">
+          Apply for this role
+        </a>
+      </section>
+    {% endif %}
+  {% endif %}
+{% endblock %}

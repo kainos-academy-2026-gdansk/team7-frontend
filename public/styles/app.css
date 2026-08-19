@@ -1,0 +1,902 @@
+:root {
+  --kainos-blue: #283583;
+  --kainos-mid-blue: #41679f;
+  --kainos-green: #61a83f;
+  --kainos-dark-green: #004631;
+  --kainos-red: #d4351c;
+  --kainos-status-green: #8fbd73;
+  --kainos-status-red: #e78276;
+  --kainos-dark-red: #b10e1e;
+  --kainos-grey: #575756;
+  --kainos-border: #d9d9d6;
+  --kainos-tint: #f2f7ef;
+  --kainos-text: #0b0c0c;
+  --kainos-font: "Century Gothic", "Avenir Next", "Futura", "Trebuchet MS", Arial, sans-serif;
+}
+
+/* Tints of the Kainos palette, held light enough for grey body text to keep 4.5:1. */
+body {
+  background-image: linear-gradient(
+    45deg,
+    #bfd1cc 0%,
+    #c9cde0 24%,
+    #c2cee0 42%,
+    #91d6f3 64%,
+    #b5d6a5 86%,
+    #cbe4c1 100%
+  );
+  background-attachment: fixed;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Pushes the footer down when a page is too short to fill the screen. */
+body > .govuk-main-wrapper {
+  flex: 1 0 auto;
+}
+
+body,
+.govuk-body,
+.govuk-link {
+  font-family: var(--kainos-font);
+}
+
+.govuk-body {
+  color: var(--kainos-text);
+  font-size: 1.125rem;
+  line-height: 1.6;
+}
+
+.govuk-heading-xl,
+.govuk-heading-l,
+.govuk-heading-m {
+  font-family: var(--kainos-font);
+  color: var(--kainos-blue);
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+}
+
+.govuk-heading-xl {
+  font-size: 2.75rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+}
+
+.govuk-heading-l {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 1.25rem;
+}
+
+.govuk-heading-m {
+  font-size: 1.375rem;
+  font-weight: 600;
+}
+
+.govuk-link {
+  color: var(--kainos-mid-blue);
+  text-underline-offset: 0.15em;
+}
+
+.govuk-link:hover {
+  color: var(--kainos-blue);
+}
+
+.govuk-width-container {
+  max-width: 1400px;
+}
+
+@media (min-width: 63.75em) and (max-width: 91.249em) {
+  .govuk-width-container {
+    margin-right: 30px;
+    margin-left: 30px;
+  }
+}
+
+.kainos-hero {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 3rem;
+  padding: 3rem 0 4rem;
+}
+
+.kainos-hero__content {
+  flex: 1 1 22rem;
+}
+
+.kainos-hero__image {
+  flex: 1 1 20rem;
+  max-width: 32rem;
+}
+
+.kainos-hero__image img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.kainos-hero__title {
+  margin-bottom: 1rem;
+}
+
+.kainos-hero__title::after {
+  content: "";
+  display: block;
+  width: 4rem;
+  height: 4px;
+  margin: 1.25rem 0 0;
+  background-color: var(--kainos-green);
+}
+
+.kainos-hero__lead {
+  font-family: var(--kainos-font);
+  font-size: 1.25rem;
+  line-height: 1.6;
+  color: var(--kainos-grey);
+  max-width: 40rem;
+  margin: 0 0 2rem;
+}
+
+.kainos-button {
+  display: inline-block;
+  font-family: var(--kainos-font);
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #ffffff;
+  background-color: var(--kainos-blue);
+  padding: 0.875rem 2rem;
+  border-bottom: 4px solid var(--kainos-green);
+  text-decoration: none;
+}
+
+.kainos-button:hover {
+  background-color: var(--kainos-mid-blue);
+  color: #ffffff;
+}
+
+.kainos-button:focus-visible {
+  outline: 3px solid var(--kainos-green);
+  outline-offset: 2px;
+}
+
+.kainos-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background-color: #ffffff;
+  border-bottom: 4px solid var(--kainos-green);
+}
+
+.kainos-header__container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+.kainos-header__logo {
+  display: inline-flex;
+  align-items: center;
+}
+
+.kainos-header__logo img {
+  display: block;
+  width: 120px;
+  height: auto;
+}
+
+.kainos-header__nav {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.kainos-header__link {
+  font-family: var(--kainos-font);
+  font-size: 1.0625rem;
+  font-weight: 600;
+  color: var(--kainos-blue);
+  text-decoration: none;
+  padding-bottom: 0.25rem;
+  border-bottom: 2px solid transparent;
+}
+
+.kainos-header__link:hover {
+  border-bottom-color: var(--kainos-green);
+}
+
+/* Logging out changes state, so it is a POST - this is a button styled as a link. */
+button.kainos-header__link {
+  background: none;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+}
+.kainos-footer {
+  background-color: var(--kainos-blue);
+  color: #ffffff;
+}
+
+.kainos-footer__container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 3rem;
+  padding-top: 2.5rem;
+  padding-bottom: 2.5rem;
+}
+
+.kainos-footer__groups {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4rem;
+}
+
+.kainos-footer__heading {
+  font-family: var(--kainos-font);
+  font-size: 1.125rem;
+  font-weight: 700;
+  display: inline-block;
+  margin: 0 0 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 3px solid var(--kainos-green);
+}
+
+.kainos-footer__text {
+  font-family: var(--kainos-font);
+  max-width: 18rem;
+  margin: 0;
+  line-height: 1.6;
+}
+
+.kainos-footer__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  line-height: 2;
+}
+
+.kainos-footer__link {
+  font-family: var(--kainos-font);
+  color: #ffffff;
+  text-underline-offset: 0.15em;
+}
+
+.kainos-footer__link:hover {
+  text-decoration-thickness: 2px;
+}
+
+.kainos-footer__link:focus-visible {
+  outline: 3px solid var(--kainos-green);
+  outline-offset: 2px;
+}
+
+.kainos-footer__bar {
+  border-top: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.kainos-footer__copyright {
+  font-family: var(--kainos-font);
+  font-size: 0.875rem;
+  margin: 0;
+  padding: 0.625rem 0;
+  text-align: center;
+}
+
+.govuk-main-wrapper {
+  padding: 0;
+}
+
+/* Sits outside the width container, so it spans the whole screen. */
+.kainos-page-banner {
+  background-image: linear-gradient(120deg, var(--kainos-blue), var(--kainos-dark-green));
+  padding: 3rem 0;
+  /* Leaves room for the filter bar that lands above the list later. */
+  margin-bottom: 5rem;
+}
+
+.kainos-page-banner__title {
+  color: #ffffff;
+  font-size: 3rem;
+  line-height: 1.1;
+  margin-bottom: 0;
+}
+
+.kainos-job-list {
+  background-color: #ffffff;
+  border: 1px solid var(--kainos-border);
+  border-top: 3px solid var(--kainos-green);
+  max-width: 38rem;
+  margin: 0 auto 2rem;
+}
+
+.kainos-job-list__actions {
+  max-width: 38rem;
+  margin: 0 auto 2rem;
+  text-align: center;
+}
+
+.kainos-job-list__actions .kainos-button {
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.kainos-form-row {
+  display: flex;
+  justify-content: center;
+}
+
+.kainos-form-row > [class*="govuk-grid-column"] {
+  float: none;
+}
+
+.kainos-form {
+  background-color: #ffffff;
+  border: 1px solid var(--kainos-border);
+  border-top: 3px solid var(--kainos-green);
+  padding: 2rem;
+  margin-bottom: 3rem;
+}
+
+.kainos-empty-state {
+  background-color: #ffffff;
+  border: 1px solid var(--kainos-border);
+  border-top: 3px solid var(--kainos-green);
+  max-width: 38rem;
+  padding: 2rem;
+  margin: 0 auto;
+}
+
+.kainos-profile__applications {
+  background-color: #ffffff;
+  border: 1px solid var(--kainos-border);
+  border-top: 3px solid var(--kainos-green);
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  max-width: 38rem;
+  margin: 0 auto 2rem;
+  padding: 0 1.5rem;
+  text-align: left;
+}
+
+.kainos-profile__application-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(10rem, 1fr);
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.kainos-profile__application-name,
+.kainos-profile__application-details {
+  display: block;
+  width: auto;
+  margin: 0;
+}
+
+.kainos-profile__application-name {
+  font-family: var(--kainos-font);
+  font-size: 1.125rem;
+}
+
+.kainos-profile__application-link {
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+.kainos-profile__application-details {
+  text-align: right;
+}
+
+.kainos-profile__application-details .govuk-caption-m {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--kainos-grey);
+}
+
+.kainos-profile__application-details .govuk-body {
+  margin: 0.75rem 0 0;
+  font-size: 0.95rem;
+}
+
+.kainos-profile__application-status,
+.kainos-job-detail__application-status {
+  font-family: var(--kainos-font);
+  text-transform: capitalize;
+}
+
+.kainos-profile__application-status--hired,
+.kainos-job-detail__application-status--hired {
+  background-color: var(--kainos-status-green);
+}
+
+.kainos-profile__application-status--rejected,
+.kainos-job-detail__application-status--rejected {
+  background-color: var(--kainos-status-red);
+}
+
+.kainos-auth-form {
+  width: 100%;
+  max-width: 30rem;
+  box-sizing: border-box;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.kainos-auth-error-summary {
+  width: 100%;
+  max-width: 30rem;
+  box-sizing: border-box;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.kainos-form__group {
+  margin-bottom: 1.75rem;
+}
+
+.kainos-form__label {
+  font-family: var(--kainos-font);
+  font-size: 1.0625rem;
+  font-weight: 600;
+  color: var(--kainos-blue);
+}
+
+.kainos-form__hint,
+.kainos-form__error {
+  font-family: var(--kainos-font);
+  font-size: 1rem;
+}
+
+.kainos-form__hint {
+  color: var(--kainos-grey);
+}
+
+.kainos-form__input,
+.kainos-form__select,
+.kainos-form__textarea {
+  font-family: var(--kainos-font);
+  font-size: 1.0625rem;
+  width: 100%;
+  border: 2px solid var(--kainos-border);
+}
+
+.kainos-form__input:focus,
+.kainos-form__select:focus,
+.kainos-form__textarea:focus {
+  border-color: var(--kainos-blue);
+  outline: 3px solid var(--kainos-green);
+  outline-offset: 0;
+  box-shadow: none;
+}
+
+.kainos-form__submit {
+  border: 0;
+  cursor: pointer;
+}
+
+.kainos-error-summary {
+  background-color: #ffffff;
+  border-color: var(--kainos-blue);
+}
+
+.kainos-error-summary__title {
+  font-family: var(--kainos-font);
+  color: var(--kainos-blue);
+}
+
+.kainos-error-summary__list {
+  font-family: var(--kainos-font);
+}
+
+.kainos-job-list__count {
+  font-family: var(--kainos-font);
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--kainos-blue);
+  margin: 0;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--kainos-border);
+}
+
+.kainos-job-list__items {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.kainos-pagination {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  max-width: 38rem;
+  margin: 0 auto 4rem;
+}
+
+.kainos-pagination__pages {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.kainos-pagination__step,
+.kainos-pagination__page {
+  font-family: var(--kainos-font);
+  font-weight: 600;
+  color: var(--kainos-blue);
+  background-color: #ffffff;
+  border: 1px solid var(--kainos-border);
+  padding: 0.5rem 0.875rem;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.kainos-pagination__step:hover,
+.kainos-pagination__page:hover {
+  background-color: var(--kainos-tint);
+  border-color: var(--kainos-green);
+}
+
+.kainos-pagination__page--current {
+  background-color: var(--kainos-blue);
+  border-color: var(--kainos-blue);
+  color: #ffffff;
+}
+
+.kainos-pagination__step:focus-visible,
+.kainos-pagination__page:focus-visible {
+  outline: 3px solid var(--kainos-green);
+  outline-offset: 2px;
+}
+
+.kainos-job {
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--kainos-border);
+}
+
+.kainos-job:last-child {
+  border-bottom: 0;
+}
+
+.kainos-job:hover {
+  background-color: var(--kainos-tint);
+}
+
+.kainos-job__title {
+  font-family: var(--kainos-font);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--kainos-blue);
+  margin: 0 0 0.75rem;
+}
+
+.kainos-job__facts {
+  font-family: var(--kainos-font);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 1.5rem;
+  margin: 0;
+  color: var(--kainos-text);
+}
+
+.kainos-job__closing {
+  margin-top: 1rem;
+}
+
+.kainos-job__fact {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.kainos-job__icon {
+  width: 2rem;
+  height: 2rem;
+  flex-shrink: 0;
+}
+
+/* Job role detail page */
+.kainos-job-detail {
+  background-color: #ffffff;
+  border: 1px solid var(--kainos-border);
+  border-top: 4px solid var(--kainos-green);
+  border-radius: 0.25rem;
+  max-width: 64rem;
+  margin: 0 auto 2rem;
+  box-shadow: 0 2px 8px rgba(11, 12, 12, 0.08);
+  overflow: hidden;
+}
+
+.kainos-job-detail__header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.75rem 2rem;
+  border-bottom: 1px solid var(--kainos-border);
+}
+
+.kainos-job-detail__title {
+  font-family: var(--kainos-font);
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--kainos-blue);
+  margin: 0;
+}
+
+.kainos-job-detail__status {
+  display: inline-block;
+  flex-shrink: 0;
+  padding: 0.4rem 1rem;
+  border-radius: 1rem;
+  font-family: var(--kainos-font);
+  font-weight: 700;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #ffffff;
+}
+
+.kainos-job-detail__status--open {
+  background-color: var(--kainos-green);
+}
+
+.kainos-job-detail__status--closed {
+  background-color: var(--kainos-grey);
+}
+
+.kainos-job-detail__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding: 0 2rem 1.75rem;
+}
+
+.kainos-job-detail__actions .kainos-button {
+  margin: 0;
+}
+
+.kainos-job-detail__edit {
+  background-color: var(--kainos-mid-blue);
+}
+
+.kainos-job-detail__edit:hover {
+  background-color: var(--kainos-blue);
+}
+
+.kainos-job-detail__delete {
+  background-color: var(--kainos-dark-green);
+}
+.kainos-job-detail__view {
+  background-color: var(--kainos-green);
+}
+
+.kainos-job-detail__delete:hover {
+  background-color: var(--kainos-grey);
+}
+
+.kainos-application__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.kainos-application__actions .kainos-button {
+  margin: 0;
+}
+
+.kainos-application__hire {
+  background-color: var(--kainos-green);
+}
+
+.kainos-application__hire:hover {
+  background-color: var(--kainos-dark-green);
+}
+
+.kainos-application__reject {
+  background-color: var(--kainos-red);
+}
+
+.kainos-application__reject:hover {
+  background-color: var(--kainos-dark-red);
+}
+
+.kainos-job-detail__content {
+  display: grid;
+  /* minmax(0, Nfr) stops the long description/link text from forcing the side column to collapse */
+  grid-template-columns: minmax(0, 3fr) minmax(0, 1fr);
+}
+
+.kainos-job-detail__main {
+  padding: 2rem;
+  border-right: 1px solid var(--kainos-border);
+  min-width: 0;
+}
+
+.kainos-job-detail__section {
+  margin-bottom: 2rem;
+}
+
+.kainos-job-detail__section:last-child {
+  margin-bottom: 0;
+}
+
+.kainos-job-detail__section-title {
+  font-family: var(--kainos-font);
+  font-size: 1.0625rem;
+  font-weight: 700;
+  color: var(--kainos-blue);
+  margin: 0 0 0.625rem;
+}
+
+.kainos-job-detail__side {
+  padding: 2rem;
+  background-color: #ffffff;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.kainos-job-detail__fact {
+  margin: 0;
+}
+
+.kainos-job-detail__label {
+  font-family: var(--kainos-font);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--kainos-grey);
+  margin: 0 0 0.25rem;
+}
+
+.kainos-job-detail__value {
+  font-family: var(--kainos-font);
+  font-size: 1.0625rem;
+  color: var(--kainos-text);
+  margin: 0;
+}
+
+.kainos-job-detail__link {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  display: inline-block;
+  max-width: 100%;
+}
+
+.kainos-job-detail__user-apply {
+  background-color: #ffffff;
+  border: 1px solid var(--kainos-border);
+  border-top: 4px solid var(--kainos-green);
+  border-radius: 0.25rem;
+  max-width: 62rem;
+  margin: 0 auto 2rem;
+  box-shadow: 0 2px 8px rgba(11, 12, 12, 0.08);
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  min-height: auto;
+  align-items: center;
+}
+
+.kainos-job-detail__application-message,
+.kainos-job-detail__application-status-panel {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.kainos-job-detail__application-status-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+}
+
+.kainos-delete-confirmation {
+  background-color: #ffffff;
+  border: 1px solid var(--kainos-border);
+  border-top: 4px solid var(--kainos-green);
+  border-radius: 0.25rem;
+  max-width: 40rem;
+  margin: 0 auto 2rem;
+  padding: 2rem;
+  box-shadow: 0 2px 8px rgba(11, 12, 12, 0.08);
+}
+
+.kainos-delete-confirmation__back-link,
+.kainos-delete-confirmation__cancel {
+  font-family: var(--kainos-font);
+}
+
+.kainos-delete-confirmation__title {
+  margin-bottom: 1.5rem;
+}
+
+.kainos-delete-confirmation__warning {
+  margin-bottom: 1.5rem;
+}
+
+.kainos-delete-confirmation__warning-icon {
+  background-color: var(--kainos-blue);
+}
+
+.kainos-delete-confirmation__warning-text,
+.kainos-delete-confirmation__description {
+  font-family: var(--kainos-font);
+}
+
+.kainos-delete-confirmation__description {
+  margin-bottom: 2rem;
+}
+
+.kainos-delete-confirmation__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.kainos-delete-confirmation__actions form {
+  margin: 0;
+}
+
+.kainos-delete-confirmation__confirm {
+  margin: 0;
+  color: #ffffff;
+  background-color: var(--kainos-red);
+  border-bottom-color: var(--kainos-dark-red);
+}
+
+.kainos-delete-confirmation__confirm:hover {
+  color: #ffffff;
+  background-color: var(--kainos-dark-red);
+}
+
+@media (max-width: 40rem) {
+  .kainos-job-detail__content {
+    grid-template-columns: 1fr;
+  }
+
+  .kainos-job-detail__main {
+    border-right: 0;
+    border-bottom: 1px solid var(--kainos-border);
+  }
+
+  .kainos-job-detail__user-apply {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .kainos-job-detail__application-status-panel {
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .kainos-profile__applications {
+    padding: 0 1rem;
+  }
+
+  .kainos-profile__application-row {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .kainos-profile__application-details {
+    text-align: left;
+  }
+}

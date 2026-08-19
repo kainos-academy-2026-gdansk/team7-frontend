@@ -1,0 +1,21 @@
+{% extends "layouts/base.njk" %}
+{% import "partials/jobRoleForm.njk" as jobRole %}
+
+{% block title %}Add a job role{% endblock %}
+
+{% block banner %}
+  <div class="kainos-page-banner">
+    <div class="govuk-width-container">
+      <h1 class="govuk-heading-l kainos-page-banner__title">Add a job role</h1>
+    </div>
+  </div>
+{% endblock %}
+
+{% block content %}
+  <a href="/job-roles/" class="govuk-back-link">Back to job role</a>
+  <div class="govuk-grid-row kainos-form-row">
+    <div class="govuk-grid-column-two-thirds">
+      {{ jobRole.createJobRoleForm(formAction, values, errors, errorList, bands, capabilities, submitLabel) }}
+    </div>
+  </div>
+{% endblock %}
