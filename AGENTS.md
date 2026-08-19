@@ -97,6 +97,29 @@ Dedicated agents implement the two halves of this flow:
 - [.github/agents/deliver-user-story.agent.md](.github/agents/deliver-user-story.agent.md) — write:
   implement, validate, hand over, and close the loop.
 
+### Skills-first development
+
+Skills are reusable project assets, equivalent to code, tests, and documentation. Follow these
+mandatory practices:
+
+1. Before significant work, review the available workspace skills and the inventory in
+  [docs/ai/skills.md](docs/ai/skills.md).
+2. Apply an existing skill whenever it fits the task.
+3. During planning, review active and proposed skills, identify missing skills that would improve
+  consistency, quality, speed, or maintainability, and create a beneficial skill before
+  implementation.
+4. Continuously identify stable, repeated implementation patterns, testing workflows, debugging
+  procedures, review processes, and architectural decisions. Any stable, reusable process should
+  become a skill.
+5. At the end of each work session, review the work performed, identify repeated procedures, and
+  propose skills where reuse value is high. Update [docs/ai/skills.md](docs/ai/skills.md) with
+  each proposal or approved change.
+
+Every skill must be concrete and executable. It must document its purpose, trigger conditions,
+prerequisites, step-by-step procedure, validation checklist, expected outputs, repository examples
+where available, anti-patterns, and applicable repository coding and testing standards. Skills must
+capture stable, repeatable, project-specific practices, not one-off solutions.
+
 ---
 
 ## 3. Planning rules
@@ -447,6 +470,7 @@ Committed, team-owned memory lives in `docs/ai/` and is part of code review:
 | [docs/ai/patterns.md](docs/ai/patterns.md) | Concrete code/CSS/Nunjucks patterns to copy, and anti-patterns to avoid |
 | [docs/ai/decisions.md](docs/ai/decisions.md) | Decision log (what was decided, why, alternatives) |
 | [docs/ai/testing.md](docs/ai/testing.md) | Testing know-how and current strategy |
+| [docs/ai/skills.md](docs/ai/skills.md) | Skills inventory: name, purpose, triggers, inputs, outputs, and lifecycle status |
 | [docs/ai/retrospectives/](docs/ai/retrospectives/) | One file per completed task |
 | [docs/ai/workflow.md](docs/ai/workflow.md) | The lifecycle itself |
 | [docs/ai/mcp-planner.md](docs/ai/mcp-planner.md) | MCP / Microsoft Planner integration and guardrails |
