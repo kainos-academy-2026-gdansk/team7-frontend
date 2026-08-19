@@ -13,6 +13,7 @@ import type { CapabilityService } from "../services/CapabilityService";
 import type { JobRoleService } from "../services/JobRoleService";
 import { JobRoleNotFoundError } from "../services/JobRoleService";
 import type { StatusService } from "../services/StatusService";
+import type { ErrorPageData } from "./ErrorPageData";
 
 const CREATE_FIELDS = [
   "roleName",
@@ -152,12 +153,14 @@ export class JobRoleController {
       // The API is a separate service, so it can be down while this site is healthy.
       console.error("Could not load job roles", error);
 
-      res.status(503).render("pages/error.njk", {
+      const errorPage: ErrorPageData = {
         heading: "Job roles are unavailable",
         message:
           "We could not reach the service that holds our job roles. This is usually temporary, so please try again in a moment.",
         retryUrl: "/job-roles",
-      });
+      };
+
+      res.status(503).render("pages/error.njk", errorPage);
     }
   };
 
@@ -191,12 +194,14 @@ export class JobRoleController {
 
       console.error("Could not create job role", error);
 
-      res.status(503).render("pages/error.njk", {
+      const errorPage: ErrorPageData = {
         heading: "The job role could not be saved",
         message:
           "We could not reach the service that stores our job roles. This is usually temporary, so please try again in a moment.",
         retryUrl: "/job-roles/new",
-      });
+      };
+
+      res.status(503).render("pages/error.njk", errorPage);
     }
   };
 
@@ -224,12 +229,14 @@ export class JobRoleController {
 
       console.error("Could not load job role", error);
 
-      res.status(503).render("pages/error.njk", {
+      const errorPage: ErrorPageData = {
         heading: "The job role is unavailable",
         message:
           "We could not reach the service that holds our job roles. This is usually temporary, so please try again in a moment.",
         retryUrl: `/job-roles/${id}/edit`,
-      });
+      };
+
+      res.status(503).render("pages/error.njk", errorPage);
     }
   };
 
@@ -270,12 +277,14 @@ export class JobRoleController {
 
       console.error("Could not update job role", error);
 
-      res.status(503).render("pages/error.njk", {
+      const errorPage: ErrorPageData = {
         heading: "The job role could not be updated",
         message:
           "We could not reach the service that stores our job roles. This is usually temporary, so please try again in a moment.",
         retryUrl: `/job-roles/${id}/edit`,
-      });
+      };
+
+      res.status(503).render("pages/error.njk", errorPage);
     }
   };
 
@@ -435,21 +444,25 @@ export class JobRoleController {
     } catch (error) {
       console.error("Could not load the job role form reference data", error);
 
-      res.status(503).render("pages/error.njk", {
+      const errorPage: ErrorPageData = {
         heading: "The job role form is unavailable",
         message:
           "We could not load the information this form needs. This is usually temporary, so please try again in a moment.",
         retryUrl: formAction,
-      });
+      };
+
+      res.status(503).render("pages/error.njk", errorPage);
     }
   };
 
   private renderNotFound = (res: Response): void => {
-    res.status(404).render("pages/error.njk", {
+    const errorPage: ErrorPageData = {
       heading: "Job role not found",
       message: "We could not find that job role. It may have been removed.",
       retryUrl: "/job-roles",
-    });
+    };
+
+    res.status(404).render("pages/error.njk", errorPage);
   };
 
   private getApplicationForRole = async (
@@ -486,23 +499,27 @@ export class JobRoleController {
       if (error instanceof JobRoleNotFoundError) {
         console.error("Job role not found", error);
 
-        res.status(404).render("pages/error.njk", {
+        const errorPage: ErrorPageData = {
           heading: "Job role not found",
           message:
             "The job role you are looking for does not exist. Please check the ID and try again.",
           retryUrl: "/job-roles/",
-        });
+        };
+
+        res.status(404).render("pages/error.njk", errorPage);
         return;
       }
 
       console.error("Could not load job role", error);
 
-      res.status(503).render("pages/error.njk", {
+      const errorPage: ErrorPageData = {
         heading: "Job role is unavailable",
         message:
           "We could not reach the service that holds our job role. This is usually temporary, so please try again in a moment.",
         retryUrl: "/job-roles/",
-      });
+      };
+
+      res.status(503).render("pages/error.njk", errorPage);
     }
   };
 }

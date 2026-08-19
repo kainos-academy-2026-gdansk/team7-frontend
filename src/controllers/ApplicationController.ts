@@ -5,6 +5,7 @@ import { CreateApplicationSchema } from "../Dto/CreateApplicationDto";
 import type { StatusEnum } from "../models/Application";
 import type { ApplicationService } from "../services/ApplicationService";
 import { JobRoleNotFoundError, type JobRoleService } from "../services/JobRoleService";
+import type { ErrorPageData } from "./ErrorPageData";
 
 const APPLICATION_FIELDS = ["experience", "salaryExpectation", "skills"] as const;
 
@@ -141,11 +142,13 @@ export class ApplicationController {
 
     const jobRoleId = Number(req.params.id);
     if (!Number.isInteger(jobRoleId) || jobRoleId <= 0) {
-      res.status(404).render("pages/error.njk", {
+      const errorPage: ErrorPageData = {
         heading: "Job role not found",
         message: "We could not find that job role.",
         retryUrl: "/job-roles",
-      });
+      };
+
+      res.status(404).render("pages/error.njk", errorPage);
       return;
     }
 
@@ -165,11 +168,13 @@ export class ApplicationController {
       res.redirect(`/job-roles/${jobRoleId}`);
     } catch (error) {
       if (isAxiosError(error) && error.response?.status === 404) {
-        res.status(404).render("pages/error.njk", {
+        const errorPage: ErrorPageData = {
           heading: "Job role not found",
           message: "We could not find that job role. It may have been removed.",
           retryUrl: "/job-roles",
-        });
+        };
+
+        res.status(404).render("pages/error.njk", errorPage);
         return;
       }
 
@@ -181,21 +186,25 @@ export class ApplicationController {
             ? "You have already applied for this job role."
             : "This job role is not accepting applications.";
 
-        res.status(409).render("pages/error.njk", {
+        const errorPage: ErrorPageData = {
           heading: "Application not submitted",
           message,
           retryUrl: `/job-roles/${jobRoleId}`,
-        });
+        };
+
+        res.status(409).render("pages/error.njk", errorPage);
         return;
       }
 
       console.error("Could not submit application", error);
 
-      res.status(503).render("pages/error.njk", {
+      const errorPage: ErrorPageData = {
         heading: "The application could not be submitted",
         message: "We could not submit your application. Please try again in a moment.",
         retryUrl: `/job-roles/${jobRoleId}/apply`,
-      });
+      };
+
+      res.status(503).render("pages/error.njk", errorPage);
     }
   };
 
@@ -213,11 +222,13 @@ export class ApplicationController {
     const jobRoleId = Number(req.params.id);
 
     if (!Number.isInteger(jobRoleId) || jobRoleId <= 0) {
-      res.status(404).render("pages/error.njk", {
+      const errorPage: ErrorPageData = {
         heading: "Job role not found",
         message: "We could not find that job role.",
         retryUrl: "/job-roles",
-      });
+      };
+
+      res.status(404).render("pages/error.njk", errorPage);
       return;
     }
 
@@ -237,21 +248,25 @@ export class ApplicationController {
       });
     } catch (error) {
       if (error instanceof JobRoleNotFoundError) {
-        res.status(404).render("pages/error.njk", {
+        const errorPage: ErrorPageData = {
           heading: "Job role not found",
           message: "We could not find that job role.",
           retryUrl: "/job-roles",
-        });
+        };
+
+        res.status(404).render("pages/error.njk", errorPage);
         return;
       }
 
       console.error("Could not load application form", error);
 
-      res.status(503).render("pages/error.njk", {
+      const errorPage: ErrorPageData = {
         heading: "The application form is unavailable",
         message: "We could not load this application form. Please try again in a moment.",
         retryUrl: `/job-roles/${jobRoleId}/apply`,
-      });
+      };
+
+      res.status(503).render("pages/error.njk", errorPage);
     }
   };
 
@@ -274,21 +289,25 @@ export class ApplicationController {
       });
     } catch (error) {
       if (error instanceof JobRoleNotFoundError) {
-        res.status(404).render("pages/error.njk", {
+        const errorPage: ErrorPageData = {
           heading: "Job role not found",
           message: "We could not find that job role.",
           retryUrl: "/job-roles",
-        });
+        };
+
+        res.status(404).render("pages/error.njk", errorPage);
         return;
       }
 
       console.error("Could not reload application form", error);
 
-      res.status(503).render("pages/error.njk", {
+      const errorPage: ErrorPageData = {
         heading: "The application form is unavailable",
         message: "We could not reload the application form. Please try again.",
         retryUrl: `/job-roles/${jobRoleId}/apply`,
-      });
+      };
+
+      res.status(503).render("pages/error.njk", errorPage);
     }
   };
 

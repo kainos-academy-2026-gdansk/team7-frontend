@@ -6,6 +6,7 @@ import { loginSchema } from "../Dto/LoginDto";
 import { registerSchema } from "../Dto/RegisterDto";
 import type { ApplicationService } from "../services/ApplicationService";
 import type { AuthService } from "../services/AuthService";
+import type { ErrorPageData } from "./ErrorPageData";
 
 const LOGIN_FIELDS = ["email", "password"] as const;
 
@@ -106,11 +107,13 @@ export class AuthController {
     } catch (error) {
       console.error("Could not load applications", error);
 
-      res.status(503).render("pages/error.njk", {
+      const errorPage: ErrorPageData = {
         heading: "Applications are unavailable",
         message: "We could not load your applications. Please try again in a moment.",
         retryUrl: "/my-profile",
-      });
+      };
+
+      res.status(503).render("pages/error.njk", errorPage);
     }
   };
 
@@ -134,12 +137,14 @@ export class AuthController {
         return;
       }
       console.error("Failed to register", error);
-      res.status(503).render("pages/error.njk", {
+      const errorPage: ErrorPageData = {
         heading: "Registration is unavailable",
         message:
           "We could not reach the registration service. This is usually temporary, so please try again in a moment.",
         retryUrl: "/register",
-      });
+      };
+
+      res.status(503).render("pages/error.njk", errorPage);
     }
   };
   public logIn = async (req: Request, res: Response): Promise<void> => {
@@ -166,12 +171,14 @@ export class AuthController {
       }
 
       console.error("Failed to log in", error);
-      res.status(503).render("pages/error.njk", {
+      const errorPage: ErrorPageData = {
         heading: "Logging in is unavailable",
         message:
           "We could not reach the service that signs you in. This is usually temporary, so please try again in a moment.",
         retryUrl: "/login",
-      });
+      };
+
+      res.status(503).render("pages/error.njk", errorPage);
     }
   };
 
@@ -179,11 +186,13 @@ export class AuthController {
     req.session.destroy((error) => {
       if (error) {
         console.error("Failed to log out", error);
-        res.status(503).render("pages/error.njk", {
+        const errorPage: ErrorPageData = {
           heading: "Logging out is unavailable",
           message: "We could not end your session. Please try again in a moment.",
           retryUrl: "/my-profile",
-        });
+        };
+
+        res.status(503).render("pages/error.njk", errorPage);
         return;
       }
 
