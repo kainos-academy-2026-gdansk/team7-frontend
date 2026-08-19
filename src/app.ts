@@ -4,9 +4,9 @@ import session from "express-session";
 import nunjucks from "nunjucks";
 import type { UserRole } from "./models/Auth";
 import ApplicationRouter from "./routes/ApplicationRouter";
+import ApplicationsRouter from "./routes/ApplicationsRouter";
 import AuthRouter from "./routes/AuthRouter";
 import JobRoleRouter from "./routes/JobRoleRouter";
-
 const app = express();
 
 declare module "express-session" {
@@ -38,6 +38,7 @@ app.use(
 app.use((req, res, next) => {
   res.locals.isAuthenticated = Boolean(req.session.authToken);
   res.locals.isProfileUser = req.session.authRole === "USER";
+  res.locals.isAdmin = Boolean(req.session.authToken) && req.session.authRole === "ADMIN";
   next();
 });
 
@@ -110,5 +111,6 @@ app.get("/health", (_req, res) => {
 app.use("/", ApplicationRouter);
 app.use("/", JobRoleRouter);
 app.use("/", AuthRouter);
+app.use("/", ApplicationsRouter);
 
 export default app;

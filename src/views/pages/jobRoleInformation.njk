@@ -13,6 +13,20 @@
       </span>
     </div>
 
+    {% if isAdmin %}
+      <div class="kainos-job-detail__actions">
+        <a href="/job-roles/{{ jobRole.id }}/edit" class="govuk-button kainos-button kainos-job-detail__edit">
+          Edit job role
+        </a>
+        <a href="/job-roles/{{ jobRole.id }}/delete" class="govuk-button kainos-button kainos-job-detail__delete">
+          Delete job role
+        </a>
+        <a href="/admin/job-roles/{{ jobRole.id }}/applications" class="govuk-button kainos-button kainos-job-detail__view">
+          View applications
+        </a>
+      </div>
+    {% endif %}
+
     <div class="kainos-job-detail__content">
       <div class="kainos-job-detail__main">
         <section class="kainos-job-detail__section">

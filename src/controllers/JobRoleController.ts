@@ -13,6 +13,7 @@ import type { CapabilityService } from "../services/CapabilityService";
 import type { JobRoleService } from "../services/JobRoleService";
 import { JobRoleNotFoundError } from "../services/JobRoleService";
 import type { StatusService } from "../services/StatusService";
+import type { ErrorPageData } from "./ErrorPageData";
 
 const CREATE_FIELDS = [
   "roleName",
@@ -123,6 +124,15 @@ export class JobRoleController {
     this.applicationService = applicationService;
   }
 
+  private requireAdmin = (req: Request, res: Response): string | null => {
+    if (!req.session.authToken || req.session.authRole !== "ADMIN") {
+      res.redirect("/");
+      return null;
+    }
+
+    return req.session.authToken;
+  };
+
   public getJobRolesPage = async (_req: Request, res: Response): Promise<void> => {
     try {
       const jobRoles = await this.jobRoleService.getJobRoles();
@@ -143,20 +153,26 @@ export class JobRoleController {
       // The API is a separate service, so it can be down while this site is healthy.
       console.error("Could not load job roles", error);
 
-      res.status(503).render("pages/error.njk", {
+      const errorPage: ErrorPageData = {
         heading: "Job roles are unavailable",
         message:
           "We could not reach the service that holds our job roles. This is usually temporary, so please try again in a moment.",
         retryUrl: "/job-roles",
-      });
+      };
+
+      res.status(503).render("pages/error.njk", errorPage);
     }
   };
 
   public showCreateJobRoleForm = async (_req: Request, res: Response): Promise<void> => {
+    if (!this.requireAdmin(_req, res)) return;
     await this.renderCreateForm(res, 200, readFormValues(CREATE_FIELDS, {}), {});
   };
 
   public createJobRole = async (req: Request, res: Response): Promise<void> => {
+    const token = this.requireAdmin(req, res);
+    if (!token) return;
+
     const values = readFormValues(CREATE_FIELDS, req.body);
     const result = createJobRoleSchema.safeParse(values);
 
@@ -166,7 +182,7 @@ export class JobRoleController {
     }
 
     try {
-      await this.jobRoleService.createJobRole(result.data);
+      await this.jobRoleService.createJobRole(result.data, token);
 
       res.redirect("/job-roles");
     } catch (error) {
@@ -178,16 +194,22 @@ export class JobRoleController {
 
       console.error("Could not create job role", error);
 
-      res.status(503).render("pages/error.njk", {
+      const errorPage: ErrorPageData = {
         heading: "The job role could not be saved",
         message:
           "We could not reach the service that stores our job roles. This is usually temporary, so please try again in a moment.",
         retryUrl: "/job-roles/new",
-      });
+      };
+
+      res.status(503).render("pages/error.njk", errorPage);
     }
   };
 
   public showEditJobRoleForm = async (req: Request, res: Response): Promise<void> => {
+    const token = this.requireAdmin(req, res);
+    if (!token) {
+      return;
+    }
     const id = readId(req.params.id);
 
     if (id === null) {
@@ -207,16 +229,20 @@ export class JobRoleController {
 
       console.error("Could not load job role", error);
 
-      res.status(503).render("pages/error.njk", {
+      const errorPage: ErrorPageData = {
         heading: "The job role is unavailable",
         message:
           "We could not reach the service that holds our job roles. This is usually temporary, so please try again in a moment.",
         retryUrl: `/job-roles/${id}/edit`,
-      });
+      };
+
+      res.status(503).render("pages/error.njk", errorPage);
     }
   };
 
   public editJobRole = async (req: Request, res: Response): Promise<void> => {
+    const token = this.requireAdmin(req, res);
+    if (!token) return;
     const id = readId(req.params.id);
 
     if (id === null) {
@@ -233,7 +259,7 @@ export class JobRoleController {
     }
 
     try {
-      await this.jobRoleService.updateJobRole(id, result.data);
+      await this.jobRoleService.updateJobRole(id, result.data, token);
 
       res.redirect("/job-roles");
     } catch (error) {
@@ -251,11 +277,72 @@ export class JobRoleController {
 
       console.error("Could not update job role", error);
 
-      res.status(503).render("pages/error.njk", {
+      const errorPage: ErrorPageData = {
         heading: "The job role could not be updated",
         message:
           "We could not reach the service that stores our job roles. This is usually temporary, so please try again in a moment.",
         retryUrl: `/job-roles/${id}/edit`,
+      };
+
+      res.status(503).render("pages/error.njk", errorPage);
+    }
+  };
+
+  public showDeleteJobRoleConfirmation = async (req: Request, res: Response): Promise<void> => {
+    const token = this.requireAdmin(req, res);
+    if (!token) return;
+
+    const id = readId(req.params.id);
+    if (id === null) {
+      this.renderNotFound(res);
+      return;
+    }
+
+    try {
+      const jobRole = await this.jobRoleService.getJobRoleById(id);
+
+      res.render("pages/deleteJobRole.njk", { jobRole });
+    } catch (error) {
+      if (isAxiosError(error) && error.response?.status === 404) {
+        this.renderNotFound(res);
+        return;
+      }
+
+      console.error("Could not load job role for deletion", error);
+      res.status(503).render("pages/error.njk", {
+        heading: "The job role is unavailable",
+        message:
+          "We could not reach the service that holds our job roles. This is usually temporary, so please try again in a moment.",
+        retryUrl: `/job-roles/${id}/delete`,
+      });
+    }
+  };
+
+  public deleteJobRole = async (req: Request, res: Response): Promise<void> => {
+    const token = this.requireAdmin(req, res);
+    if (!token) return;
+
+    const id = readId(req.params.id);
+    if (id === null) {
+      this.renderNotFound(res);
+      return;
+    }
+
+    try {
+      await this.jobRoleService.deleteJobRole(id, token);
+      res.redirect("/job-roles");
+    } catch (error) {
+      if (isAxiosError(error) && error.response?.status === 404) {
+        this.renderNotFound(res);
+        return;
+      }
+
+      console.error("Could not delete job role", error);
+      res.status(503).render("pages/error.njk", {
+        heading: "The job role could not be deleted",
+        message:
+          "We could not reach the service that stores our job roles. This is usually temporary, so please try again in a moment.",
+        retryUrl: `/job-roles/${id}/delete`,
       });
     }
   };
@@ -295,6 +382,7 @@ export class JobRoleController {
       submitLabel: "Save changes",
       needsStatuses: true,
       statusName,
+      jobRoleId: id,
     });
 
   private renderForm = async (
@@ -309,6 +397,7 @@ export class JobRoleController {
       submitLabel: string;
       needsStatuses: boolean;
       statusName?: string;
+      jobRoleId?: number;
     },
   ): Promise<void> => {
     const {
@@ -321,6 +410,7 @@ export class JobRoleController {
       submitLabel,
       needsStatuses,
       statusName,
+      jobRoleId,
     } = options;
 
     try {
@@ -349,25 +439,30 @@ export class JobRoleController {
         statuses,
         formAction,
         submitLabel,
+        jobRoleId,
       });
     } catch (error) {
       console.error("Could not load the job role form reference data", error);
 
-      res.status(503).render("pages/error.njk", {
+      const errorPage: ErrorPageData = {
         heading: "The job role form is unavailable",
         message:
           "We could not load the information this form needs. This is usually temporary, so please try again in a moment.",
         retryUrl: formAction,
-      });
+      };
+
+      res.status(503).render("pages/error.njk", errorPage);
     }
   };
 
   private renderNotFound = (res: Response): void => {
-    res.status(404).render("pages/error.njk", {
+    const errorPage: ErrorPageData = {
       heading: "Job role not found",
       message: "We could not find that job role. It may have been removed.",
       retryUrl: "/job-roles",
-    });
+    };
+
+    res.status(404).render("pages/error.njk", errorPage);
   };
 
   private getApplicationForRole = async (
@@ -404,23 +499,27 @@ export class JobRoleController {
       if (error instanceof JobRoleNotFoundError) {
         console.error("Job role not found", error);
 
-        res.status(404).render("pages/error.njk", {
+        const errorPage: ErrorPageData = {
           heading: "Job role not found",
           message:
             "The job role you are looking for does not exist. Please check the ID and try again.",
           retryUrl: "/job-roles/",
-        });
+        };
+
+        res.status(404).render("pages/error.njk", errorPage);
         return;
       }
 
       console.error("Could not load job role", error);
 
-      res.status(503).render("pages/error.njk", {
+      const errorPage: ErrorPageData = {
         heading: "Job role is unavailable",
         message:
           "We could not reach the service that holds our job role. This is usually temporary, so please try again in a moment.",
         retryUrl: "/job-roles/",
-      });
+      };
+
+      res.status(503).render("pages/error.njk", errorPage);
     }
   };
 }

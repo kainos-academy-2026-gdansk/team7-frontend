@@ -1,0 +1,30 @@
+{% extends "layouts/base.njk" %}
+
+{% block title %}Delete {{ jobRole.jobRoleName }}{% endblock %}
+
+{% block content %}
+  <a href="/job-roles/{{ jobRole.id }}" class="govuk-back-link kainos-delete-confirmation__back-link">Back to job role</a>
+
+  <div class="kainos-delete-confirmation">
+    <h1 class="govuk-heading-l kainos-delete-confirmation__title">Delete {{ jobRole.jobRoleName }}?</h1>
+
+    <div class="govuk-warning-text kainos-delete-confirmation__warning" data-module="govuk-warning-text">
+      <span class="govuk-warning-text__icon kainos-delete-confirmation__warning-icon" aria-hidden="true">!</span>
+      <strong class="govuk-warning-text__text kainos-delete-confirmation__warning-text">
+        <span class="govuk-visually-hidden">Warning</span>
+        This action cannot be undone.
+      </strong>
+    </div>
+
+    <p class="govuk-body kainos-delete-confirmation__description">This will permanently delete the job role.</p>
+
+    <div class="kainos-delete-confirmation__actions">
+      <form method="post" action="/job-roles/{{ jobRole.id }}/delete">
+        <button class="govuk-button kainos-button kainos-delete-confirmation__confirm" type="submit">
+          Delete job role
+        </button>
+      </form>
+      <a class="govuk-link kainos-delete-confirmation__cancel" href="/job-roles/{{ jobRole.id }}">Cancel</a>
+    </div>
+  </div>
+{% endblock %}

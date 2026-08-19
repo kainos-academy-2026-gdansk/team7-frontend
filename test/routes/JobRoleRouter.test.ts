@@ -26,9 +26,11 @@ describe("JobRoleRouter", () => {
       { method: "get", path: "/job-roles" },
       { method: "get", path: "/job-roles/new" },
       { method: "post", path: "/job-roles/new" },
-      { method: "get", path: "/job-roles/:id" },
       { method: "get", path: "/job-roles/:id/edit" },
       { method: "post", path: "/job-roles/:id/edit" },
+      { method: "get", path: "/job-roles/:id/delete" },
+      { method: "post", path: "/job-roles/:id/delete" },
+      { method: "get", path: "/job-roles/:id" },
     ]);
   });
 });

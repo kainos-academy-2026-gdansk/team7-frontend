@@ -35,8 +35,12 @@ export class JobRoleService {
     return response.data.filter((jobRole) => jobRole.status === OPEN_STATUS_NAME);
   }
 
-  async createJobRole(jobRole: CreateJobRoleDto): Promise<JobRole> {
-    const response = await this.apiClient.post<JobRole>("/api/job-roles", jobRole);
+  async createJobRole(jobRole: CreateJobRoleDto, token: string): Promise<JobRole> {
+    const response = await this.apiClient.post<JobRole>("/api/admin/job-roles", jobRole, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return response.data;
   }
 
@@ -46,10 +50,30 @@ export class JobRoleService {
     return response.data;
   }
 
-  async updateJobRole(id: number, jobRole: UpdateJobRoleDto): Promise<JobRoleDetailed> {
-    const response = await this.apiClient.put<JobRoleDetailed>(`/api/job-roles/${id}`, jobRole);
+  async updateJobRole(
+    id: number,
+    jobRole: UpdateJobRoleDto,
+    token: string,
+  ): Promise<JobRoleDetailed> {
+    const response = await this.apiClient.put<JobRoleDetailed>(
+      `/api/admin/job-roles/${id}`,
+      jobRole,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
 
     return response.data;
+  }
+
+  async deleteJobRole(id: number, token: string): Promise<void> {
+    await this.apiClient.delete(`/api/admin/job-roles/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
   }
 
   async getJobRoleInformation(id: number): Promise<JobRoleDetailed> {

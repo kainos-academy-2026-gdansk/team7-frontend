@@ -4,6 +4,7 @@ import type { CreateJobRoleDto } from "../../src/Dto/CreateJobRoleDto";
 import type { LoginDto } from "../../src/Dto/LoginDto";
 import type { RegisterDto } from "../../src/Dto/RegisterDto";
 import type { UpdateJobRoleDto } from "../../src/Dto/UpdateJobRoleDto";
+import { ApplicationService } from "../../src/services/ApplicationService";
 import { AuthService } from "../../src/services/AuthService";
 import { BandService } from "../../src/services/BandService";
 import { CapabilityService } from "../../src/services/CapabilityService";
@@ -14,6 +15,8 @@ const apiClient = {
   get: vi.fn(),
   post: vi.fn(),
   put: vi.fn(),
+  patch: vi.fn(),
+  delete: vi.fn(),
 };
 
 const jobRole = {
@@ -104,8 +107,12 @@ describe("JobRoleService", () => {
     };
     apiClient.post.mockResolvedValue({ data: jobRole });
 
-    await expect(service.createJobRole(payload)).resolves.toEqual(jobRole);
-    expect(apiClient.post).toHaveBeenCalledWith("/api/job-roles", payload);
+    await expect(service.createJobRole(payload, "admin-token")).resolves.toEqual(jobRole);
+    expect(apiClient.post).toHaveBeenCalledWith("/api/admin/job-roles", payload, {
+      headers: {
+        Authorization: "Bearer admin-token",
+      },
+    });
   });
 
   it("gets one job role by id", async () => {
@@ -130,8 +137,23 @@ describe("JobRoleService", () => {
     };
     apiClient.put.mockResolvedValue({ data: jobRole });
 
-    await expect(service.updateJobRole(7, payload)).resolves.toEqual(jobRole);
-    expect(apiClient.put).toHaveBeenCalledWith("/api/job-roles/7", payload);
+    await expect(service.updateJobRole(7, payload, "admin-token")).resolves.toEqual(jobRole);
+    expect(apiClient.put).toHaveBeenCalledWith("/api/admin/job-roles/7", payload, {
+      headers: {
+        Authorization: "Bearer admin-token",
+      },
+    });
+  });
+
+  it("deletes a job role with the administrator token", async () => {
+    apiClient.delete.mockResolvedValue({ status: 204 });
+
+    await expect(service.deleteJobRole(7, "admin-token")).resolves.toBeUndefined();
+    expect(apiClient.delete).toHaveBeenCalledWith("/api/admin/job-roles/7", {
+      headers: {
+        Authorization: "Bearer admin-token",
+      },
+    });
   });
 
   describe("getJobRoleInformation", () => {
@@ -156,6 +178,48 @@ describe("JobRoleService", () => {
 
       await expect(service.getJobRoleInformation(7)).rejects.toBe(error);
     });
+  });
+});
+
+describe("ApplicationService", () => {
+  const service = new ApplicationService(apiClient as unknown as AxiosInstance);
+  const application = {
+    id: 4,
+    applicantEmail: "applicant@example.com",
+    status: "IN_PROGRESS" as const,
+    experience: "Three years",
+    salaryExpectation: "50000",
+    skills: "TypeScript",
+  };
+
+  it("gets applications for a job role with the administrator token", async () => {
+    apiClient.get.mockResolvedValue({ data: [application] });
+
+    await expect(service.getApplicationsForJobRole(7, "admin-token")).resolves.toEqual([
+      application,
+    ]);
+    expect(apiClient.get).toHaveBeenCalledWith("/api/admin/job-roles/7/applications", {
+      headers: {
+        Authorization: "Bearer admin-token",
+      },
+    });
+  });
+
+  it("updates an application status with a PATCH request", async () => {
+    apiClient.patch.mockResolvedValue({ data: { status: "HIRED" } });
+
+    await expect(service.changeApplicationStatus(4, 7, "admin-token", "HIRED")).resolves.toEqual({
+      status: "HIRED",
+    });
+    expect(apiClient.patch).toHaveBeenCalledWith(
+      "/api/admin/job-roles/7/applications/4",
+      { status: "HIRED" },
+      {
+        headers: {
+          Authorization: "Bearer admin-token",
+        },
+      },
+    );
   });
 });
 
