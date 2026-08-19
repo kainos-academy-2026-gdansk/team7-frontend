@@ -1,3 +1,4 @@
+import { expect } from "@playwright/test";
 import { createBdd } from "playwright-bdd";
 
 import { HomePage } from "../pages/HomePage";
@@ -18,7 +19,9 @@ When("the user clicks the job roles link", async ({ page }) => {
 
 Then("the user can view the job role list", async ({ page }) => {
   const jobRolesPage = new JobRolesPage(page);
-  await jobRolesPage.expectJobRolesPage();
+
+  await expect(page).toHaveURL(/\/job-roles$/);
+  await expect(jobRolesPage.heading).toBeVisible();
 });
 
 Given("the user is on the job role list page", async ({ page }) => {
@@ -33,5 +36,7 @@ When("the user clicks the first offer", async ({ page }) => {
 
 Then("the user can view the job role details", async ({ page }) => {
   const jobRoleDetailsPage = new JobRoleDetailsPage(page);
-  await jobRoleDetailsPage.expectPageDisplayed();
+
+  await expect(page).toHaveURL(/\/job-roles\/\d+$/);
+  await expect(jobRoleDetailsPage.heading).toBeVisible();
 });

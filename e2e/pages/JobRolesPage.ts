@@ -1,4 +1,4 @@
-import { type Locator, type Page, expect } from "@playwright/test";
+import type { Locator, Page } from "@playwright/test";
 
 export class JobRolesPage {
   public readonly heading: Locator;
@@ -11,11 +11,6 @@ export class JobRolesPage {
 
   public async openJobRolesPage(): Promise<void> {
     await this.page.goto("/job-roles");
-  }
-
-  public async expectJobRolesPage(): Promise<void> {
-    await expect(this.page).toHaveURL(/\/job-roles$/);
-    await expect(this.heading).toBeVisible();
   }
 
   public async openFirstJobRole(): Promise<void> {

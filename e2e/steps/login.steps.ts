@@ -1,3 +1,4 @@
+import { expect } from "@playwright/test";
 import { createBdd } from "playwright-bdd";
 
 import { LoginPage } from "../pages/LoginPage";
@@ -27,13 +28,11 @@ When("submits the login form", async ({ page }) => {
 });
 
 Then("the user is logged in", async ({ page }) => {
-  const loginPage = new LoginPage(page);
-
-  await loginPage.expectLoggedIn();
+  await expect(page).toHaveURL(/\/my-profile$/);
+  await expect(page.getByRole("heading", { name: "My applications" })).toBeVisible();
 });
 
 Then("the user is not logged in", async ({ page }) => {
-  const loginPage = new LoginPage(page);
-
-  await loginPage.expectNotLoggedIn();
+  await expect(page).toHaveURL(/\/login$/);
+  await expect(page.getByRole("heading", { name: "Log in" })).toBeVisible();
 });

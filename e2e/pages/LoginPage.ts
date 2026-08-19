@@ -1,4 +1,4 @@
-import { type Locator, type Page, expect } from "@playwright/test";
+import type { Locator, Page } from "@playwright/test";
 
 export class LoginPage {
   public readonly emailInput: Locator;
@@ -25,15 +25,5 @@ export class LoginPage {
 
   public async submitLogin(): Promise<void> {
     await this.loginSubmitButton.click();
-  }
-
-  public async expectLoggedIn(): Promise<void> {
-    await expect(this.page).toHaveURL(/\/my-profile$/);
-    await expect(this.page.getByRole("heading", { name: "My applications" })).toBeVisible();
-  }
-
-  public async expectNotLoggedIn(): Promise<void> {
-    await expect(this.page).toHaveURL(/\/login$/);
-    await expect(this.page.getByRole("heading", { name: "Log in" })).toBeVisible();
   }
 }
