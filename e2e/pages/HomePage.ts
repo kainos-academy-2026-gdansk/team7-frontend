@@ -12,4 +12,8 @@ export class HomePage {
   public async goto(): Promise<void> {
     await this.page.goto("/");
   }
+
+  public async openJobRolesPage(): Promise<void> {
+    await this.viewJobRolesLink.click();
+  }
 }
