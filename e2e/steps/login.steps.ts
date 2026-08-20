@@ -11,6 +11,16 @@ Given("the user is on the login page", async ({ page }) => {
   await loginPage.openLoginPage();
 });
 
+Given("the user has an authenticated session", async ({ page }) => {
+  const loginPage = new LoginPage(page);
+
+  await loginPage.openLoginPage();
+  await loginPage.enterEmail("applicant@kainos.com");
+  await loginPage.enterPassword("Password1!");
+  await loginPage.submitLogin();
+  await expect(page).toHaveURL(/\/my-profile$/);
+});
+
 When("the user enters the email {string}", async ({ page }, email: string) => {
   const loginPage = new LoginPage(page);
   await loginPage.enterEmail(email);
