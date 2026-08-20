@@ -1,8 +1,8 @@
 import type { Locator, Page } from "@playwright/test";
 
+const selectedApplicantEmails = new WeakMap<Page, string>();
+
 export class AdminApplicationsPage {
-  public readonly hireLink: Locator;
-  public readonly rejectLink: Locator;
   public readonly cancelLink: Locator;
   public readonly confirmationHeading: Locator;
   public readonly warningText: Locator;
@@ -10,13 +10,9 @@ export class AdminApplicationsPage {
   public readonly rejectConfirmationHeading: Locator;
   public readonly rejectApplicantButton: Locator;
   public readonly applicationsHeading: Locator;
-  public readonly inProgressStatus: Locator;
-  public readonly hiredStatus: Locator;
-  public readonly rejectedStatus: Locator;
+  public readonly inProgressApplications: Locator;
 
   constructor(private readonly page: Page) {
-    this.hireLink = page.getByRole("link", { name: "Hire" }).first();
-    this.rejectLink = page.getByRole("link", { name: "Reject" }).first();
     this.cancelLink = page.getByRole("link", { name: "Cancel" });
     this.confirmationHeading = page.getByRole("heading", { name: /^Hire .+\?$/ });
     this.warningText = page.getByText("This action cannot be undone.");
@@ -24,32 +20,80 @@ export class AdminApplicationsPage {
     this.rejectConfirmationHeading = page.getByRole("heading", { name: /^Reject .+\?$/ });
     this.rejectApplicantButton = page.getByRole("button", { name: "Reject applicant" });
     this.applicationsHeading = page.getByRole("heading", { name: "Job role applications" });
-    this.inProgressStatus = page.getByText("Status: IN_PROGRESS").first();
-    this.hiredStatus = page.getByText("Status: HIRED").first();
-    this.rejectedStatus = page.getByText("Status: REJECTED").first();
+    this.inProgressApplications = page.locator(".kainos-job").filter({
+      hasText: "Status: IN_PROGRESS",
+    });
   }
 
-  public async openApplications(jobRoleId: string): Promise<void> {
+  public async navigateToApplications(jobRoleId: string): Promise<void> {
     await this.page.goto(`/admin/job-roles/${jobRoleId}/applications`);
   }
 
-  public async chooseHire(): Promise<void> {
-    await this.hireLink.click();
+  public async clickRandomHire(): Promise<void> {
+    const application = await this.selectRandomInProgressApplication();
+
+    await application.getByRole("link", { name: "Hire" }).click();
   }
 
-  public async chooseReject(): Promise<void> {
-    await this.rejectLink.click();
+  public async clickRandomReject(): Promise<void> {
+    const application = await this.selectRandomInProgressApplication();
+
+    await application.getByRole("link", { name: "Reject" }).click();
   }
 
-  public async cancelHire(): Promise<void> {
+  public async clickCancel(): Promise<void> {
     await this.cancelLink.click();
   }
 
-  public async confirmHire(): Promise<void> {
+  public async clickConfirmHire(): Promise<void> {
     await this.hireApplicantButton.click();
   }
 
-  public async confirmReject(): Promise<void> {
+  public async clickConfirmReject(): Promise<void> {
     await this.rejectApplicantButton.click();
+  }
+
+  public get selectedApplicantInProgressStatus(): Locator {
+    return this.getSelectedApplicant().getByText("Status: IN_PROGRESS");
+  }
+
+  public get selectedApplicantHiredStatus(): Locator {
+    return this.getSelectedApplicant().getByText("Status: HIRED");
+  }
+
+  public get selectedApplicantRejectedStatus(): Locator {
+    return this.getSelectedApplicant().getByText("Status: REJECTED");
+  }
+
+  private async selectRandomInProgressApplication(): Promise<Locator> {
+    const applicationCount = await this.inProgressApplications.count();
+
+    if (applicationCount === 0) {
+      throw new Error("No in-progress applications are available.");
+    }
+
+    const randomIndex = Math.floor(Math.random() * applicationCount);
+    const application = this.inProgressApplications.nth(randomIndex);
+    const applicantEmail = await application.getByRole("heading").textContent();
+
+    if (!applicantEmail) {
+      throw new Error("The selected application has no applicant email.");
+    }
+
+    selectedApplicantEmails.set(this.page, applicantEmail);
+
+    return application;
+  }
+
+  private getSelectedApplicant(): Locator {
+    const applicantEmail = selectedApplicantEmails.get(this.page);
+
+    if (!applicantEmail) {
+      throw new Error("No application has been selected.");
+    }
+
+    return this.page.locator(".kainos-job").filter({
+      has: this.page.getByRole("heading", { name: applicantEmail, exact: true }),
+    });
   }
 }

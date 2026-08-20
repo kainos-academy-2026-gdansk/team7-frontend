@@ -53,9 +53,11 @@ E2E_ADMIN_PASSWORD=
 E2E_JOB_ROLE_ID=1
 ```
 
-Before running the feature, reset and seed the backend database, then start the backend:
+Before running the feature, switch to the backend repository. Reset and seed the backend database,
+then start the backend there:
 
 ```bash
+# In the backend repository
 npx prisma migrate reset
 npm run dev
 ```

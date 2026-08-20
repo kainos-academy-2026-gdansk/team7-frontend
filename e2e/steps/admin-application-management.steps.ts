@@ -7,7 +7,7 @@ import { LoginPage } from "../pages/LoginPage";
 
 const { Given, When, Then } = createBdd();
 
-Given("the administrator is logged in", async ({ page }) => {
+Given("the administrator is viewing an in-progress application", async ({ page }) => {
   const { adminEmail, adminPassword } = e2eEnvironment;
 
   if (!adminEmail || !adminPassword) {
@@ -22,9 +22,6 @@ Given("the administrator is logged in", async ({ page }) => {
   await loginPage.submitLogin();
 
   await expect(page).toHaveURL(/\/$/);
-});
-
-Given("the administrator is viewing applications for a job role", async ({ page }) => {
   const { jobRoleId } = e2eEnvironment;
 
   if (!jobRoleId) {
@@ -33,87 +30,59 @@ Given("the administrator is viewing applications for a job role", async ({ page 
 
   const adminApplicationsPage = new AdminApplicationsPage(page);
 
-  await adminApplicationsPage.openApplications(jobRoleId);
+  await adminApplicationsPage.navigateToApplications(jobRoleId);
+  await expect(adminApplicationsPage.inProgressApplications).not.toHaveCount(0);
 });
 
-Given('an applicant has the status "IN_PROGRESS"', async ({ page }) => {
+When("the administrator cancels hiring the applicant", async ({ page }) => {
   const adminApplicationsPage = new AdminApplicationsPage(page);
 
-  await expect(adminApplicationsPage.inProgressStatus).toBeVisible();
-});
-
-When("the administrator chooses to hire the applicant", async ({ page }) => {
-  const adminApplicationsPage = new AdminApplicationsPage(page);
-
-  await adminApplicationsPage.chooseHire();
-});
-
-Then("they should see the hire confirmation page", async ({ page }) => {
-  const adminApplicationsPage = new AdminApplicationsPage(page);
-
+  await adminApplicationsPage.clickRandomHire();
   await expect(adminApplicationsPage.confirmationHeading).toBeVisible();
-  await expect(adminApplicationsPage.warningText).toBeVisible();
-  await expect(adminApplicationsPage.hireApplicantButton).toBeVisible();
+  await adminApplicationsPage.clickCancel();
 });
 
-When("the administrator cancels the hire action", async ({ page }) => {
+When("the administrator cancels rejecting the applicant", async ({ page }) => {
   const adminApplicationsPage = new AdminApplicationsPage(page);
 
-  await adminApplicationsPage.cancelHire();
+  await adminApplicationsPage.clickRandomReject();
+  await expect(adminApplicationsPage.rejectConfirmationHeading).toBeVisible();
+  await adminApplicationsPage.clickCancel();
 });
 
-Then("they should return to the job role applications page", async ({ page }) => {
+Then("the applicant remains in progress", async ({ page }) => {
   const adminApplicationsPage = new AdminApplicationsPage(page);
 
   await expect(adminApplicationsPage.applicationsHeading).toBeVisible();
+  await expect(adminApplicationsPage.selectedApplicantInProgressStatus).toBeVisible();
 });
 
-Then('the applicant status should remain "IN_PROGRESS"', async ({ page }) => {
+When("the administrator hires the applicant", async ({ page }) => {
   const adminApplicationsPage = new AdminApplicationsPage(page);
 
-  await expect(adminApplicationsPage.inProgressStatus).toBeVisible();
+  await adminApplicationsPage.clickRandomHire();
+  await expect(adminApplicationsPage.confirmationHeading).toBeVisible();
+  await expect(adminApplicationsPage.warningText).toBeVisible();
+  await adminApplicationsPage.clickConfirmHire();
 });
 
-When("the administrator chooses to reject the applicant", async ({ page }) => {
+Then("the applicant is marked as hired", async ({ page }) => {
   const adminApplicationsPage = new AdminApplicationsPage(page);
 
-  await adminApplicationsPage.chooseReject();
+  await expect(adminApplicationsPage.selectedApplicantHiredStatus).toBeVisible();
 });
 
-Then("they should see the reject confirmation page", async ({ page }) => {
+When("the administrator rejects the applicant", async ({ page }) => {
   const adminApplicationsPage = new AdminApplicationsPage(page);
 
+  await adminApplicationsPage.clickRandomReject();
   await expect(adminApplicationsPage.rejectConfirmationHeading).toBeVisible();
   await expect(adminApplicationsPage.warningText).toBeVisible();
-  await expect(adminApplicationsPage.rejectApplicantButton).toBeVisible();
+  await adminApplicationsPage.clickConfirmReject();
 });
 
-When("the administrator cancels the reject action", async ({ page }) => {
+Then("the applicant is marked as rejected", async ({ page }) => {
   const adminApplicationsPage = new AdminApplicationsPage(page);
 
-  await adminApplicationsPage.cancelHire();
-});
-
-When("the administrator confirms the hire action", async ({ page }) => {
-  const adminApplicationsPage = new AdminApplicationsPage(page);
-
-  await adminApplicationsPage.confirmHire();
-});
-
-Then('the applicant status should be "HIRED"', async ({ page }) => {
-  const adminApplicationsPage = new AdminApplicationsPage(page);
-
-  await expect(adminApplicationsPage.hiredStatus).toBeVisible();
-});
-
-When("the administrator confirms the reject action", async ({ page }) => {
-  const adminApplicationsPage = new AdminApplicationsPage(page);
-
-  await adminApplicationsPage.confirmReject();
-});
-
-Then('the applicant status should be "REJECTED"', async ({ page }) => {
-  const adminApplicationsPage = new AdminApplicationsPage(page);
-
-  await expect(adminApplicationsPage.rejectedStatus).toBeVisible();
+  await expect(adminApplicationsPage.selectedApplicantRejectedStatus).toBeVisible();
 });
