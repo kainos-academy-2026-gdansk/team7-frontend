@@ -7,5 +7,7 @@ export const e2eEnvironment = {
   port,
   adminEmail: process.env.E2E_ADMIN_EMAIL ?? "",
   adminPassword: process.env.E2E_ADMIN_PASSWORD ?? "",
+  userEmail: process.env.E2E_USER_EMAIL ?? "",
+  userPassword: process.env.E2E_USER_PASSWORD ?? "",
   jobRoleId: process.env.E2E_JOB_ROLE_ID ?? "",
 };
