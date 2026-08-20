@@ -26,4 +26,12 @@ export class AddJobRolePage {
     this.closingDateInput = page.getByLabel("Closing date");
     this.submitButton = page.getByRole("button", { name: "Add job role" });
   }
+
+  public async createJobRole(roleName: string): Promise<void> {
+    await this.roleNameInput.fill(roleName);
+    await this.locationInput.fill("Gdansk");
+    await this.bandSelect.selectOption({ index: 1 });
+    await this.capabilitySelect.selectOption({ index: 1 });
+    await this.submitButton.click();
+  }
 }

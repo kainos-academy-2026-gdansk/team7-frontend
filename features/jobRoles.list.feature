@@ -13,8 +13,8 @@ Feature: Job Role List view
         Then the user can view the job role details
 
     @requires-backend
-    Scenario: Administrator can open the add job role form
+    Scenario: Administrator creates a job role that is visible to applicants
         Given the administrator has an authenticated session
-        When the administrator opens the job roles page
-        And the administrator selects Add a role
-        Then the administrator is taken to the add job role form
+        And the administrator is on the job roles page
+        When the administrator creates a new job role
+        Then the new job role is shown on the job roles page
