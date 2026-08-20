@@ -42,6 +42,35 @@ Git. To run all browser tests, including the BDD scenarios and smoke tests, use 
 The login scenarios are tagged `@requires-backend`, so CI excludes them because this repository's
 workflow starts the frontend but does not start the separate backend service.
 
+### Administrator Application Management
+
+The administrator application-management scenarios require the backend, a freshly seeded local
+database, and the following local-only values in `.env`. Do not commit `.env` or its values:
+
+```env
+E2E_ADMIN_EMAIL=
+E2E_ADMIN_PASSWORD=
+E2E_JOB_ROLE_ID=1
+```
+
+Before running the feature, switch to the backend repository. Reset and seed the backend database,
+then start the backend there:
+
+```bash
+# In the backend repository
+npx prisma migrate reset
+npm run dev
+```
+
+Run the administrator feature from the frontend repository:
+
+```bash
+npx bddgen && npx playwright test e2e/.features-gen/features/admin-application-management.feature.spec.js --project=chromium
+```
+
+The feature uses `@mode:serial` because its scenarios share seeded applications and change their
+statuses. Reset the backend database before another full run.
+
 ### Test framework structure
 
 - `e2e/config/` holds environment-derived Playwright configuration. Set `BASE_URL` to test an

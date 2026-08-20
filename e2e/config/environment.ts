@@ -1,7 +1,11 @@
-const localBaseUrl = `http://127.0.0.1:${process.env.E2E_PORT ?? "4000"}`;
+const port = process.env.E2E_PORT || "4000";
+const localBaseUrl = `http://127.0.0.1:${port}`;
 
 export const e2eEnvironment = {
   baseUrl: process.env.BASE_URL ?? localBaseUrl,
   localBaseUrl,
-  port: process.env.E2E_PORT ?? "4000",
+  port,
+  adminEmail: process.env.E2E_ADMIN_EMAIL ?? "",
+  adminPassword: process.env.E2E_ADMIN_PASSWORD ?? "",
+  jobRoleId: process.env.E2E_JOB_ROLE_ID ?? "",
 };
