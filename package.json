@@ -15,7 +15,7 @@
     "ci:check": "biome ci .",
     "test": "vitest run test",
     "test:watch": "vitest",
-    "test:coverage": "vitest run --coverage",
+    "test:coverage": "vitest run test --coverage",
     "bddgen": "bddgen",
     "test:bdd": "bddgen && playwright test --project=chromium",
     "test:e2e": "bddgen && playwright test",

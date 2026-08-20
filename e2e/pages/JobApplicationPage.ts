@@ -1,17 +1,35 @@
-import { type Page, expect } from "@playwright/test";
+import type { Locator, Page } from "@playwright/test";
 
 export class JobApplicationPage {
-  constructor(private readonly page: Page) {}
+  private readonly experience: Locator;
+  private readonly salaryExpectation: Locator;
+  private readonly skills: Locator;
+  private readonly submitButton: Locator;
 
-  public async openApplicationForm(): Promise<void> {
-    await this.page.goto("/job-roles/1/apply");
+  constructor(private readonly page: Page) {
+    this.experience = this.page.getByRole("textbox", { name: "Experience" });
+    this.salaryExpectation = this.page.getByRole("textbox", { name: "Salary expectation" });
+    this.skills = this.page.getByRole("textbox", { name: "Skills" });
+    this.submitButton = this.page.getByRole("button", { name: "Apply for this role" });
   }
 
-  public async expectRedirectedToLogin(): Promise<void> {
-    await expect(this.page).toHaveURL(/\/login$/);
+  public async openApplicationForm(jobRoleId: number): Promise<void> {
+    await this.page.goto(`/job-roles/${jobRoleId}/apply`);
   }
 
-  public async expectLoginHeading(): Promise<void> {
-    await expect(this.page.getByRole("heading", { name: "Log in" })).toBeVisible();
+  public async fillExperience(value: string): Promise<void> {
+    await this.experience.fill(value);
+  }
+
+  public async fillSalaryExpectation(value: string): Promise<void> {
+    await this.salaryExpectation.fill(value);
+  }
+
+  public async fillSkills(value: string): Promise<void> {
+    await this.skills.fill(value);
+  }
+
+  public async submitApplication(): Promise<void> {
+    await this.submitButton.click();
   }
 }
