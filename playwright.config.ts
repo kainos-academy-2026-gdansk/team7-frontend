@@ -1,3 +1,4 @@
+import "dotenv/config";
 import { defineConfig } from "@playwright/test";
 import { defineBddConfig } from "playwright-bdd";
 import { e2eEnvironment } from "./e2e/config/environment";
