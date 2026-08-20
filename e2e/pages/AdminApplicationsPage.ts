@@ -25,8 +25,8 @@ export class AdminApplicationsPage {
     this.rejectApplicantButton = page.getByRole("button", { name: "Reject applicant" });
     this.applicationsHeading = page.getByRole("heading", { name: "Job role applications" });
     this.inProgressStatus = page.getByText("Status: IN_PROGRESS").first();
-    this.hiredStatus = page.getByText("Status: HIRED");
-    this.rejectedStatus = page.getByText("Status: REJECTED");
+    this.hiredStatus = page.getByText("Status: HIRED").first();
+    this.rejectedStatus = page.getByText("Status: REJECTED").first();
   }
 
   public async openApplications(jobRoleId: string): Promise<void> {
