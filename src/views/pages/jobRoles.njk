@@ -18,13 +18,13 @@
 {% endmacro %}
 
 {% block content %}
-  {% if totalCount > 0 %}
-    {% if isAdmin %}
-      <div class="kainos-job-list__actions">
-        <a href="/job-roles/new" class="govuk-button kainos-button">Add a role</a>
-      </div>
-    {% endif %}
+  {% if isAdmin %}
+    <div class="kainos-job-list__actions">
+      <a href="/job-roles/new" class="govuk-button kainos-button">Add a role</a>
+    </div>
+  {% endif %}
 
+  {% if totalCount > 0 %}
     <div class="kainos-job-list">
       <p class="kainos-job-list__count">{{ totalCount }} jobs found</p>
       <ul class="kainos-job-list__items">
@@ -55,11 +55,6 @@
         {% endfor %}
       </ul>
     </div>
-    {% if isAdmin %}
-      <div class="kainos-job-list__actions">
-        <a href="/job-roles/new" class="govuk-button kainos-button">Add a role</a>
-      </div>
-    {% endif %}
 
     {# Pagination parked until the team agrees on a page size.
     {% if totalPages > 1 %}
