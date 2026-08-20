@@ -3,9 +3,7 @@ Feature: Applicant authentication
   @requires-backend
   Scenario: registered applicant can log in
     Given the user is on the login page
-    When the user enters the email "applicant@kainos.com"
-    And the user enters the password "Password1!"
-    And submits the login form
+    When the registered applicant submits valid credentials
     Then the user is logged in
 
   @requires-backend

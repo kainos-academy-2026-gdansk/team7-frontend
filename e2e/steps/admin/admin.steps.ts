@@ -1,6 +1,7 @@
 import { type Page, expect } from "@playwright/test";
 import { createBdd } from "playwright-bdd";
 
+import { e2eEnvironment } from "../../config/environment";
 import { AddJobRolePage } from "../../pages/AddJobRolePage";
 import { HomePage } from "../../pages/HomePage";
 import { JobRolesPage } from "../../pages/JobRolesPage";
@@ -21,11 +22,17 @@ const roleNameFor = (page: Page): string => {
 };
 
 Given("the administrator has an authenticated session", async ({ page }) => {
+  const { adminEmail, adminPassword } = e2eEnvironment;
+
+  if (!adminEmail || !adminPassword) {
+    throw new Error("Set E2E_ADMIN_EMAIL and E2E_ADMIN_PASSWORD before running this test.");
+  }
+
   const loginPage = new LoginPage(page);
 
   await loginPage.openLoginPage();
-  await loginPage.enterEmail("admin@kainos.local");
-  await loginPage.enterPassword("Admin!123");
+  await loginPage.enterEmail(adminEmail);
+  await loginPage.enterPassword(adminPassword);
   await loginPage.submitLogin();
 
   await expect(page).toHaveURL(/\/$/);
