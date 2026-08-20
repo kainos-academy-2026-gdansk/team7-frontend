@@ -6,12 +6,12 @@ import { JobRolesPage } from "../pages/JobRolesPage";
 
 const { Given, When, Then } = createBdd();
 
-Given("the visitor is not logged in", async ({ context }) => {
+Given("the user is unauthenticated", async ({ context }) => {
   await context.clearCookies();
 });
 
 When(
-  "they try to open a job application form for job role {int}",
+  "the user tries to open a job application form for job role {int}",
   async ({ page }, jobRoleId: number) => {
     const jobApplicationPage = new JobApplicationPage(page);
 
@@ -19,11 +19,11 @@ When(
   },
 );
 
-Then("they should be redirected to the login page", async ({ page }) => {
+Then("the user should be redirected to the login page", async ({ page }) => {
   await expect(page).toHaveURL(/\/login$/);
 });
 
-Then('they should see the "Log in" heading', async ({ page }) => {
+Then('the user should see the "Log in" heading', async ({ page }) => {
   await expect(page.getByRole("heading", { name: "Log in" })).toBeVisible();
 });
 
