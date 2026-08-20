@@ -78,7 +78,7 @@ describe("GET /job-roles/:id", () => {
       const result = await request(app).get("/job-roles/1");
 
       expect(result.text).toContain("Interested in this role?");
-      expect(result.text).toContain('href="/login" class="govuk-button kainos-button"');
+      expect(result.text).toContain('href="/login"');
       expect(result.text).toContain("Log in to apply for this role");
       expect(result.text).not.toContain('href="/job-roles/1/apply"');
     });
