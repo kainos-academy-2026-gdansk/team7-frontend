@@ -649,7 +649,7 @@ button.kainos-header__link {
 }
 
 .kainos-job-detail__status--open {
-  background-color: var(--kainos-green);
+  background-color: var(--kainos-dark-green);
 }
 
 .kainos-job-detail__status--closed {
