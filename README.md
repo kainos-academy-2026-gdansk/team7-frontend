@@ -1,75 +1,95 @@
 # team7-frontend
 Team7 Frontend
 
-## Browser tests
+## Browser E2E tests
 
-Install the Playwright Chromium browser once after installing dependencies:
+The full browser suite runs against a disposable PostgreSQL database and an E2E backend image. The
+test stack is defined in `docker-compose.e2e.yml`:
 
-```bash
-npx playwright install chromium
+```text
+postgres -> seed (migrations + seed) -> backend -> Playwright frontend
 ```
 
-Run the browser smoke suite:
+Playwright starts the frontend on `E2E_PORT`; the backend is exposed on port `3000`. The seed service
+exits after `prisma migrate deploy` and `prisma db seed`; the backend starts only after it succeeds.
 
-```bash
-npm run test:e2e
-```
+### Run locally
 
-Playwright starts the local frontend automatically. Use UI mode or the HTML report to diagnose a
-failure:
+1. Copy `.env.example` to `.env` and set the required E2E values. Do not commit `.env`.
+2. Set `BACKEND_E2E_IMAGE` to the backend E2E image, normally `e2e-latest`, and set a local-only
+	`E2E_JWT_SECRET`.
+3. Authenticate Docker to GHCR if the backend package is private:
 
-```bash
-npm run test:ui
-npx playwright test --debug
-npx playwright show-report
-```
+	```bash
+	docker login ghcr.io -u YOUR_GITHUB_LOGIN
+	```
 
-## Playwright BDD
+4. Start the dependencies and run the tests:
 
-The login example uses Gherkin with `playwright-bdd`. The feature describes the behavior in
-`features/login.feature`, step definitions connect those sentences to Playwright in
-`e2e/steps/login.steps.ts`, and `e2e/pages/LoginPage.ts` contains the page locators and actions.
+	```bash
+	docker compose -f docker-compose.e2e.yml up -d --wait
+	npm run test:e2e
+	```
 
-Run the BDD scenario with the registered test account used by this example:
+5. Remove containers and the database volume afterward:
 
-```bash
-npm run test:bdd
-```
+	```bash
+	docker compose -f docker-compose.e2e.yml down -v
+	```
 
-The email and password are currently written directly in `features/login.feature` as a temporary
-exercise setup. The generated Playwright files are written to `e2e/.features-gen/` and ignored by
-Git. To run all browser tests, including the BDD scenarios and smoke tests, use `npm run test:e2e`.
-The login scenarios are tagged `@requires-backend`, so CI excludes them because this repository's
-workflow starts the frontend but does not start the separate backend service.
+For an Apple Silicon machine, the backend image must include `linux/arm64`; otherwise Docker must
+emulate the published `linux/amd64` image.
 
-### Administrator Application Management
+### E2E configuration
 
-The administrator application-management scenarios require the backend, a freshly seeded local
-database, and the following local-only values in `.env`. Do not commit `.env` or its values:
+The following values are required locally in `.env` and are supplied by GitHub Actions in CI:
 
 ```env
+API_BASE_URL=http://127.0.0.1:3000
+SESSION_SECRET=
+BASE_URL=http://127.0.0.1:4001
+E2E_PORT=4001
+BACKEND_E2E_IMAGE=ghcr.io/kainos-academy-2026-gdansk/team7-backend:e2e-latest
+E2E_JWT_SECRET=
 E2E_ADMIN_EMAIL=
 E2E_ADMIN_PASSWORD=
-E2E_JOB_ROLE_ID=1
+E2E_USER_EMAIL=
+E2E_USER_PASSWORD=
+E2E_ADMIN_JOB_ROLE_ID=
+E2E_APPLICATION_JOB_ROLE_ID=
+E2E_EMPTY_APPLICATION_JOB_ROLE_ID=
 ```
 
-Before running the feature, switch to the backend repository. Reset and seed the backend database,
-then start the backend there:
+The three job-role IDs are intentionally separate. Administrator scenarios require seeded
+`IN_PROGRESS` applications. Successful-application and empty-form scenarios use different roles so
+one scenario cannot hide the Apply link required by the other.
 
-```bash
-# In the backend repository
-npx prisma migrate reset
-npm run dev
-```
+`playwright-bdd` generates ignored files under `e2e/.features-gen/`. Use `npm run test:ui`,
+`npx playwright test --debug`, or `npx playwright show-report` to diagnose a failure.
 
-Run the administrator feature from the frontend repository:
+### CI E2E configuration
 
-```bash
-npx bddgen && npx playwright test e2e/.features-gen/features/admin-application-management.feature.spec.js --project=chromium
-```
+The E2E job pulls the backend image from GHCR, starts the Compose stack, runs the complete suite,
+prints Compose logs when a test fails, and removes the stack with `down -v`.
 
-The feature uses `@mode:serial` because its scenarios share seeded applications and change their
-statuses. Reset the backend database before another full run.
+Configure these repository-level GitHub Actions secrets:
+
+- `E2E_JWT_SECRET`
+- `E2E_FRONTEND_SESSION_SECRET`
+- `E2E_ADMIN_PASSWORD`
+- `E2E_USER_PASSWORD`
+
+Configure these repository-level GitHub Actions variables:
+
+- `BACKEND_E2E_IMAGE`
+- `E2E_ADMIN_EMAIL`
+- `E2E_USER_EMAIL`
+- `E2E_ADMIN_JOB_ROLE_ID`
+- `E2E_APPLICATION_JOB_ROLE_ID`
+- `E2E_EMPTY_APPLICATION_JOB_ROLE_ID`
+
+The GHCR backend package must grant this frontend repository read access. The E2E job requests
+`packages: read` and logs in with its `GITHUB_TOKEN`.
 
 ### Test framework structure
 

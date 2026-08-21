@@ -1,5 +1,6 @@
 import { expect } from "@playwright/test";
 import { createBdd } from "playwright-bdd";
+import { e2eEnvironment } from "../config/environment";
 import { JobApplicationPage } from "../pages/JobApplicationPage";
 import { JobRoleDetailsPage } from "../pages/JobRoleDetailsPage";
 import { JobRolesPage } from "../pages/JobRolesPage";
@@ -32,10 +33,26 @@ When("the user opens job roles", async ({ page }) => {
   await jobRolesPage.openJobRolesPage();
 });
 
-When("the user opens a role", async ({ page }) => {
-  const jobRolesPage = new JobRolesPage(page);
+When("the user opens the role for an application", async ({ page }) => {
+  const { applicationJobRoleId } = e2eEnvironment;
 
-  await jobRolesPage.openFirstJobRole();
+  if (!applicationJobRoleId) {
+    throw new Error("Set E2E_APPLICATION_JOB_ROLE_ID before running this test.");
+  }
+
+  const jobRoleDetailsPage = new JobRoleDetailsPage(page);
+  await jobRoleDetailsPage.openJobRole(applicationJobRoleId);
+});
+
+When("the user opens the role for an empty application", async ({ page }) => {
+  const { emptyApplicationJobRoleId } = e2eEnvironment;
+
+  if (!emptyApplicationJobRoleId) {
+    throw new Error("Set E2E_EMPTY_APPLICATION_JOB_ROLE_ID before running this test.");
+  }
+
+  const jobRoleDetailsPage = new JobRoleDetailsPage(page);
+  await jobRoleDetailsPage.openJobRole(emptyApplicationJobRoleId);
 });
 
 When("the user clicks Apply", async ({ page }) => {

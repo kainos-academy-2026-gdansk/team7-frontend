@@ -12,4 +12,8 @@ export class JobRoleDetailsPage {
   public async clickApply(): Promise<void> {
     await this.applyButton.click();
   }
+
+  public async openJobRole(id: string): Promise<void> {
+    await this.page.goto(`/job-roles/${id}`);
+  }
 }
