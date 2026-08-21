@@ -73,6 +73,24 @@ describe("GET /job-roles/:id", () => {
       expect(result.text).toContain("Back to job roles");
       expect(result.text).toContain('href="/job-roles"');
     });
+
+    it("shows an unauthenticated user the application banner with a login link", async () => {
+      const result = await request(app).get("/job-roles/1");
+
+      expect(result.text).toContain("Interested in this role?");
+      expect(result.text).toContain('href="/login"');
+      expect(result.text).toContain("Log in to apply for this role");
+      expect(result.text).not.toContain('href="/job-roles/1/apply"');
+    });
+
+    it("uses sequential heading levels on the job role detail page", async () => {
+      const result = await request(app).get("/job-roles/1");
+
+      expect(result.text).toContain(
+        '<h2 class="kainos-job-detail__section-title">Description</h2>',
+      );
+      expect(result.text).not.toContain('<h3 class="kainos-job-detail__section-title">');
+    });
   });
 
   describe("when description is missing", () => {

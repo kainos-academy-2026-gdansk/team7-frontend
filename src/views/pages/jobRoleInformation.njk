@@ -30,7 +30,7 @@
     <div class="kainos-job-detail__content">
       <div class="kainos-job-detail__main">
         <section class="kainos-job-detail__section">
-          <h3 class="kainos-job-detail__section-title">Description</h3>
+          <h2 class="kainos-job-detail__section-title">Description</h2>
           {% if jobRole.description %}
           <p class="govuk-body">{{ jobRole.description }}</p>
           {% else %}
@@ -39,7 +39,7 @@
         </section>
 
         <section class="kainos-job-detail__section">
-          <h3 class="kainos-job-detail__section-title">Responsibilities</h3>
+          <h2 class="kainos-job-detail__section-title">Responsibilities</h2>
           {% if jobRole.responsibilities %}
             <p class="govuk-body">{{ jobRole.responsibilities }}</p>
           {% else %}
@@ -49,7 +49,7 @@
 
         {% if jobRole.sharepointUrl %}
           <section class="kainos-job-detail__section">
-            <h3 class="kainos-job-detail__section-title">SharePoint link</h3>
+            <h2 class="kainos-job-detail__section-title">SharePoint link</h2>
             <a href="{{ jobRole.sharepointUrl }}" class="govuk-link kainos-job-detail__link" target="_blank" rel="noopener noreferrer">{{ jobRole.sharepointUrl }}</a>
           </section>
         {% endif %}
@@ -83,28 +83,32 @@
       </dl>
     </div>
   </div>
-  {% if isProfileUser %}
-    {% if application %}
-      <section class="govuk-inset-text kainos-job-detail__user-apply">
-        <div class="kainos-job-detail__application-message">
-          <h2 class="govuk-heading-m">Your application</h2>
-          <p class="govuk-body">You have already applied for this role.</p>
-        </div>
+  {% if isProfileUser and application %}
+    <section class="govuk-inset-text kainos-job-detail__user-apply">
+      <div class="kainos-job-detail__application-message">
+        <h2 class="govuk-heading-m">Your application</h2>
+        <p class="govuk-body">You have already applied for this role.</p>
+      </div>
 
-        <div class="kainos-job-detail__application-status-panel">
-          <span class="govuk-caption-m">Status</span>
-          <strong class="govuk-tag kainos-job-detail__application-status kainos-job-detail__application-status--{{ application.status | lower | replace("_", "-") }}">
-            {{ application.status | lower | replace("_", " ") | capitalize }}
-          </strong>
-        </div>
-      </section>
-      {% else %}
-      <section class="govuk-inset-text kainos-job-detail__user-apply">
-        <h2 class="govuk-heading-m">Interested in this role?</h2>
+      <div class="kainos-job-detail__application-status-panel">
+        <span class="govuk-caption-m">Status</span>
+        <strong class="govuk-tag kainos-job-detail__application-status kainos-job-detail__application-status--{{ application.status | lower | replace("_", "-") }}">
+          {{ application.status | lower | replace("_", " ") | capitalize }}
+        </strong>
+      </div>
+    </section>
+  {% elif isProfileUser or not isAuthenticated %}
+    <section class="govuk-inset-text kainos-job-detail__user-apply">
+      <h2 class="govuk-heading-m">Interested in this role?</h2>
+      {% if isProfileUser %}
         <a href="/job-roles/{{ jobRole.id }}/apply" class="govuk-button kainos-button">
           Apply for this role
         </a>
-      </section>
-    {% endif %}
+      {% else %}
+        <a href="/login" class="govuk-button kainos-button">
+          Log in to apply for this role
+        </a>
+      {% endif %}
+    </section>
   {% endif %}
 {% endblock %}
