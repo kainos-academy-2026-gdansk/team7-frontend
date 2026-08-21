@@ -129,6 +129,12 @@ service is needed, match these first instead of inventing a new shape.
   each validation rule rejecting with `400` and the right message, entered values being kept after a
   validation failure, API-reported field errors being shown on the right field, and an unreachable
   API producing a `503` with a generic message (never the raw error text).
+- Full browser E2E uses `docker-compose.e2e.yml`. The `seed` service runs migrations and the backend
+  seed on a disposable PostgreSQL instance; the backend service starts only after the seed completes.
+  Playwright starts the frontend on the host and calls the backend through `127.0.0.1:3000`.
+- Keep E2E data deterministic with `E2E_ADMIN_JOB_ROLE_ID`, `E2E_APPLICATION_JOB_ROLE_ID`, and
+  `E2E_EMPTY_APPLICATION_JOB_ROLE_ID`. Do not choose the first listed role when a scenario needs a
+  particular application state.
 
 ## Avoid
 

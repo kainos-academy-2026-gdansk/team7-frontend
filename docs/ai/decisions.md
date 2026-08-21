@@ -14,6 +14,22 @@
 - Alternatives: One unrestricted agent was rejected because it weakens stage boundaries. Chat-only
   memory was rejected because it is not shared, reviewable, or durable.
 
+## D-003: Disposable Compose Environment For Browser E2E
+
+- Date: 2026-08-21
+- Status: Accepted
+- Context: Backend-dependent Playwright scenarios require a seeded API and database, while unit and
+  Supertest tests must remain isolated from a live backend.
+- Decision: The frontend repository owns `docker-compose.e2e.yml`, which starts PostgreSQL, a
+  one-shot backend seed service, and the backend E2E image from GHCR. The CI E2E job pulls the image,
+  runs the full browser suite, and removes the stack and volume afterward.
+- Consequences: Every CI E2E run starts with a clean database. The frontend workflow needs read
+  access to the backend GHCR package and runtime E2E secrets/variables. Application scenarios use
+  separate configured role IDs so state is not shared accidentally.
+- Alternatives: A manually started backend/database was rejected because it cannot make CI E2E
+  repeatable. Resetting a shared database between individual scenarios was rejected because it is
+  slow and conflicts with serial administrator scenarios.
+
 ## D-002: CSV Intake Before Microsoft Planner MCP Pilot
 
 - Date: 2026-08-12

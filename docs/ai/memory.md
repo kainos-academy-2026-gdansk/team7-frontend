@@ -10,8 +10,9 @@ Durable facts approved for use in future tasks.
   behavior are part of functional correctness.
 - 2026-08-12: The backend base URL is environment configuration used by
   `src/client/axiosClient.ts`; secrets and environment values do not belong in repository memory.
-- 2026-08-12: Automated browser E2E tooling is not configured. Supertest page tests plus developer
-  browser verification are the current end-to-end confidence boundary.
+- 2026-08-21: Browser E2E uses Playwright plus `docker-compose.e2e.yml`: a disposable PostgreSQL
+  service, a backend `seed` service that runs migrations and the backend seed, and the GHCR E2E
+  backend image. Playwright starts the frontend locally and reaches the backend at `127.0.0.1:3000`.
 - 2026-08-12: User stories are currently taken from developer-attached CSV files. Microsoft Planner
   MCP remains a guarded pilot described in `mcp-planner.md`.
 - 2026-08-12: The backend replaced the `JobRoleStatus` enum with a `Status` lookup table
@@ -53,3 +54,9 @@ Durable facts approved for use in future tasks.
 - 2026-08-13: Auth integration uses `POST /api/auth/register` and `POST /api/auth/login`
   through `AuthController` -> `AuthService` -> the shared Axios client. A successful login establishes
   a server-side Express session; protected routes must use session state rather than browser storage.
+- 2026-08-21: CI runs the complete E2E suite, including `@requires-backend` scenarios. The E2E job
+  has `packages: read`, logs in to GHCR with `GITHUB_TOKEN`, tears down the Compose stack with
+  `down -v`, and receives secrets/variables only at runtime.
+- 2026-08-21: E2E uses independent role IDs for administrator, successful-application, and
+  empty-application scenarios. This prevents state created by a successful application from hiding
+  the Apply link required by the empty-form scenario.
