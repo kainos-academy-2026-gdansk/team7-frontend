@@ -9,8 +9,7 @@ Feature: Apply for a job role
   @requires-backend
   Scenario: User can apply for a role
     Given the user has an authenticated session
-    When the user opens job roles
-    And the user opens a role
+    When the user opens the role for an application
     And the user clicks Apply
     And the user fills the application form
     And the user submits the application
@@ -20,8 +19,7 @@ Feature: Apply for a job role
   @requires-backend
   Scenario: User cannot submit an empty application
     Given the user has an authenticated session
-    When the user opens job roles
-    And the user opens a role
+    When the user opens the role for an empty application
     And the user clicks Apply
     And the user submits the empty application form
     Then the application form is displayed

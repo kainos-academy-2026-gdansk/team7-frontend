@@ -22,15 +22,15 @@ Given("the administrator is viewing an in-progress application", async ({ page }
   await loginPage.submitLogin();
 
   await expect(page).toHaveURL(/\/$/);
-  const { jobRoleId } = e2eEnvironment;
+  const { adminJobRoleId } = e2eEnvironment;
 
-  if (!jobRoleId) {
-    throw new Error("Set E2E_JOB_ROLE_ID before running this test.");
+  if (!adminJobRoleId) {
+    throw new Error("Set E2E_ADMIN_JOB_ROLE_ID before running this test.");
   }
 
   const adminApplicationsPage = new AdminApplicationsPage(page);
 
-  await adminApplicationsPage.navigateToApplications(jobRoleId);
+  await adminApplicationsPage.navigateToApplications(adminJobRoleId);
   await expect(adminApplicationsPage.inProgressApplications).not.toHaveCount(0);
 });
 

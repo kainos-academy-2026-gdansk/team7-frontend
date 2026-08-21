@@ -61,7 +61,9 @@ jobs:
           E2E_ADMIN_PASSWORD: ${{ secrets.E2E_ADMIN_PASSWORD }}
           E2E_USER_EMAIL: ${{ vars.E2E_USER_EMAIL }}
           E2E_USER_PASSWORD: ${{ secrets.E2E_USER_PASSWORD }}
-          E2E_JOB_ROLE_ID: ${{ vars.E2E_JOB_ROLE_ID }}
+          E2E_ADMIN_JOB_ROLE_ID: ${{ vars.E2E_ADMIN_JOB_ROLE_ID }}
+          E2E_APPLICATION_JOB_ROLE_ID: ${{ vars.E2E_APPLICATION_JOB_ROLE_ID }}
+          E2E_EMPTY_APPLICATION_JOB_ROLE_ID: ${{ vars.E2E_EMPTY_APPLICATION_JOB_ROLE_ID }}
         run: npm run test:e2e
       - name: Show E2E container logs on failure
         if: failure()
