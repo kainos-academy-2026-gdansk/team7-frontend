@@ -1,0 +1,42 @@
+name: team7-e2e
+
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: team7_e2e
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d team7_e2e"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  seed:
+    image: ${BACKEND_E2E_IMAGE:?Set BACKEND_E2E_IMAGE to the backend E2E image tag}
+    command: >-
+      sh -c "npx prisma migrate deploy && npx prisma db seed"
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/team7_e2e
+      JWT_SECRET: ${E2E_JWT_SECRET:?Set E2E_JWT_SECRET}
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  backend:
+    image: ${BACKEND_E2E_IMAGE:?Set BACKEND_E2E_IMAGE to the backend E2E image tag}
+    environment:
+      PORT: 3000
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/team7_e2e
+      JWT_SECRET: ${E2E_JWT_SECRET:?Set E2E_JWT_SECRET}
+    ports:
+      - "3000:3000"
+    depends_on:
+      seed:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "-", "http://localhost:3000/health"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
