@@ -1,32 +1,32 @@
-FROM node:22-alpine AS deps
+FROM node:22-alpine AS build
+
 WORKDIR /app
-COPY package.json package-lock.json ./
+
+COPY package*.json ./
+
 RUN npm ci
 
-FROM node:22-alpine AS build
-WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
-COPY package.json package-lock.json tsconfig.json ./
 COPY src ./src
+COPY public ./public
+COPY tsconfig.json ./
+
 RUN npm run build
 
-FROM node:22-alpine AS prod-deps
-WORKDIR /app
-COPY package.json package-lock.json ./
-RUN npm ci --omit=dev
 
 FROM node:22-alpine AS runtime
-ENV NODE_ENV=production
-ENV PORT=4000
+
 WORKDIR /app
 
-COPY --from=prod-deps /app/node_modules ./node_modules
+COPY package*.json ./
+
+RUN npm ci --omit=dev
+
 COPY --from=build /app/dist ./dist
-COPY package.json ./
-# Nunjucks templates are resolved from src/views at runtime, so they are not part of the tsc output.
-COPY src/views ./src/views
-COPY public ./public
+COPY --from=build /app/src/views ./src/views
+COPY --from=build /app/public ./public
+
+EXPOSE 4000
 
 USER node
-EXPOSE 4000
+
 CMD ["node", "dist/index.js"]
