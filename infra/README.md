@@ -12,13 +12,11 @@ workflow before application hosting is added to the agreed scope.
 
 ## GitHub Actions variables
 
-Configure these repository or `dev` environment variables without placing secrets in the repository:
+Configure these values without placing them in the repository:
 
-- `ACR_NAME`: `acraiacademy26`
-- `ACR_LOGIN_SERVER`: `acraiacademy26.azurecr.io`
-- `AZURE_CLIENT_ID`: Microsoft Entra application (client) ID
-- `AZURE_TENANT_ID`: Microsoft Entra tenant ID
-- `AZURE_SUBSCRIPTION_ID`: Azure subscription ID
+- GitHub Variables: `ACR_NAME` (`acraiacademy26`) and `ACR_LOGIN_SERVER`
+	(`acraiacademy26.azurecr.io`).
+- GitHub Secrets: `AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, and `AZURE_SUBSCRIPTION_ID`.
 
 ## Azure OIDC setup
 
