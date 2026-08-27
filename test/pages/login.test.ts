@@ -194,6 +194,36 @@ describe("POST /login", () => {
     expect(response.headers["set-cookie"]).toBeDefined();
   });
 
+  it("sets a secure session cookie when HTTPS is terminated by a trusted proxy", async () => {
+    vi.stubEnv("NODE_ENV", "production");
+    vi.stubEnv("SESSION_SECRET", "production-session-secret");
+    vi.resetModules();
+
+    try {
+      const { default: productionApp } = await import("../../src/app");
+      apiClient.post.mockResolvedValue({
+        data: {
+          token: "test-jwt-token",
+          user: { id: 1, email: "zuzanna@kainos.com", role: "USER" },
+        },
+      });
+
+      const response = await request(productionApp)
+        .post("/login")
+        .set("X-Forwarded-Proto", "https")
+        .type("form")
+        .send({
+          email: "zuzanna@kainos.com",
+          password: "Password1!",
+        });
+
+      expect(response.status).toBe(302);
+      expect(response.headers["set-cookie"]?.[0]).toContain("Secure");
+    } finally {
+      vi.unstubAllEnvs();
+    }
+  });
+
   it("renders a 503 page when the login API is unavailable", async () => {
     apiClient.post.mockRejectedValue(new Error("Connection refused"));
 
