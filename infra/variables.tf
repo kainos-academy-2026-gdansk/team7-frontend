@@ -29,4 +29,9 @@ variable "container_image" {
 variable "backend_api_base_url" {
   description = "Base URL of the backend API available to the frontend container."
   type        = string
+
+  validation {
+    condition     = startswith(var.backend_api_base_url, "https://")
+    error_message = "Backend API base URL must be a non-empty HTTPS URL."
+  }
 }
