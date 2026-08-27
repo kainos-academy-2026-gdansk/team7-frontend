@@ -20,3 +20,13 @@ variable "environment" {
     error_message = "Environment must be dev, test, or prod."
   }
 }
+
+variable "container_image" {
+  description = "Fully qualified immutable frontend container image reference."
+  type        = string
+}
+
+variable "backend_api_base_url" {
+  description = "Base URL of the backend API available to the frontend container."
+  type        = string
+}
