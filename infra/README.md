@@ -41,8 +41,6 @@ then add GitHub federated credentials for this repository:
 
 - Pull request: `repo:kainos-academy-2026-gdansk/team7-frontend:pull_request`
 - Main branch: `repo:kainos-academy-2026-gdansk/team7-frontend:ref:refs/heads/main`
-- Terraform configuration branch:
-	`repo:kainos-academy-2026-gdansk/team7-frontend:ref:refs/heads/terraform-config`
 - Development environment: `repo:kainos-academy-2026-gdansk/team7-frontend:environment:dev`
 
 If the Azure portal presents immutable GitHub organization or repository IDs, use the subject it
@@ -90,5 +88,4 @@ terraform plan -input=false \
 ```
 
 Do not run `terraform apply` locally. The protected `dev` GitHub Environment performs it only for a
-push to `main` or `terraform-config`, using the same uploaded `tfplan` artifact produced by the
-plan job.
+push to `main`, using the same uploaded `tfplan` artifact produced by the plan job.
