@@ -58,6 +58,13 @@ temp/
 *.tmp
 .ai/
 
+# Terraform local state and provider cache
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+terraform.tfvars
+
 # Editors / IDEs
 .idea/
 *.swp
