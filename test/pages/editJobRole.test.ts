@@ -1,5 +1,5 @@
 import request from "supertest";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import app from "../../src/app";
 
 const apiClient = vi.hoisted(() => ({ get: vi.fn(), post: vi.fn(), put: vi.fn() }));
@@ -63,6 +63,8 @@ const apiError = (status: number, data: unknown = {}) =>
 let adminAgent: ReturnType<typeof request.agent>;
 
 beforeEach(async () => {
+  vi.useFakeTimers();
+  vi.setSystemTime(new Date("2026-08-01T12:00:00.000Z"));
   apiClient.get.mockReset();
   apiClient.post.mockReset();
   apiClient.put.mockReset();
@@ -85,6 +87,10 @@ beforeEach(async () => {
     email: "admin@example.com",
     password: "Password1!",
   });
+});
+
+afterEach(() => {
+  vi.useRealTimers();
 });
 
 describe("GET /job-roles/:id/edit", () => {
